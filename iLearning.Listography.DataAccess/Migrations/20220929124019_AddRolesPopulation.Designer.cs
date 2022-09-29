@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220929124019_AddRolesPopulation")]
+    partial class AddRolesPopulation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,15 +118,15 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "39b45000-47f4-4304-a5d8-255bd0720490",
-                            ConcurrencyStamp = "32d817b1-8625-4372-b74e-d1fb5acad268",
+                            Id = "aa74b034-7201-4c99-99e3-6a5dc7cedf42",
+                            ConcurrencyStamp = "4b1c9a51-41bf-411a-900d-d67432bac89a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "7d3e123b-1537-45e1-b072-a3ade5708cf6",
-                            ConcurrencyStamp = "b27dda87-452c-44aa-85f2-65d6944f48e4",
+                            Id = "f90805a2-462e-49f9-b61c-8ce9863f76aa",
+                            ConcurrencyStamp = "514af6a8-9cd7-462f-9f7a-4d0f986f0861",
                             Name = "User",
                             NormalizedName = "USER"
                         });

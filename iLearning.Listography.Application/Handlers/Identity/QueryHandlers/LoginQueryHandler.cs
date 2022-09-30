@@ -55,6 +55,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
                 new Claim(JwtRegisteredClaimNames.NameId, account.Id),
                 new Claim(JwtRegisteredClaimNames.Email, account.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("id", account.Id)
             }),
             Expires = DateTime.UtcNow.AddHours(12),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

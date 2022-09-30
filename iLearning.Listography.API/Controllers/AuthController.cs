@@ -1,5 +1,6 @@
 ﻿using iLearning.Listography.Application.Requests.Identity.Commands.RegisterUser;
 using iLearning.Listography.Application.Requests.Identity.Queries.Login;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iLearning.Listography.API.Controllers;

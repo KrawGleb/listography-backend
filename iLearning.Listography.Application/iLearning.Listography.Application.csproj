@@ -20,7 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Handlers\Accounts\CommandHandlers\" />
     <Folder Include="Handlers\List\QueryHandlers\" />
+    <Folder Include="Requests\Accounts\Commands\" />
     <Folder Include="Requests\List\Queries\" />
   </ItemGroup>
 

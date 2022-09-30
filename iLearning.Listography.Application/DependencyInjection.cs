@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
+
 namespace iLearning.Listography.Application;
 
 public static class DependencyInjection
@@ -13,6 +14,7 @@ public static class DependencyInjection
         services.Configure<JWTConfiguration>(configuration.GetSection("JWT"));
 
         services.AddMediatR(Assembly.GetExecutingAssembly());
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;
     }

@@ -1,4 +1,6 @@
 ﻿using iLearning.Listography.DataAccess.Implementations;
+using iLearning.Listography.DataAccess.Implementations.Repositories;
+using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +20,8 @@ public static class DependencyInjection
 
         services.AddIdentity<Account, IdentityRole>(options => { })
             .AddEntityFrameworkStores<ApplicationDbContext>();
+
+        services.AddScoped<IListsRepository, ListsRepository>();
 
         return services;
     }

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iLearning.Listography.Application\iLearning.Listography.Application.csproj" />
+    <ProjectReference Include="..\iLearning.Listography.Infrastructure\iLearning.Listography.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

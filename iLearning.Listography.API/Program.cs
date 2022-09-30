@@ -12,6 +12,16 @@ var configuration = builder.Configuration;
 services.AddDatabase(configuration);
 services.AddApplication(configuration);
 
+services.AddCors(options =>
+{
+    // TODO: Hide origins.
+    options.AddPolicy("CorsPolicy", b => b
+        .WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+});
+
 services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,6 +56,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

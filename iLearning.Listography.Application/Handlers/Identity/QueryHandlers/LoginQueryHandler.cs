@@ -1,4 +1,6 @@
 ﻿using iLearning.Listography.Application.Models.Configurations;
+using iLearning.Listography.Application.Models.Responses;
+using iLearning.Listography.Application.Models.Responses.Identity;
 using iLearning.Listography.Application.Requests.Identity.Queries.Login;
 using iLearning.Listography.DataAccess.Models.Identity;
 using MediatR;
@@ -11,7 +13,7 @@ using System.Text;
 
 namespace iLearning.Listography.Application.Handlers.Identity.QueryHandlers;
 
-public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
+public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
 {
     private readonly UserManager<Account> _userManager;
     private readonly SignInManager<Account> _signInManager;
@@ -27,7 +29,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
         _jwtConfiguration = jwtConfiguration.Value;
     }
 
-    public async Task<string> Handle(LoginQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
         var signInResult = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
 
@@ -36,11 +38,18 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
             var account = await _userManager.FindByEmailAsync(request.Email);
             var token = GenerateToken(account);
 
-            return token;
+            return new LoginResponse()
+            {
+                Succeeded = true,
+                Token = token
+            };
         }
 
-        // TODO: Custom exception.
-        throw new InvalidOperationException();
+        return new ErrorResponse()
+        {
+            Succeeded = false,
+            Errors = new string[] { "Invalid password or email" }
+        };
     }
 
     private string GenerateToken(Account account)

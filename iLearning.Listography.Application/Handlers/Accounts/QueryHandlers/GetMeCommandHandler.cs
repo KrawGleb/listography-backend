@@ -20,6 +20,7 @@ public class GetMeCommandHandler : IRequestHandler<GetMeQuery, Account?>
         return await _userManager
             .Users
             .Include(u => u.Lists)
+            .ThenInclude(l => l.Tags)
             .FirstOrDefaultAsync(u => u.Id == request.Id);
     }
 }

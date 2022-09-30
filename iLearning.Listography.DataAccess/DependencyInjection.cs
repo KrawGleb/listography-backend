@@ -22,6 +22,7 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddScoped<IListsRepository, ListsRepository>();
+        services.AddScoped<ITagsRepository, TagsRepository>();
 
         return services;
     }

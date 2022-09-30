@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole, str
     private DbSet<ListTag> Tags { get; set; }
     private DbSet<ListTopic> Topics { get; set; }
     private DbSet<CustomField> CustomFields { get; set; }
+    private DbSet<ListItem> Items { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

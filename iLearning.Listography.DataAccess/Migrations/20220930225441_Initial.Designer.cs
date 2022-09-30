@@ -12,8 +12,8 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220929142423_CreateListModel")]
-    partial class CreateListModel
+    [Migration("20220930225441_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,6 +106,9 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.Property<int?>("IntValue")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ListItemId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -118,6 +121,24 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListItemId");
+
+                    b.ToTable("CustomFields");
+                });
+
+            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("UserListId")
                         .HasColumnType("int");
 
@@ -125,7 +146,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("UserListId");
 
-                    b.ToTable("CustomFields");
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListTag", b =>
@@ -226,15 +247,15 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8850e053-5514-46e9-b2b0-0cd3f16d88f8",
-                            ConcurrencyStamp = "162a7319-57d2-4c92-8d8e-07527cefac84",
+                            Id = "6dcefb1a-3b58-4e71-a150-8ebc0e4ab23d",
+                            ConcurrencyStamp = "ae40ad1d-d1ed-42d3-a8ad-62f36b20633d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "98c1fb91-2453-4eaa-92a2-4f0a96620494",
-                            ConcurrencyStamp = "36f0807c-bb46-4f7b-8760-77b1f8ae91ee",
+                            Id = "29ad8ec1-af98-4fc3-824d-80d1472e417d",
+                            ConcurrencyStamp = "94243b52-5bc8-49ac-b171-fb4d360a9d69",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -348,8 +369,15 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.CustomField", b =>
                 {
-                    b.HasOne("iLearning.Listography.DataAccess.Models.List.UserList", null)
+                    b.HasOne("iLearning.Listography.DataAccess.Models.List.ListItem", null)
                         .WithMany("CustomFields")
+                        .HasForeignKey("ListItemId");
+                });
+
+            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListItem", b =>
+                {
+                    b.HasOne("iLearning.Listography.DataAccess.Models.List.UserList", null)
+                        .WithMany("Items")
                         .HasForeignKey("UserListId");
                 });
 
@@ -429,9 +457,14 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.Navigation("Lists");
                 });
 
-            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.UserList", b =>
+            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListItem", b =>
                 {
                     b.Navigation("CustomFields");
+                });
+
+            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.UserList", b =>
+                {
+                    b.Navigation("Items");
 
                     b.Navigation("Tags");
                 });

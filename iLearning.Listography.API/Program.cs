@@ -30,7 +30,7 @@ services.AddAuthentication(options =>
 })
     .AddJwtBearer(options =>
 {
-    var key = Encoding.UTF8.GetBytes(configuration["JWT:Key"]);
+    var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT.Key")!);
     options.TokenValidationParameters = new TokenValidationParameters()
     {
         ValidateIssuerSigningKey = true,

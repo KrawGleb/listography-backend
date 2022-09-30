@@ -1,4 +1,5 @@
 ﻿using iLearning.Listography.DataAccess.Models.Identity;
+using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,11 @@ public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole, str
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     { }
+
+    private DbSet<UserList> Lists { get; set; }
+    private DbSet<ListTag> Tags { get; set; }
+    private DbSet<ListTopic> Topics { get; set; }
+    private DbSet<CustomField> CustomFields { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using iLearning.Listography.Application.Requests.List.Commands.AddItem;
 using iLearning.Listography.Application.Requests.List.Commands.Create;
 using iLearning.Listography.DataAccess.Models.List;
 
@@ -9,5 +10,6 @@ public class ListProfile : Profile
 	public ListProfile()
 	{
 		CreateMap<CreateListCommand, UserList>();
+		CreateMap<AddItemCommand, ListItem>();
 	}
 }

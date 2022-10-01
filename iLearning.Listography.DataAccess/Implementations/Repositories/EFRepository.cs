@@ -7,7 +7,7 @@ namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 public class EFRepository<T> : IEFRepository<T> 
     where T : class, IEntity, new()
 {
-    private readonly ApplicationDbContext _context;
+    protected readonly ApplicationDbContext _context;
     protected readonly DbSet<T> _table;
 
     public EFRepository(ApplicationDbContext context)

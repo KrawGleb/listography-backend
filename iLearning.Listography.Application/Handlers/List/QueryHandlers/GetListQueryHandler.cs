@@ -17,6 +17,5 @@ public class GetListQueryHandler : IRequestHandler<GetListQuery, UserList?>
     public async Task<UserList?> Handle(GetListQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetByIdAsync(request.Id);
-        throw new NotImplementedException();
     }
 }

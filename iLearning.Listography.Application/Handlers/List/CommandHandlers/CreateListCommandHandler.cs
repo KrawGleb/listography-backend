@@ -3,7 +3,9 @@ using iLearning.Listography.Application.Requests.List.Commands.Create;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.Identity;
 using iLearning.Listography.DataAccess.Models.List;
+using iLearning.Listography.Infrastructure.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,19 +16,24 @@ public class CreateListCommandHandler : IRequestHandler<CreateListCommand>
     private readonly IMapper _mapper;
     private readonly UserManager<Account> _userManager;
     private readonly IListsRepository _repository;
+    private readonly IHttpContextAccessor _contextAccessor;
 
     public CreateListCommandHandler(
         IMapper mapper,
         UserManager<Account> userManager,
-        IListsRepository repository)
+        IListsRepository repository,
+        IHttpContextAccessor contextAccessor)
     {
         _mapper = mapper;
         _userManager = userManager;
         _repository = repository;
+        _contextAccessor = contextAccessor;
     }
 
     public async Task<Unit> Handle(CreateListCommand request, CancellationToken cancellationToken)
     {
+        request.UserId = _contextAccessor.HttpContext.GetUserId();
+
         var relatedUser = await _userManager
             .Users
             .Include(u => u.Lists)

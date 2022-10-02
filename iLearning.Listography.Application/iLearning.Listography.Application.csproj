@@ -23,6 +23,7 @@
   <ItemGroup>
     <Folder Include="Handlers\Accounts\CommandHandlers\" />
     <Folder Include="Requests\Accounts\Commands\" />
+    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace iLearning.Listography.Application.Requests.List.Commands.DeleteItem;
+namespace iLearning.Listography.Application.Requests.Items.Commands.Delete;
 
 public class DeleteItemCommand : IRequest
 {

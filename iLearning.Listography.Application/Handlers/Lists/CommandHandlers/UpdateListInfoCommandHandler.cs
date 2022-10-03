@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using iLearning.Listography.Application.Models.Responses;
-using iLearning.Listography.Application.Requests.List.Commands.UpdateInfo;
+using iLearning.Listography.Application.Requests.Lists.Commands.Update;
 using iLearning.Listography.Application.Services.Interfaces;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;

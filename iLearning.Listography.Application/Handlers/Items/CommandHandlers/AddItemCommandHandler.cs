@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using iLearning.Listography.Application.Models.Responses;
-using iLearning.Listography.Application.Requests.List.Commands.AddItem;
+using iLearning.Listography.Application.Requests.Items.Commands.Add;
 using iLearning.Listography.Application.Services.Interfaces;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using iLearning.Listography.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using System.Reflection.Metadata.Ecma335;
 
-namespace iLearning.Listography.Application.Handlers.List.CommandHandlers;
+namespace iLearning.Listography.Application.Handlers.Items.CommandHandlers;
 
 public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Response>
 {

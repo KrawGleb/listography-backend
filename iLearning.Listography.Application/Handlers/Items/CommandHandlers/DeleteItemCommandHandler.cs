@@ -1,11 +1,11 @@
-﻿using iLearning.Listography.Application.Requests.List.Commands.DeleteItem;
+﻿using iLearning.Listography.Application.Requests.Items.Commands.Delete;
 using iLearning.Listography.Application.Services.Interfaces;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace iLearning.Listography.Application.Handlers.List.CommandHandlers;
+namespace iLearning.Listography.Application.Handlers.Items.CommandHandlers;
 
 public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand>
 {

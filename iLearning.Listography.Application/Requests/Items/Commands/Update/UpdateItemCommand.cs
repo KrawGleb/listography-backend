@@ -2,11 +2,11 @@
 using iLearning.Listography.DataAccess.Models.List;
 using MediatR;
 
-namespace iLearning.Listography.Application.Requests.List.Commands.AddItem;
+namespace iLearning.Listography.Application.Requests.Items.Commands.Update;
 
-public class AddItemCommand : IRequest<Response>
+public class UpdateItemCommand : IRequest<Response>
 {
-    public int ListId { get; set; }
+    public int Id { get; set; }
     public string? Name { get; set; }
     public ICollection<CustomField>? CustomFields { get; set; }
 }

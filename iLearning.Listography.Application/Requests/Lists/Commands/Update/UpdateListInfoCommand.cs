@@ -2,7 +2,7 @@
 using iLearning.Listography.DataAccess.Models.List;
 using MediatR;
 
-namespace iLearning.Listography.Application.Requests.List.Commands.UpdateInfo;
+namespace iLearning.Listography.Application.Requests.Lists.Commands.Update;
 
 public class UpdateListInfoCommand : IRequest<Response>
 {

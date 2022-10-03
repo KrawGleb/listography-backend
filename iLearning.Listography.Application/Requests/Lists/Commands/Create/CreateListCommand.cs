@@ -1,7 +1,7 @@
 ﻿using iLearning.Listography.DataAccess.Models.List;
 using MediatR;
 
-namespace iLearning.Listography.Application.Requests.List.Commands.Create;
+namespace iLearning.Listography.Application.Requests.Lists.Commands.Create;
 
 public class CreateListCommand : IRequest
 {

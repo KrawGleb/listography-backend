@@ -1,8 +1,6 @@
-﻿using iLearning.Listography.Application.Requests.List.Commands.AddItem;
-using iLearning.Listography.Application.Requests.List.Commands.Create;
-using iLearning.Listography.Application.Requests.List.Commands.DeleteItem;
-using iLearning.Listography.Application.Requests.List.Commands.UpdateInfo;
-using iLearning.Listography.Application.Requests.List.Queries.Get;
+﻿using iLearning.Listography.Application.Requests.List.Queries.Get;
+using iLearning.Listography.Application.Requests.Lists.Commands.Create;
+using iLearning.Listography.Application.Requests.Lists.Commands.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

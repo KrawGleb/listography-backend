@@ -37,9 +37,14 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             .FirstAsync(l => l.Id == id);
     }
 
+    public async override Task UpdateAsync(UserList entity)
+    {
+        
+    }
+
     public async Task AddItemToListAsync(int id, ListItem item)
     {
-        var list = await GetByIdAsync(id);
+        var list = await GetByIdAsync(id, trackEntity: true);
 
         if (list is null)
         {

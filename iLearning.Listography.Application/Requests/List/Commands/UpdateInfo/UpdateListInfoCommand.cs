@@ -6,7 +6,7 @@ namespace iLearning.Listography.Application.Requests.List.Commands.UpdateInfo;
 
 public class UpdateListInfoCommand : IRequest<Response>
 {
-    public int ListId { get; set; }
+    public int Id { get; set; }
     public ListTopic? Topic { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }

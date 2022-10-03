@@ -1,33 +1,36 @@
-﻿using iLearning.Listography.DataAccess.Models.Identity;
+﻿using iLearning.Listography.Application.Services.Interfaces;
+using iLearning.Listography.DataAccess.Interfaces.Repositories;
+using iLearning.Listography.DataAccess.Models.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace iLearning.Listography.Application.Services.Implementatinos;
 
-public class UserPermissionsService
+public class UserPermissionsService : IUserPermissionsService
 {
-	private readonly UserManager<Account> _userManager;
+    private readonly UserManager<Account> _userManager;
+    private readonly IListsRepository _repository;
 
-	public UserPermissionsService(UserManager<Account> userManager)
-	{
-		_userManager = userManager;
-	}
+    public UserPermissionsService(
+        UserManager<Account> userManager,
+        IListsRepository repository)
+    {
+        _userManager = userManager;
+        _repository = repository;
+    }
 
-	public async Task<bool> AllowEditList(string userId, int listId)
-	{
-		var user = await _userManager
-			.Users
-			.Include(u => u.Lists)
-			.FirstOrDefaultAsync(u => u.Id == userId);
+    public async Task<bool> AllowEditListAsync(string userId, int listId)
+    {
+        var list = await _repository.GetByIdAsync(listId, trackEntity: false);
 
-		return
-			user is not null && (
-			user.Lists.Any(l => l.Id == listId) ||
-			await IsAdmin(user));
-	}
-
-	private async Task<bool> IsAdmin(Account account)
-	{
-		return await _userManager.IsInRoleAsync(account,"admin");
-	}
+        if (list is not null &&
+            list.AccountId == userId)
+        {
+            return true;
+        }
+        else
+        {
+            return await _userManager.IsInRoleAsync(
+                    await _userManager.FindByIdAsync(userId), "admin");
+        }
+    }
 }

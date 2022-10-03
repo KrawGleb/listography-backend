@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
-public class EFRepository<T> : IEFRepository<T> 
+public class EFRepository<T> : IEFRepository<T>
     where T : class, IEntity, new()
 {
     protected readonly ApplicationDbContext _context;
@@ -49,7 +49,7 @@ public class EFRepository<T> : IEFRepository<T>
         await _context.SaveChangesAsync();
     }
 
-    public virtual void Update(T entity) => _table.Update(entity);
+    public async virtual Task UpdateAsync(T entity) => _table.Update(entity);
 
     public virtual async Task DeleteAsync(T entity)
     {

@@ -1,5 +1,6 @@
 ﻿using iLearning.Listography.Application.Requests.List.Commands.AddItem;
 using iLearning.Listography.Application.Requests.List.Commands.Create;
+using iLearning.Listography.Application.Requests.List.Commands.DeleteItem;
 using iLearning.Listography.Application.Requests.List.Commands.UpdateInfo;
 using iLearning.Listography.Application.Requests.List.Queries.Get;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +15,6 @@ public class ListsController : ApiControllerBase
 {
     [HttpPost("create")]
     public async Task<IActionResult> CreateList([FromBody] CreateListCommand command)
-        => Ok(await Mediator.Send(command));
-
-    [HttpPost("add")]
-    public async Task<IActionResult> AddItem([FromBody] AddItemCommand command)
         => Ok(await Mediator.Send(command));
 
     [HttpPost("update")]

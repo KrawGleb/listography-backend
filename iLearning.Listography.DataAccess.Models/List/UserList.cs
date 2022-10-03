@@ -10,7 +10,7 @@ public class UserList : IEntity
     public string? Description { get; set; }
     public string? ImageUrl { get; set; }
     public ListTopic? Topic { get; set; }
-    public ListItem? ItemTemplate { get; set; }
+    public ListItemTemplate? ItemTemplate { get; set; }
     public ICollection<ListTag>? Tags { get; set; }
     public ICollection<ListItem>? Items { get; set; }
 }

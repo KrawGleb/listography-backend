@@ -4,7 +4,7 @@ namespace iLearning.Listography.DataAccess.Interfaces.Repositories;
 
 public interface IListsRepository : IEFRepository<UserList>
 {
-    Task AddItemToListAsync(int id, ListItem item);
+    Task<ListItem> AddItemToListAsync(int id, ListItem item);
     Task<UserList?> GetByIdAsync(
         int id,
         bool includeItems = true,

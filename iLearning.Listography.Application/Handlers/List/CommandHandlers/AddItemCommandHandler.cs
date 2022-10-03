@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.List.Commands.AddItem;
 using iLearning.Listography.Application.Services.Interfaces;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
@@ -6,10 +7,11 @@ using iLearning.Listography.DataAccess.Models.List;
 using iLearning.Listography.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using System.Reflection.Metadata.Ecma335;
 
 namespace iLearning.Listography.Application.Handlers.List.CommandHandlers;
 
-public class AddItemCommandHandler : IRequestHandler<AddItemCommand>
+public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Response>
 {
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IListsRepository _listsRepository;
@@ -28,7 +30,7 @@ public class AddItemCommandHandler : IRequestHandler<AddItemCommand>
         _mapper = mapper;
     }
 
-    public async Task<Unit> Handle(AddItemCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(AddItemCommand request, CancellationToken cancellationToken)
     {
         var userId = _contextAccessor.HttpContext.GetUserId();
 
@@ -36,8 +38,17 @@ public class AddItemCommandHandler : IRequestHandler<AddItemCommand>
         {
             var item = _mapper.Map<ListItem>(request);
             await _listsRepository.AddItemToListAsync(request.ListId, item);
+
+            return new CommonResponse
+            {
+                Succeeded = true,
+                Body = item
+            };
         }
 
-        return Unit.Value;
+        return new ErrorResponse
+        {
+            Succeeded = false,
+        };
     }
 }

@@ -2,7 +2,5 @@
 
 namespace iLearning.Listography.DataAccess.Interfaces.Repositories;
 
-public interface ITopicsRepository : IEFRepository<ListTopic>
-{
-    Task<ListTopic> GetTopicByNameAsync(string name);
-}
+public interface IItemsRepository : IEFRepository<ListItem>
+{ }

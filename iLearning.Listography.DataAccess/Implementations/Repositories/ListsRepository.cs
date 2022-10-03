@@ -72,15 +72,16 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddItemToListAsync(int id, ListItem item)
+    public async Task<ListItem> AddItemToListAsync(int id, ListItem item)
     {
         var list = await GetByIdAsync(id, trackEntity: true);
 
         if (list is null)
         {
-            return;
+            throw new InvalidOperationException();
         }
 
+        // TODO: Fix it.
         var customFields = item.CustomFields.Select(field =>
         {
             field.Id = 0;
@@ -90,8 +91,9 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         await _customFieldsRepository.AddRangeAsync(customFields);
 
         list.Items!.Add(item);
-
         await _context.SaveChangesAsync();
+
+        return item;
     }
 
     private async Task ApplyFieldsChangesAsync(UserList oldEntity, UserList updatedFields)

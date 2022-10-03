@@ -32,14 +32,14 @@ public class UpdateListInfoCommandHandler : IRequestHandler<UpdateListInfoComman
     public async Task<Response> Handle(UpdateListInfoCommand request, CancellationToken cancellationToken)
     {
         var userId = _contextAccessor.HttpContext.GetUserId();
-        var allowEditList = await _userPermissionsService.AllowEditListAsync(userId, request.ListId);
+        var allowEditList = await _userPermissionsService.AllowEditListAsync(userId, request.Id);
         if (!allowEditList)
         {
             return new ErrorResponse { Succeeded = false };
         }
 
         var listInfo = _mapper.Map<UserList>(request);
-        _repository.UpdateAsync(listInfo);
+        await _repository.UpdateAsync(listInfo);
 
         return new Response { Succeeded = true };
     }

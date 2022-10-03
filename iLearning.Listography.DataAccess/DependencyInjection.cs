@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<IListsRepository, ListsRepository>();
         services.AddScoped<ITagsRepository, TagsRepository>();
         services.AddScoped<ICustomFieldsRepository, CustomFieldsRepository>();
+        services.AddScoped<ITopicsRepository, TopicsRepository>();
 
         return services;
     }

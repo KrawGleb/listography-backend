@@ -4,4 +4,5 @@ namespace iLearning.Listography.DataAccess.Interfaces.Repositories;
 public interface ITagsRepository
 {
     Task<IEnumerable<ListTag>> CreateTags(IEnumerable<ListTag> tags);
+    void DeleteAll(IEnumerable<ListTag> tags);
 }

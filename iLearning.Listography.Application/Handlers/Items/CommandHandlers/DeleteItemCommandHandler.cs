@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.Application.Requests.Items.Commands.Delete;
+﻿using iLearning.Listography.Application.Models.Responses;
+using iLearning.Listography.Application.Requests.Items.Commands.Delete;
 using iLearning.Listography.Application.Services.Interfaces;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.Infrastructure.Extensions;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace iLearning.Listography.Application.Handlers.Items.CommandHandlers;
 
-public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand>
+public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand, Response>
 {
     private readonly IItemsRepository _repository;
     private readonly IUserPermissionsService _userPermissionsService;
@@ -23,7 +24,7 @@ public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand>
         _contextAccessor = contextAccessor;
     }
 
-    public async Task<Unit> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
     {
         var item = await _repository.GetByIdAsync(request.Id);
         var userId = _contextAccessor.HttpContext.GetUserId();
@@ -35,9 +36,15 @@ public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand>
         }
         else
         {
-            throw new InvalidOperationException();
+            return new ErrorResponse()
+            {
+                Succeeded = false,
+            };
         }
 
-        return Unit.Value;
+        return new Response()
+        {
+            Succeeded = true
+        };
     }
 }

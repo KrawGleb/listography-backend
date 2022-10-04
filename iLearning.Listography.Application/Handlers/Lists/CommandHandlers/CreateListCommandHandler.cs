@@ -32,12 +32,12 @@ public class CreateListCommandHandler : IRequestHandler<CreateListCommand>
 
     public async Task<Unit> Handle(CreateListCommand request, CancellationToken cancellationToken)
     {
-        request.UserId = _contextAccessor.HttpContext.GetUserId();
+        var userId = _contextAccessor.HttpContext.GetUserId();
 
         var relatedUser = await _userManager
             .Users
             .Include(u => u.Lists)
-            .FirstOrDefaultAsync(u => u.Id == request.UserId);
+            .FirstOrDefaultAsync(u => u.Id == userId);
         var list = _mapper.Map<UserList>(request);
 
         relatedUser.Lists!.Add(list);

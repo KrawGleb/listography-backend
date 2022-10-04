@@ -34,7 +34,9 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             : _table.AsNoTracking();
 
         query = includeItems
-            ? query.Include(l => l.Items).ThenInclude(i => i.CustomFields)
+            ? query
+                .Include(l => l.Items).ThenInclude(i => i.CustomFields)
+                .Include(l => l.Items).ThenInclude(i => i.Tags)
             : query;
 
         query = includeItemTemplate

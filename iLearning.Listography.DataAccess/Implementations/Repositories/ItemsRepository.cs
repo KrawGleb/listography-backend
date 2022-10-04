@@ -19,13 +19,29 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         _tagsRepository = tagsRepository;
     }
 
-    public async override Task UpdateAsync(ListItem entity)
+    public async override Task<ListItem?> GetByIdAsync(int id, bool trackEntity = false)
     {
-        var existingItem = await GetByIdAsync(entity.Id);
+        var query = trackEntity
+            ? _table
+            : _table.AsNoTracking();
 
-        existingItem.Name = entity.Name;
-        await _customFieldsRepository.UpdateCustomFields(entity.CustomFields);
-        await _context.SaveChangesAsync();
+        var entity = await query
+            .Include(i => i.CustomFields)
+            .Include(i => i.Tags)
+            .FirstOrDefaultAsync(i => i.Id == id);
+
+        return entity;
+    }
+
+    public async override Task DeleteAsync(int id)
+    {
+        var entity = await GetByIdAsync(id, true);
+
+        if (entity is not null)
+        {
+            _table.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task UpdateAsync(ListItem oldEntity, ListItem newEntity)

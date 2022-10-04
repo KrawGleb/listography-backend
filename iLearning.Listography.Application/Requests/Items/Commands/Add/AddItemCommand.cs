@@ -8,5 +8,6 @@ public class AddItemCommand : IRequest<Response>
 {
     public int ListId { get; set; }
     public string? Name { get; set; }
+    public ICollection<ListTag>? Tags { get; set; }
     public ICollection<CustomField>? CustomFields { get; set; }
 }

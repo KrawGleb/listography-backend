@@ -1,4 +1,4 @@
-﻿    using iLearning.Listography.DataAccess.Interfaces.Repositories;
+﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,17 +22,10 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         _topicsRepository = topicsRepository;
     }
 
-    public override async Task CreateAsync(UserList entity)
-    {
-        await _tagsRepository.CreateTags(entity.Tags);
-
-        await base.CreateAsync(entity);
-    }
-
     public async Task<UserList?> GetByIdAsync(
-        int id, 
-        bool includeItems = true, 
-        bool includeTags = true, 
+        int id,
+        bool includeItems = true,
+        bool includeTags = true,
         bool includeItemTemplate = true,
         bool trackEntity = false)
     {
@@ -46,10 +39,6 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
         query = includeItemTemplate
             ? query.Include(l => l.ItemTemplate).ThenInclude(i => i.CustomFields)
-            : query;
-
-        query = includeTags
-            ? query.Include(l => l.Tags)
             : query;
 
         return await query.FirstAsync(l => l.Id == id);
@@ -89,6 +78,7 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         });
 
         await _customFieldsRepository.AddRangeAsync(customFields);
+        await _tagsRepository.CreateTags(item.Tags);
 
         list.Items!.Add(item);
         await _context.SaveChangesAsync();
@@ -96,15 +86,11 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         return item;
     }
 
-    private async Task ApplyFieldsChangesAsync(UserList oldEntity, UserList updatedFields)
+    private async Task ApplyFieldsChangesAsync(UserList oldEntity, UserList newEntity)
     {
-        _tagsRepository.DeleteAll(oldEntity.Tags!);
-        var newTags = await _tagsRepository.CreateTags(updatedFields.Tags!);
-
-        oldEntity.Title = updatedFields.Title;
-        oldEntity.Description = updatedFields.Description;
-        oldEntity.Tags = newTags.ToList();
-        oldEntity.ImageUrl = updatedFields.ImageUrl;
-        oldEntity.Topic = await _topicsRepository.GetTopicByNameAsync(updatedFields.Topic?.Name);
+        oldEntity.Title = newEntity.Title;
+        oldEntity.Description = newEntity.Description;
+        oldEntity.ImageUrl = newEntity.ImageUrl;
+        oldEntity.Topic = await _topicsRepository.GetTopicByNameAsync(newEntity.Topic?.Name);
     }
 }

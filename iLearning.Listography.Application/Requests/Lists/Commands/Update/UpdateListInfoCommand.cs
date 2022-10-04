@@ -11,5 +11,4 @@ public class UpdateListInfoCommand : IRequest<Response>
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? ImageUrl { get; set; }    
-    public IEnumerable<ListTag>? Tags { get; set; }
 }

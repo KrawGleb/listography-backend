@@ -20,6 +20,9 @@ public static class CustomFieldExtensions
             case CustomFieldType.BoolType:
                 field.BoolValue = (bool)value;
                 break;
+            case CustomFieldType.TextType:
+                field.TextValue = value.ToString();
+                break;
             default:
                 throw new InvalidOperationException("Unknown field type.");
         }
@@ -33,6 +36,7 @@ public static class CustomFieldExtensions
             CustomFieldType.IntType => field.IntValue,
             CustomFieldType.DateTimeType => field.DateTimeValue,
             CustomFieldType.BoolType => field.BoolValue,
+            CustomFieldType.TextType => field.TextValue,
             _ => throw new InvalidOperationException("Unknown field type."),
         };
     }

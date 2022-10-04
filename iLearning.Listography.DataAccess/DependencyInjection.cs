@@ -15,8 +15,10 @@ public static class DependencyInjection
     public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
         // TODO: Secure connection string.
-        services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseSqlServer(configuration.GetConnectionString("Default")));
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(
+                configuration.GetConnectionString("Default"), 
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
         services.AddIdentity<Account, IdentityRole>(options => { })
             .AddEntityFrameworkStores<ApplicationDbContext>();

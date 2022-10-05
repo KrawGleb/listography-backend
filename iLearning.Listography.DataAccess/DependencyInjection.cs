@@ -11,16 +11,24 @@ namespace iLearning.Listography.DataAccess;
 
 public static class DependencyInjection
 {
-    // TODO: Rename or split it.
-    public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
     {
         // TODO: Secure connection string.
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
-                configuration.GetConnectionString("Default"), 
+                configuration.GetConnectionString("Default"),
                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
-        services.AddIdentity<Account, IdentityRole>(options => { })
+        services.AddIdentity<Account, IdentityRole>(options =>
+        {
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireDigit = true;
+            options.Password.RequiredLength = 6;
+
+            options.User.RequireUniqueEmail = true;
+        })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddScoped<IListsRepository, ListsRepository>();

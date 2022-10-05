@@ -37,11 +37,13 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
         {
             var account = await _userManager.FindByEmailAsync(request.Email);
             var token = GenerateToken(account);
+            var isAdmin = await _userManager.IsInRoleAsync(account, "admin");
 
             return new LoginResponse()
             {
                 Succeeded = true,
-                Token = token
+                Token = token,
+                IsAdmin = isAdmin
             };
         }
 

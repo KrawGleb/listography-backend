@@ -1,32 +1,33 @@
-﻿using iLearning.Listography.Application.Requests.Identity.Commands.RegisterUser;
-using iLearning.Listography.DataAccess.Implementations;
+﻿using iLearning.Listography.Application.Models.Responses;
+using iLearning.Listography.Application.Requests.Identity.Commands.RegisterUser;
 using iLearning.Listography.DataAccess.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace iLearning.Listography.Application.Handlers.Identity.CommandHandlers;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, IdentityResult>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Response>
 {
     private readonly UserManager<Account> _userManager;
-    private readonly ApplicationDbContext _context;
 
     public RegisterCommandHandler(
-        UserManager<Account> userManager,
-        ApplicationDbContext context)
+        UserManager<Account> userManager)
     {
         _userManager = userManager;
-        _context = context;
     }
 
-    public async Task<IdentityResult> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         var account = new Account()
         {
-            UserName = request.Email,
+            UserName = request.Username,
             Email = request.Email,
         };
 
-        return await _userManager.CreateAsync(account, request.Password);
+        var result = await _userManager.CreateAsync(account, request.Password);
+
+        return result.Succeeded
+            ? new Response() { Succeeded = true }
+            : new ErrorResponse() { Succeeded = false, Errors = result.Errors.Select(e => e.Description) };
     }
 }

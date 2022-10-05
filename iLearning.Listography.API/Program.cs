@@ -9,7 +9,7 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 // Add services to the container.
-services.AddDatabase(configuration);
+services.AddDataAccess(configuration);
 services.AddApplication(configuration);
 
 services.AddCors(options =>

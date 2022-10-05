@@ -1,6 +1,7 @@
 ﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 
 namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
@@ -86,6 +87,13 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         await _context.SaveChangesAsync();
 
         return item;
+    }
+
+    public async override Task DeleteAsync(int id)
+    {
+        var list = await GetByIdAsync(id, true, true, true, true);
+        _table.Remove(list);
+        await _context.SaveChangesAsync();
     }
 
     private async Task ApplyFieldsChangesAsync(UserList oldEntity, UserList newEntity)

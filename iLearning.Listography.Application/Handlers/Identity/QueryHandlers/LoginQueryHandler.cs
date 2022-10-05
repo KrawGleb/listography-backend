@@ -31,7 +31,8 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
 
     public async Task<Response> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var signInResult = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, false);
 
         if (signInResult.Succeeded)
         {

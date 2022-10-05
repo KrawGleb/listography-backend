@@ -40,7 +40,7 @@ public class CreateListCommandHandler : IRequestHandler<CreateListCommand>
             .FirstOrDefaultAsync(u => u.Id == userId);
         var list = _mapper.Map<UserList>(request);
 
-        relatedUser.Lists!.Add(list);
+        relatedUser!.Lists!.Add(list);
 
         await _repository.CreateAsync(list);
         await _userManager.UpdateAsync(relatedUser);

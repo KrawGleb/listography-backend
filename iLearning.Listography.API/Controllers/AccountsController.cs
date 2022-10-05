@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.Application.Requests.Accounts.Queries.GetMe;
+﻿using iLearning.Listography.Application.Requests.Accounts.Queries.GetLists;
+using iLearning.Listography.Application.Requests.Accounts.Queries.GetMe;
 using iLearning.Listography.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,5 +16,13 @@ public class AccountsController : ApiControllerBase
         => Ok(await Mediator.Send(new GetMeQuery()
         {
             Id = HttpContext.GetUserId(),
+        }));
+
+    [HttpGet("{username}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAccount([FromRoute] string username)
+        => Ok(await Mediator.Send(new GetAccountListsQuery()
+        {
+            Username = username
         }));
 }

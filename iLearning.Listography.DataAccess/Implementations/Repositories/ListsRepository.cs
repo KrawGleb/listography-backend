@@ -26,8 +26,8 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
     public async Task<UserList?> GetByIdAsync(
         int id,
         bool includeItems = true,
-        bool includeTags = true,
         bool includeItemTemplate = true,
+        bool includeTopic = true,
         bool trackEntity = false)
     {
         var query = trackEntity
@@ -42,6 +42,10 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
         query = includeItemTemplate
             ? query.Include(l => l.ItemTemplate).ThenInclude(i => i.CustomFields)
+            : query;
+
+        query = includeTopic
+            ? query.Include(l => l.Topic)
             : query;
 
         return await query.FirstAsync(l => l.Id == id);
@@ -101,6 +105,6 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         oldEntity.Title = newEntity.Title;
         oldEntity.Description = newEntity.Description;
         oldEntity.ImageUrl = newEntity.ImageUrl;
-        oldEntity.Topic = await _topicsRepository.GetTopicByNameAsync(newEntity.Topic?.Name);
+        oldEntity.Topic = await _topicsRepository.GetTopicByNameAsync(newEntity.Topic?.Name!);
     }
 }

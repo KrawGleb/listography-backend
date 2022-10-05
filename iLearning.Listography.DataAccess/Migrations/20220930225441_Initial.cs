@@ -257,16 +257,6 @@ namespace iLearning.Listography.DataAccess.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "29ad8ec1-af98-4fc3-824d-80d1472e417d", "94243b52-5bc8-49ac-b171-fb4d360a9d69", "User", "USER" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6dcefb1a-3b58-4e71-a150-8ebc0e4ab23d", "ae40ad1d-d1ed-42d3-a8ad-62f36b20633d", "Admin", "ADMIN" });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",

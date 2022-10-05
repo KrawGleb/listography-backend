@@ -6,9 +6,9 @@ public interface IListsRepository : IEFRepository<UserList>
 {
     Task<ListItem> AddItemToListAsync(int id, ListItem item);
     Task<UserList?> GetByIdAsync(
-        int id,
-        bool includeItems = true,
-        bool includeTags = true,
-        bool includeItemTemplate = true,
-        bool trackEntity = false);
+         int id,
+         bool includeItems = true,
+         bool includeItemTemplate = true,
+         bool includeTopic = true,
+         bool trackEntity = false);
 }

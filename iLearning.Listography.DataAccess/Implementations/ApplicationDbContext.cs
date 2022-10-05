@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Models.Identity;
+﻿using iLearning.Listography.DataAccess.Helpers.DataSeeding;
+using iLearning.Listography.DataAccess.Models.Identity;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -21,24 +22,8 @@ public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole, str
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder
-            .Entity<IdentityRole>()
-            .HasData(
-                new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "Admin",
-                    NormalizedName = "ADMIN",
-                    ConcurrencyStamp = Guid.NewGuid().ToString()
-                },
-                new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "User",
-                    NormalizedName = "USER",
-                    ConcurrencyStamp = Guid.NewGuid().ToString()
-                }
-            );
+        builder.SeedWithRoles();
+        builder.SeedWithTopics();
 
         base.OnModelCreating(builder);
     }

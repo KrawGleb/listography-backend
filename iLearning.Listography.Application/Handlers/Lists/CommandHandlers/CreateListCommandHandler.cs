@@ -16,17 +16,20 @@ public class CreateListCommandHandler : IRequestHandler<CreateListCommand>
     private readonly IMapper _mapper;
     private readonly UserManager<Account> _userManager;
     private readonly IListsRepository _repository;
+    private readonly ITopicsRepository _topicsRepository;
     private readonly IHttpContextAccessor _contextAccessor;
 
     public CreateListCommandHandler(
         IMapper mapper,
         UserManager<Account> userManager,
         IListsRepository repository,
+        ITopicsRepository topicsRepository,
         IHttpContextAccessor contextAccessor)
     {
         _mapper = mapper;
         _userManager = userManager;
         _repository = repository;
+        _topicsRepository = topicsRepository;
         _contextAccessor = contextAccessor;
     }
 
@@ -38,7 +41,9 @@ public class CreateListCommandHandler : IRequestHandler<CreateListCommand>
             .Users
             .Include(u => u.Lists)
             .FirstOrDefaultAsync(u => u.Id == userId);
+
         var list = _mapper.Map<UserList>(request);
+        list.Topic = await _topicsRepository.GetTopicByNameAsync(request.Topic?.Name!);
 
         relatedUser!.Lists!.Add(list);
 

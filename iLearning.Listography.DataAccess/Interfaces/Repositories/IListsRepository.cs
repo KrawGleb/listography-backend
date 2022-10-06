@@ -11,4 +11,5 @@ public interface IListsRepository : IEFRepository<UserList>
          bool includeItemTemplate = true,
          bool includeTopic = true,
          bool trackEntity = false);
+    Task<string?> GetOwnerIdAsync(int listId);
 }

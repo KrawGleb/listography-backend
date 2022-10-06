@@ -2,6 +2,6 @@
 
 public interface IUserPermissionsService
 {
-    // TODO: Rename it.
+    Task<bool> AllowEditItemAsync(string userId, int itemId);
     Task<bool> AllowEditListAsync(string userId, int listId);
 }

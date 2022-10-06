@@ -51,6 +51,11 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         return await query.FirstAsync(l => l.Id == id);
     }
 
+    public async Task<string?> GetOwnerIdAsync(int listId)
+    {
+        return (await _table.FirstOrDefaultAsync(l => l.Id == listId))?.AccountId;
+    }
+
     public async override Task UpdateAsync(UserList entity)
     {
         var existingList = await GetByIdAsync(

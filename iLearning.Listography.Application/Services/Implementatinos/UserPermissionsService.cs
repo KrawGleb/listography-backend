@@ -8,29 +8,39 @@ namespace iLearning.Listography.Application.Services.Implementatinos;
 public class UserPermissionsService : IUserPermissionsService
 {
     private readonly UserManager<Account> _userManager;
-    private readonly IListsRepository _repository;
+    private readonly IListsRepository _listsRepository;
+    private readonly IItemsRepository _itemsRepository;
 
     public UserPermissionsService(
         UserManager<Account> userManager,
-        IListsRepository repository)
+        IListsRepository listsRepository,
+        IItemsRepository itemsRepository
+        )
     {
         _userManager = userManager;
-        _repository = repository;
+        _listsRepository = listsRepository;
+        _itemsRepository = itemsRepository;
+    }
+
+    public async Task<bool> AllowEditItemAsync(string userId, int itemId)
+    {
+        var listId = await _itemsRepository.GetListIdAsync(itemId);
+
+        return 
+            listId is not null && 
+            await AllowEditListAsync(userId, listId ?? -1);
     }
 
     public async Task<bool> AllowEditListAsync(string userId, int listId)
     {
-        var list = await _repository.GetByIdAsync(listId, trackEntity: false);
+        var ownerId = await _listsRepository.GetOwnerIdAsync(listId);
 
-        if (list is not null &&
-            list.AccountId == userId)
-        {
-            return true;
-        }
-        else
-        {
-            return await _userManager.IsInRoleAsync(
-                    await _userManager.FindByIdAsync(userId), "admin");
-        }
+        var isUserListOwner = ownerId is not null &&
+            ownerId == userId;
+
+        var isUserAdmin = _userManager.IsInRoleAsync(
+            await _userManager.FindByIdAsync(userId), "admin");
+
+        return isUserListOwner || await isUserAdmin;
     }
 }

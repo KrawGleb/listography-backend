@@ -10,9 +10,16 @@ public class TopicsRepository : EFRepository<ListTopic>, ITopicsRepository
         : base(context)
     { }
 
-    public async Task<ListTopic?> GetTopicByNameAsync(string name)
+    public async Task<ListTopic?> GetTopicByNameAsync(string? name)
     {
-        return await _table.FirstOrDefaultAsync(t => t.Name!.ToLower() == name.ToLower()) 
-            ?? await _table.FirstAsync(t => t.Name!.ToLower() == "other");
+        return name is null 
+            ? await GetDefaultTopic()
+            : await _table.FirstOrDefaultAsync(t => t.Name!.ToLower() == name.ToLower())
+                ?? await GetDefaultTopic();
+    }
+
+    private async Task<ListTopic> GetDefaultTopic()
+    {
+        return await _table.FirstAsync(t => t.Name!.ToLower() == "other");
     }
 }

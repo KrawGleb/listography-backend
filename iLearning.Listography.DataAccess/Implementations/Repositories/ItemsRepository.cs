@@ -33,6 +33,11 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         return entity;
     }
 
+    public async Task<int?> GetListIdAsync(int id)
+    {
+        return (await _table.FirstOrDefaultAsync(i => i.Id == id))?.UserListId;
+    }
+
     public async override Task DeleteAsync(int id)
     {
         var entity = await GetByIdAsync(id, true);

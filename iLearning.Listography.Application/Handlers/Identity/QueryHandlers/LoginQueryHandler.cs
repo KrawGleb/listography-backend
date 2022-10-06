@@ -31,10 +31,9 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
 
     public async Task<Response> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, false);
+        var loginResult = await LoginAsync(request);
 
-        if (signInResult.Succeeded)
+        if (loginResult.Succeeded)
         {
             var account = await _userManager.FindByEmailAsync(request.Email);
             var token = GenerateToken(account);
@@ -53,6 +52,14 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
             Succeeded = false,
             Errors = new string[] { "Invalid password or email" }
         };
+    }
+
+    private async Task<SignInResult> LoginAsync(LoginQuery request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, false);
+
+        return signInResult;
     }
 
     private string GenerateToken(Account account)

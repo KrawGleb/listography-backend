@@ -4,6 +4,6 @@ namespace iLearning.Listography.DataAccess.Interfaces.Repositories;
 
 public interface ITagsRepository : IEFRepository<ListTag>
 {
-    Task<IEnumerable<ListTag>> CreateTags(IEnumerable<ListTag> tags);
-    void DeleteAll(IEnumerable<ListTag> tags);
+    Task<IEnumerable<ListTag>?> CreateTagsAsync(IEnumerable<ListTag>? tags);
+    void DeleteAll(IEnumerable<ListTag>? tags);
 }

@@ -1,6 +1,5 @@
 ﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
-using Microsoft.EntityFrameworkCore;
 
 namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
@@ -10,14 +9,21 @@ public class TagsRepository : EFRepository<ListTag>, ITagsRepository
         : base(context)
     { }
 
-    public async Task<IEnumerable<ListTag>> CreateTags(IEnumerable<ListTag> tags)
+    public async Task<IEnumerable<ListTag>?> CreateTagsAsync(IEnumerable<ListTag>? tags)
     {
-        await _table.AddRangeAsync(tags);
+        if (tags is not null)
+        {
+            await _table.AddRangeAsync(tags);
+        }
+
         return tags;
     }
 
-    public void DeleteAll(IEnumerable<ListTag> tags)
+    public void DeleteAll(IEnumerable<ListTag>? tags)
     {
-        _table.RemoveRange(tags);
+        if (tags is not null)
+        {
+            _table.RemoveRange(tags);
+        }
     }
 }

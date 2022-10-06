@@ -18,6 +18,15 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Response>
 
     public async Task<Response> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
+        var result = await RegisterAccountAsync(request);
+
+        return result.Succeeded
+            ? new Response() { Succeeded = true }
+            : new ErrorResponse() { Succeeded = false, Errors = result.Errors.Select(e => e.Description) };
+    }
+
+    private async Task<IdentityResult> RegisterAccountAsync(RegisterCommand request)
+    {
         var account = new Account()
         {
             UserName = request.Username,
@@ -26,8 +35,6 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Response>
 
         var result = await _userManager.CreateAsync(account, request.Password);
 
-        return result.Succeeded
-            ? new Response() { Succeeded = true }
-            : new ErrorResponse() { Succeeded = false, Errors = result.Errors.Select(e => e.Description) };
+        return result;
     }
 }

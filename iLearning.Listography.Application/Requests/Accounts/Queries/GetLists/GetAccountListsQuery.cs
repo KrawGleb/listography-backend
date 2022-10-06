@@ -1,9 +1,9 @@
-﻿using iLearning.Listography.DataAccess.Models.List;
+﻿using iLearning.Listography.Application.Models.Responses;
 using MediatR;
 
 namespace iLearning.Listography.Application.Requests.Accounts.Queries.GetLists;
 
-public class GetAccountListsQuery : IRequest<IEnumerable<UserList>?>
+public class GetAccountListsQuery : IRequest<Response>
 {
     public string? Username { get; set; }
 }

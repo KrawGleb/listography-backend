@@ -1,11 +1,11 @@
-﻿using iLearning.Listography.Application.Requests.List.Queries.Get;
+﻿using iLearning.Listography.Application.Models.Responses;
+using iLearning.Listography.Application.Requests.List.Queries.Get;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
-using iLearning.Listography.DataAccess.Models.List;
 using MediatR;
 
 namespace iLearning.Listography.Application.Handlers.List.QueryHandlers;
 
-public class GetListQueryHandler : IRequestHandler<GetListQuery, UserList?>
+public class GetListQueryHandler : IRequestHandler<GetListQuery, Response>
 {
     private readonly IListsRepository _repository;
 
@@ -14,8 +14,14 @@ public class GetListQueryHandler : IRequestHandler<GetListQuery, UserList?>
         _repository = repository;
     }
 
-    public async Task<UserList?> Handle(GetListQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(GetListQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetByIdAsync(request.Id);
+        var list = await _repository.GetByIdAsync(request.Id);
+
+        return new CommonResponse()
+        {
+            Succeeded = true,
+            Body = list
+        };
     }
 }

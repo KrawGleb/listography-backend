@@ -17,8 +17,7 @@ public class ListsController : ApiControllerBase
     public async Task<IActionResult> CreateList([FromBody] CreateListCommand command)
         => Ok(await Mediator.Send(command));
 
-    // TODO: Use Path instead of Post verb.
-    [HttpPost("update")]
+    [HttpPatch("update")]
     [ServiceFilter(typeof(ProtectedListActionFilter))]
     public async Task<IActionResult> UpdateListInfo([FromBody] UpdateListInfoCommand command)
         => Ok(await Mediator.Send(command));

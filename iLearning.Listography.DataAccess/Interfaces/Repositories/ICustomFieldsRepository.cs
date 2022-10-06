@@ -4,5 +4,6 @@ namespace iLearning.Listography.DataAccess.Interfaces.Repositories;
 
 public interface ICustomFieldsRepository : IEFRepository<CustomField>
 {
-    Task<IEnumerable<CustomField>> UpdateCustomFields(IEnumerable<CustomField> customFields);
+    Task<IEnumerable<CustomField>> UpdateCustomFieldsAsync(IEnumerable<CustomField>? customFields);
+    Task AddRangeAsync(IEnumerable<CustomField>? entities);
 }

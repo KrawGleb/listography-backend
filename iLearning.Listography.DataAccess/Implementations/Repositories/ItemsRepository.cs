@@ -1,6 +1,7 @@
 ﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
@@ -51,11 +52,13 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
 
     public async Task UpdateAsync(ListItem oldEntity, ListItem newEntity)
     {
-        oldEntity.Name = newEntity.Name;
-        oldEntity.CustomFields = (await _customFieldsRepository.UpdateCustomFields(newEntity.CustomFields)).ToList();
+        var customFields = await _customFieldsRepository.UpdateCustomFieldsAsync(newEntity.CustomFields);
+        var tags = await _tagsRepository.CreateTagsAsync(newEntity.Tags);
 
         _tagsRepository.DeleteAll(oldEntity.Tags);
-        oldEntity.Tags = (await _tagsRepository.CreateTags(newEntity.Tags)).ToList();
+        oldEntity.Tags = tags?.ToList();
+        oldEntity.Name = newEntity.Name;
+        oldEntity.CustomFields = customFields.ToList();
 
         _context.Entry(oldEntity).State = EntityState.Modified;
 

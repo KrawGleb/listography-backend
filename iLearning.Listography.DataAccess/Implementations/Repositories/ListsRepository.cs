@@ -1,7 +1,6 @@
 ﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
-using System.Transactions;
 
 namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
@@ -36,24 +35,25 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
         query = includeItems
             ? query
-                .Include(l => l.Items).ThenInclude(i => i.CustomFields)
-                .Include(l => l.Items).ThenInclude(i => i.Tags)
+                .Include(l => l.Items!).ThenInclude(i => i.CustomFields)
+                .Include(l => l.Items!).ThenInclude(i => i.Tags)
             : query;
 
         query = includeItemTemplate
-            ? query.Include(l => l.ItemTemplate).ThenInclude(i => i.CustomFields)
+            ? query.Include(l => l.ItemTemplate).ThenInclude(i => i!.CustomFields)
             : query;
 
         query = includeTopic
             ? query.Include(l => l.Topic)
             : query;
 
-        return await query.FirstAsync(l => l.Id == id);
+        return await query.FirstOrDefaultAsync(l => l.Id == id);
     }
 
     public async Task<string?> GetOwnerIdAsync(int listId)
     {
-        return (await _table.FirstOrDefaultAsync(l => l.Id == listId))?.AccountId;
+        var entity = await _table.FirstOrDefaultAsync(l => l.Id == listId);
+        return entity?.AccountId;
     }
 
     public async override Task UpdateAsync(UserList entity)
@@ -82,17 +82,11 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             throw new InvalidOperationException();
         }
 
-        // TODO: Fix it.
-        var customFields = item.CustomFields.Select(field =>
-        {
-            field.Id = 0;
-            return field;
-        });
-
-        await _customFieldsRepository.AddRangeAsync(customFields);
-        await _tagsRepository.CreateTags(item.Tags);
+        await _customFieldsRepository.AddRangeAsync(item.CustomFields);
+        await _tagsRepository.CreateTagsAsync(item.Tags);
 
         list.Items!.Add(item);
+
         await _context.SaveChangesAsync();
 
         return item;
@@ -101,12 +95,18 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
     public async override Task DeleteAsync(int id)
     {
         var list = await GetByIdAsync(id, true, true, true, true);
-        _table.Remove(list);
-        await _context.SaveChangesAsync();
+
+        if (list is not null)
+        {
+            _table.Remove(list);
+            await _context.SaveChangesAsync();
+        }
     }
 
     private async Task ApplyFieldsChangesAsync(UserList oldEntity, UserList newEntity)
     {
+        // TODO: Test it.
+        // _context.Entry(oldEntity).CurrentValues.SetValues(newEntity);
         oldEntity.Title = newEntity.Title;
         oldEntity.Description = newEntity.Description;
         oldEntity.ImageUrl = newEntity.ImageUrl;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using iLearning.Listography.Application.Common.Exceptions;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Items.Commands.Update;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
@@ -20,27 +21,18 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Respo
         _repository = repository;
     }
 
-    // TODO: Review it.
     public async Task<Response> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
     {
         var existingItem = await _repository.GetByIdAsync(request.Id, true);
 
         if (existingItem is null)
         {
-            return new ErrorResponse()
-            {
-                Succeeded = false,
-                Errors = new string[] { "Item not exists" }
-            };
+            throw new NotFoundException("Item not exists");
         }
 
         var item = _mapper.Map<ListItem>(request);
-
         await _repository.UpdateAsync(existingItem, item);
 
-        return new Response
-        {
-            Succeeded = true
-        };
+        return new Response { Succeeded = true };
     }
 }

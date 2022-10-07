@@ -38,9 +38,9 @@ public class UserPermissionsService : IUserPermissionsService
         var isUserListOwner = ownerId is not null &&
             ownerId == userId;
 
-        var isUserAdmin = _userManager.IsInRoleAsync(
+        var isUserAdmin = await _userManager.IsInRoleAsync(
             await _userManager.FindByIdAsync(userId), "admin");
 
-        return isUserListOwner || await isUserAdmin;
+        return isUserListOwner || isUserAdmin;
     }
 }

@@ -55,7 +55,10 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         var response = new ErrorResponse()
         {
             Succeeded = false,
-            Errors = new string[] { "An error occured while processing request." }
+            Errors = new string[] { 
+                "An error occured while processing request.",
+                context.Exception.Message
+            }
         };
 
         context.Result = new ObjectResult(response)

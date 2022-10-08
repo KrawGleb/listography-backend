@@ -35,12 +35,12 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
         query = includeItems
             ? query
-                .Include(l => l.Items).ThenInclude(i => i.CustomFields)
-                .Include(l => l.Items).ThenInclude(i => i.Tags)
+                .Include(l => l.Items!).ThenInclude(i => i.CustomFields)
+                .Include(l => l.Items!).ThenInclude(i => i.Tags)
             : query;
 
         query = includeItemTemplate
-            ? query.Include(l => l.ItemTemplate).ThenInclude(i => i.CustomFields)
+            ? query.Include(l => l.ItemTemplate!).ThenInclude(i => i.CustomFields)
             : query;
 
         query = includeTopic
@@ -48,6 +48,17 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             : query;
 
         return await query.FirstOrDefaultAsync(l => l.Id == id);
+    }
+
+    public async override Task DeleteAsync(int id)
+    {
+        var list = await GetByIdAsync(id, true, true, true, true);
+
+        if (list is not null)
+        {
+            _table.Remove(list);
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task<string?> GetOwnerIdAsync(int listId)
@@ -94,8 +105,6 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
     private async Task ApplyFieldsChangesAsync(UserList oldEntity, UserList newEntity)
     {
-        // TODO: Test it.
-        // _context.Entry(oldEntity).CurrentValues.SetValues(newEntity);
         oldEntity.Title = newEntity.Title;
         oldEntity.Description = newEntity.Description;
         oldEntity.ImageUrl = newEntity.ImageUrl;

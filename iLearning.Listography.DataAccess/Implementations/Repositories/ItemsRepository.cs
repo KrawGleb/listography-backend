@@ -29,7 +29,7 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         var entity = await query
             .Include(i => i.CustomFields)
             .Include(i => i.Tags)
-            .FirstOrDefaultAsync(i => i.Id == id);
+            .SingleAsync(i => i.Id == id);
 
         return entity;
     }

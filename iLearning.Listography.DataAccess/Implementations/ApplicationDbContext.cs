@@ -25,6 +25,16 @@ public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole, str
         builder.SeedWithRoles();
         builder.SeedWithTopics();
 
+        builder
+            .Entity<Account>()
+            .HasMany(a => a.Lists)
+            .WithOne(l => l.Account);
+
+        builder
+            .Entity<UserList>()
+            .HasMany(l => l.Items)
+            .WithOne(i => i.UserList);
+
         base.OnModelCreating(builder);
     }
 }

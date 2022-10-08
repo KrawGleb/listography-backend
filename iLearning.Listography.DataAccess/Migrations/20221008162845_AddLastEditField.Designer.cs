@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221008162845_AddLastEditField")]
+    partial class AddLastEditField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,7 +139,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("ListItemTemplateId");
 
-                    b.ToTable("CustomFields", (string)null);
+                    b.ToTable("CustomFields");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListItem", b =>
@@ -148,7 +150,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("LastEdit")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -161,7 +163,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("UserListId");
 
-                    b.ToTable("Items", (string)null);
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListItemTemplate", b =>
@@ -177,7 +179,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemTemplates", (string)null);
+                    b.ToTable("ItemTemplates");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListTag", b =>
@@ -198,7 +200,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("ListItemId");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListTopic", b =>
@@ -214,7 +216,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Topics", (string)null);
+                    b.ToTable("Topics");
 
                     b.HasData(
                         new
@@ -293,7 +295,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("Lists", (string)null);
+                    b.ToTable("Lists");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -325,15 +327,15 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5f074415-5993-4054-9977-620fbe195b36",
-                            ConcurrencyStamp = "f207b104-c110-4cc6-bd8c-0178c4bfefa9",
+                            Id = "25f22390-8869-4b9f-868f-f6529483699b",
+                            ConcurrencyStamp = "57a2baf3-d7b2-45be-803c-70632f5d3937",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "b9cb0a9c-1c0c-43da-b8ae-484c3387fa84",
-                            ConcurrencyStamp = "3a1c789e-8970-4a8b-8e7f-01342092538d",
+                            Id = "411f143c-b0d9-4e75-a21a-acfb02528179",
+                            ConcurrencyStamp = "2f940c81-088f-4f11-9b2e-e70f7cd2a998",
                             Name = "User",
                             NormalizedName = "USER"
                         });

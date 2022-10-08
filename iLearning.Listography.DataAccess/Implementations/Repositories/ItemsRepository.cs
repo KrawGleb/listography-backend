@@ -20,6 +20,12 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         _tagsRepository = tagsRepository;
     }
 
+    public async override Task CreateAsync(ListItem entity)
+    {
+        entity.CreatedAt = DateTime.Now;
+        await base.CreateAsync(entity);
+    }
+
     public async override Task<ListItem?> GetByIdAsync(int id, bool trackEntity = false)
     {
         var query = trackEntity
@@ -37,6 +43,18 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
     public async Task<int?> GetListIdAsync(int id)
     {
         return (await _table.FirstOrDefaultAsync(i => i.Id == id))?.UserListId;
+    }
+
+    public async Task<IEnumerable<ListItem>> GetLastCreated(int count)
+    {
+        var query = _table
+            .Include(i => i.UserList)
+                .ThenInclude(l => l.Account)
+            .AsNoTracking()
+            .OrderByDescending(i => i.CreatedAt)
+            .Take(count);
+
+        return await query.ToListAsync();
     }
 
     public async override Task DeleteAsync(int id)

@@ -50,6 +50,21 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         return await query.FirstOrDefaultAsync(l => l.Id == id);
     }
 
+    public async Task<string?> GetOwnerIdAsync(int listId)
+    {
+        var entity = await _table.FirstOrDefaultAsync(l => l.Id == listId);
+        return entity?.AccountId;
+    }
+
+    public async Task<IEnumerable<UserList>> GetLargestAsync(int count)
+    {
+        return await _table
+            .Include(l => l.Items)
+            .OrderByDescending(l => l.Items.Count)
+            .Take(count)
+            .ToListAsync();
+    }
+
     public async override Task DeleteAsync(int id)
     {
         var list = await GetByIdAsync(id, true, true, true, true);
@@ -59,12 +74,6 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             _table.Remove(list);
             await _context.SaveChangesAsync();
         }
-    }
-
-    public async Task<string?> GetOwnerIdAsync(int listId)
-    {
-        var entity = await _table.FirstOrDefaultAsync(l => l.Id == listId);
-        return entity?.AccountId;
     }
 
     public async override Task UpdateAsync(UserList entity)
@@ -96,6 +105,7 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         await _customFieldsRepository.AddRangeAsync(item.CustomFields);
         await _tagsRepository.CreateTagsAsync(item.Tags);
 
+        item.CreatedAt = DateTime.Now;
         list.Items!.Add(item);
 
         await _context.SaveChangesAsync();

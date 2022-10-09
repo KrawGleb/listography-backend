@@ -1,4 +1,5 @@
 ﻿using iLearning.Listography.DataAccess.Models.Interfaces;
+using Nest;
 using System.Text.Json.Serialization;
 
 namespace iLearning.Listography.DataAccess.Models.List;
@@ -12,6 +13,7 @@ public class ListItem : IEntity
     public DateTime CreatedAt { get; set; }
     
     public int UserListId { get; set; }
+    [Ignore]
     [JsonIgnore]
     public UserList? UserList { get; set; }
 }

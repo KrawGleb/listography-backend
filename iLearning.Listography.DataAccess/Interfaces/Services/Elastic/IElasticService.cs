@@ -2,9 +2,10 @@
 
 namespace iLearning.Listography.DataAccess.Interfaces.Services.Elastic;
 
-public interface IElasticSearchService
+public interface IElasticService
 {
-    Task<string> IndexItemAsync(SearchItem item);
     Task<IEnumerable<SearchItem>?> SearchByValueAsync(string value);
+    Task<string> IndexItemAsync(SearchItem item);
     Task DeleteItemAsync(int id);
+    Task UpdateItemAsync(SearchItem item);
 }

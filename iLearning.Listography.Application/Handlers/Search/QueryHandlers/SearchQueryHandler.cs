@@ -7,16 +7,16 @@ namespace iLearning.Listography.Application.Handlers.Search.QueryHandlers;
 
 public class SearchQueryHandler : IRequestHandler<SearchQuery, Response>
 {
-    private readonly IElasticSearchService _elasticSearchService;
+    private readonly IElasticService _elasticService;
 
-    public SearchQueryHandler(IElasticSearchService elasticSearchService)
+    public SearchQueryHandler(IElasticService elasticService)
     {
-        _elasticSearchService = elasticSearchService;
+        _elasticService = elasticService;
     }
 
     public async Task<Response> Handle(SearchQuery request, CancellationToken cancellationToken)
     {
-        var items = await _elasticSearchService.SearchByValueAsync(request.SearchValue);
+        var items = await _elasticService.SearchByValueAsync(request.SearchValue);
 
         return new CommonResponse
         {

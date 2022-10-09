@@ -9,20 +9,20 @@ namespace iLearning.Listography.Application.Handlers.Items.CommandHandlers;
 public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand, Response>
 {
     private readonly IItemsRepository _repository;
-    private readonly IElasticSearchService _elasticSearchService;
+    private readonly IElasticService _elasticService;
 
     public DeleteItemCommandHandler(
         IItemsRepository repository,
-        IElasticSearchService elasticSearchService)
+        IElasticService elasticService)
     {
         _repository = repository;
-        _elasticSearchService = elasticSearchService;
+        _elasticService = elasticService;
     }
 
     public async Task<Response> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
     {
         await _repository.DeleteAsync(request.Id);
-        await _elasticSearchService.DeleteItemAsync(request.Id);
+        await _elasticService.DeleteItemAsync(request.Id);
 
         return new Response()
         {

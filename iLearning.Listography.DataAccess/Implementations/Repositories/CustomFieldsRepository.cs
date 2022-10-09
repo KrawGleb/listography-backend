@@ -10,25 +10,27 @@ public class CustomFieldsRepository : EFRepository<CustomField>, ICustomFieldsRe
         : base(context)
     { }
 
-    public async Task<IEnumerable<CustomField>> UpdateCustomFieldsAsync(IEnumerable<CustomField>? customFields)
+    public async Task<IEnumerable<CustomField>> UpdateCustomFieldsAsync(IEnumerable<CustomField> oldValues, IEnumerable<CustomField>? newValues)
     {
-        if (customFields is null)
+        if (oldValues is null || newValues is null)
         {
             return Enumerable.Empty<CustomField>();
         }
 
-        var ids = customFields.Select(c => c.Id);
-        var existingFields = customFields.Where(c => ids.Contains(c.Id));
-
-        foreach (var field in existingFields)
+        if (oldValues.Count() != newValues.Count())
         {
-            var value = customFields.First(c => c.Id == field.Id).GetValue();
-            field.SetValue(value!);
+            throw new InvalidOperationException();
+        }
+
+        for (int i = 0; i < oldValues.Count(); i++)
+        {
+            var newValue = newValues.ElementAt(i).GetValue();
+            oldValues.ElementAt(i).SetValue(newValue);
         }
 
         await _context.SaveChangesAsync();
-
-        return existingFields;
+        
+        return oldValues;   
     }
 
     public async override Task AddRangeAsync(IEnumerable<CustomField>? entities)

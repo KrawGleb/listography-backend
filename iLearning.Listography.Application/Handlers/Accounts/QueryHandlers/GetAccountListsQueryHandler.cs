@@ -33,7 +33,8 @@ public class GetAccountListsQueryHandler : IRequestHandler<GetAccountListsQuery,
     {
         var account = await _userManager
             .Users
-            .Include(u => u.Lists)
+            .Include(u => u.Lists!)
+                .ThenInclude(l => l.Topic)
             .FirstOrDefaultAsync(u => u.UserName == username);
 
         if (account is null)

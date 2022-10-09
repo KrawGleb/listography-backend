@@ -12,12 +12,12 @@ namespace iLearning.Listography.Application.Handlers.Items.CommandHandlers;
 public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Response>
 {
     private readonly IListsRepository _listsRepository;
-    private readonly IElasticSearchService _elasticService;
+    private readonly IElasticService _elasticService;
     private readonly IMapper _mapper;
 
     public AddItemCommandHandler(
         IListsRepository listsRepository,
-        IElasticSearchService elasticService,
+        IElasticService elasticService,
         IMapper mapper)
     {
         _listsRepository = listsRepository;

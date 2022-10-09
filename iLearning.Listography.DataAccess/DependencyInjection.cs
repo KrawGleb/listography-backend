@@ -63,7 +63,7 @@ public static class DependencyInjection
             return new ElasticClient(settings);
         });
 
-        services.AddScoped<IElasticSearchService, ElasticSearchService>();
+        services.AddScoped<IElasticService, ElasticService>();
 
         return services;
     }

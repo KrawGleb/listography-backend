@@ -51,13 +51,9 @@ public static class DependencyInjection
     {
         services.AddSingleton<IElasticClient>(factory =>
         {
-            var elasticSection = configuration.GetSection("Elastic");
-            var connectionUri = elasticSection.GetSection("ConnectionUri").Value;
-            var user = elasticSection.GetSection("User").Value;
-            var password = elasticSection.GetSection("Password").Value;
+            var connectionUri = Environment.GetEnvironmentVariable("BONSAI_URL");
 
-            var settings = new ConnectionSettings()
-                .BasicAuthentication(user, password)
+            var settings = new ConnectionSettings(new Uri(connectionUri!))
                 .DefaultMappingFor<SearchItem>(i => i.IndexName(ElasticConstants.ItemIndexName));
 
             return new ElasticClient(settings);

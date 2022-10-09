@@ -6,4 +6,6 @@ namespace iLearning.Listography.DataAccess.Models.Identity;
 public class Account : IdentityUser
 {
     public ICollection<UserList>? Lists { get; set; }
+    public string? SelectedLanguage { get; set; }
+    public string? SelectedTheme { get; set; }
 }

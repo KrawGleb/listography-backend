@@ -6,9 +6,9 @@ public interface IEFRepository<T>
 {
     Task AddRangeAsync(IEnumerable<T> entities);
     Task CreateAsync(T entity);
+    Task UpdateAsync(T entity);
     Task DeleteAsync(int id);
     Task DeleteAsync(T entity);
     Task<IEnumerable<T>> GetAllAsync(bool trackEntities = false);
     Task<T?> GetByIdAsync(int id, bool trackEntity = false);
-    void Update(T entity);
 }

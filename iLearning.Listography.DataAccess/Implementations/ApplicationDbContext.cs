@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Models.Identity;
+﻿using iLearning.Listography.DataAccess.Helpers.DataSeeding;
+using iLearning.Listography.DataAccess.Models.Identity;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,27 +17,23 @@ public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole, str
     private DbSet<ListTag> Tags { get; set; }
     private DbSet<ListTopic> Topics { get; set; }
     private DbSet<CustomField> CustomFields { get; set; }
+    private DbSet<ListItem> Items { get; set; }
+    private DbSet<ListItemTemplate> ItemTemplates { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.SeedWithRoles();
+        builder.SeedWithTopics();
+
         builder
-            .Entity<IdentityRole>()
-            .HasData(
-                new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "Admin",
-                    NormalizedName = "ADMIN",
-                    ConcurrencyStamp = Guid.NewGuid().ToString()
-                },
-                new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "User",
-                    NormalizedName = "USER",
-                    ConcurrencyStamp = Guid.NewGuid().ToString()
-                }
-            );
+            .Entity<Account>()
+            .HasMany(a => a.Lists)
+            .WithOne(l => l.Account);
+
+        builder
+            .Entity<UserList>()
+            .HasMany(l => l.Items)
+            .WithOne(i => i.UserList);
 
         base.OnModelCreating(builder);
     }

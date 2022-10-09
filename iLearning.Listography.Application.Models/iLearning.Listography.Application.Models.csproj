@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\iLearning.Listography.DataAccess.Models\iLearning.Listography.DataAccess.Models.csproj" />
+  </ItemGroup>
+
 </Project>

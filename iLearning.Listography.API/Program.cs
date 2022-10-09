@@ -1,3 +1,5 @@
+using iLearning.Listography.API.Common;
+using iLearning.Listography.API.Common.FilterAttributes;
 using iLearning.Listography.Application;
 using iLearning.Listography.DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,8 +11,10 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 // Add services to the container.
-services.AddDatabase(configuration);
+services.AddDataAccess(configuration);
 services.AddApplication(configuration);
+
+services.AddFilters();
 
 services.AddCors(options =>
 {
@@ -41,7 +45,9 @@ services.AddAuthentication(options =>
     };
 });
 
-services.AddControllers();
+services.AddControllers(options =>
+    options.Filters.Add<ApiExceptionFilterAttribute>());
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();

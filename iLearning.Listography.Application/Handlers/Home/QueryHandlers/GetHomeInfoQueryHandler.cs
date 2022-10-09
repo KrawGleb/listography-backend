@@ -27,7 +27,7 @@ public class GetHomeInfoQueryHandler : IRequestHandler<GetHomeInfoQuery, Respons
         // TODO: Review it.
         var fiveLastCreated = await _itemsRepository.GetLastCreated(5);
         var tenRandomTags = await _tagsRepository.GetRandomAsync(10);
-        var threeLargesLists = await _listsRepository.GetLargestAsync(3);
+        var fiveLargesLists = await _listsRepository.GetLargestAsync(5);
 
         // TODO: Use automapper.
         var itemDescriptions = fiveLastCreated.Select(i =>
@@ -43,7 +43,7 @@ public class GetHomeInfoQueryHandler : IRequestHandler<GetHomeInfoQuery, Respons
 
         var homeInfo = new HomeInfo
         {
-            LargestLists = threeLargesLists,
+            LargestLists = fiveLargesLists,
             LastCreatedItems = itemDescriptions,
             Tags = tenRandomTags
         };

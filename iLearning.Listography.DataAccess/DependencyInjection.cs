@@ -51,9 +51,11 @@ public static class DependencyInjection
     {
         services.AddSingleton<IElasticClient>(factory =>
         {
-            var connectionUri = Environment.GetEnvironmentVariable("BONSAI_URL");
+            var connectionUri = new Uri(Environment.GetEnvironmentVariable("BONSAI_URL")!);
 
-            var settings = new ConnectionSettings(new Uri(connectionUri!))
+            var settings = new ConnectionSettings(connectionUri)
+                .EnableHttpCompression()
+                .ConnectionLimit(-1)
                 .DefaultMappingFor<SearchItem>(i => i.IndexName(ElasticConstants.ItemIndexName));
 
             return new ElasticClient(settings);

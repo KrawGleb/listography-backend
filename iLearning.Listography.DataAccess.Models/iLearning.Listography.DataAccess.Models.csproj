@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Elasticsearch.Net" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.9" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="NEST" Version="6.0.2" />
   </ItemGroup>
 

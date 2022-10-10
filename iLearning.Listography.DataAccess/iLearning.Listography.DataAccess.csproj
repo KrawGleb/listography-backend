@@ -8,12 +8,12 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningsAsErrors></WarningsAsErrors>
-    <NoWarn>1701;1702;1605;</NoWarn>
+    <NoWarn>1701;1702;NU1605;</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <WarningsAsErrors></WarningsAsErrors>
-    <NoWarn>1701;1702;1605;</NoWarn>
+    <NoWarn>1701;1702;NU1605;</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

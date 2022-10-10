@@ -1,16 +1,19 @@
 ﻿using iLearning.Listography.DataAccess.Interfaces.Services.Elastic;
 using iLearning.Listography.DataAccess.Models.Common;
 using iLearning.Listography.DataAccess.Models.Constants;
+using Microsoft.Extensions.Logging;
 using Nest;
 
 namespace iLearning.Listography.DataAccess.Implementations.Services.Elastic;
 
 public class ElasticService : IElasticService
 {
+    private readonly ILogger<ElasticService> _logger;
     private readonly IElasticClient _client;
 
-    public ElasticService(IElasticClient client)
+    public ElasticService(ILogger<ElasticService> logger, IElasticClient client)
     {
+        _logger = logger;
         _client = client;
     }
 
@@ -20,7 +23,13 @@ public class ElasticService : IElasticService
             .Query(q => q.QueryString(q => q.Query(value))))).Documents;
 
     public async Task<string> IndexItemAsync(SearchItem item)
-        => (await _client.IndexAsync(item, x => x.Index(ElasticConstants.ItemIndexName))).Id;
+    {
+        var response = await _client.IndexAsync(item, x => x.Index(ElasticConstants.ItemIndexName));
+
+        _logger.LogInformation("ElasticSearch responses with: ", response);
+
+        return response.Id;
+    }
 
     public async Task UpdateItemAsync(SearchItem item)
         => await _client

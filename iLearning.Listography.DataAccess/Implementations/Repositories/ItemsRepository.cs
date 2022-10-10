@@ -35,6 +35,8 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         var entity = await query
             .Include(i => i.CustomFields)
             .Include(i => i.Tags)
+            .Include(i => i.Comments)
+            .Include(i => i.Likes)
             .SingleAsync(i => i.Id == id);
 
         return entity;

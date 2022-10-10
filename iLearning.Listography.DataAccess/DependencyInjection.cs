@@ -37,12 +37,21 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddElasticClient(configuration);
+        services.AddRepositories();
+       
 
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
         services.AddScoped<IListsRepository, ListsRepository>();
         services.AddScoped<ITagsRepository, TagsRepository>();
         services.AddScoped<ICustomFieldsRepository, CustomFieldsRepository>();
         services.AddScoped<ITopicsRepository, TopicsRepository>();
         services.AddScoped<IItemsRepository, ItemsRepository>();
+        services.AddScoped<ILikesRepository, LikesRepository>();
+        services.AddScoped<ICommentsRespository, CommentsRepository>();
 
         return services;
     }
@@ -52,7 +61,6 @@ public static class DependencyInjection
         services.AddSingleton<IElasticClient>(factory =>
         {
             var elasticSection = configuration.GetSection("Elastic");
-            var connectionUri = elasticSection.GetSection("ConnectionUri").Value;
             var user = elasticSection.GetSection("User").Value;
             var password = elasticSection.GetSection("Password").Value;
 

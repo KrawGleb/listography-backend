@@ -9,16 +9,18 @@ namespace iLearning.Listography.DataAccess.Implementations;
 
 public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole, string>
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    { }
-
     private DbSet<UserList> Lists { get; set; }
     private DbSet<ListTag> Tags { get; set; }
     private DbSet<ListTopic> Topics { get; set; }
     private DbSet<CustomField> CustomFields { get; set; }
     private DbSet<ListItem> Items { get; set; }
     private DbSet<ListItemTemplate> ItemTemplates { get; set; }
+    private DbSet<Like> Likes { get; set; }
+    private DbSet<Comment> Comments { get; set; }
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    { }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

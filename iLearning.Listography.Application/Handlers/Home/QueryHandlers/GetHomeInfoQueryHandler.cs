@@ -1,4 +1,4 @@
-﻿using iLearning.Listography.Application.Models;
+﻿using iLearning.Listography.Application.Models.Home;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Home.Queries.Get;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
@@ -32,7 +32,7 @@ public class GetHomeInfoQueryHandler : IRequestHandler<GetHomeInfoQuery, Respons
         // TODO: Use automapper.
         var itemDescriptions = fiveLastCreated.Select(i =>
         {
-            return new ItemDescription
+            return new ItemMainDescription
             {
                 Id = i.Id,
                 Name = i.Name,

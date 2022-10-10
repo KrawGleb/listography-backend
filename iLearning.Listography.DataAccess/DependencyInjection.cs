@@ -51,14 +51,18 @@ public static class DependencyInjection
     {
         services.AddSingleton<IElasticClient>(factory =>
         {
-            var connectionUri = new Uri(Environment.GetEnvironmentVariable("BONSAI_URL")!);
-
-            var settings = new ConnectionSettings(connectionUri)
+            var settings = new ConnectionSettings(new Uri("https://4qkagpt4m:slsrx87cz1@jasmine-749629487.eu-west-1.bonsaisearch.net:443"))
+                .DefaultMappingFor<SearchItem>(i => i.IndexName(ElasticConstants.ItemIndexName))
                 .EnableHttpCompression()
-                .ConnectionLimit(-1)
-                .DefaultMappingFor<SearchItem>(i => i.IndexName(ElasticConstants.ItemIndexName));
+                .ConnectionLimit(-1);
 
-            return new ElasticClient(settings);
+            var client = new ElasticClient(settings);
+
+            client.Indices.Create(
+                ElasticConstants.ItemIndexName,
+                index => index.Map<SearchItem>(x => x.AutoMap()));
+
+            return client;
         });
 
         services.AddScoped<IElasticService, ElasticService>();

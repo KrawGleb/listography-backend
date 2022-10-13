@@ -36,7 +36,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
         if (loginResult.Succeeded)
         {
             var account = await _userManager.FindByEmailAsync(request.Email);
-            var token = GenerateToken(account);
+            var token = await GenerateTokenAsync(account);
             var isAdmin = await _userManager.IsInRoleAsync(account, "admin");
 
             return new LoginResponse()
@@ -62,10 +62,11 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
         return signInResult;
     }
 
-    private string GenerateToken(Account account)
+    private async Task<string> GenerateTokenAsync(Account account)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Key);
+        var role = (await _userManager.GetRolesAsync(account)).FirstOrDefault();
 
         var tokenDescription = new SecurityTokenDescriptor()
         {
@@ -74,6 +75,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
                 new Claim(JwtRegisteredClaimNames.NameId, account.Id),
                 new Claim(JwtRegisteredClaimNames.Email, account.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, role ?? ""),
                 new Claim("id", account.Id)
             }),
             Expires = DateTime.UtcNow.AddHours(12),

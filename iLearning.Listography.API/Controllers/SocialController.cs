@@ -1,6 +1,7 @@
 ﻿using iLearning.Listography.Application.Requests.Social.Commands.AddLike;
 using iLearning.Listography.Application.Requests.Social.Commands.Comment;
 using iLearning.Listography.Application.Requests.Social.Commands.DeleteLike;
+using iLearning.Listography.Application.Requests.Social.Queries.GetComments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,4 +23,9 @@ public class SocialController : ApiControllerBase
     [HttpPost("comment")]
     public async Task<IActionResult> Comment([FromBody] CommentCommand command)
         => Ok(await Mediator.Send(command));
+
+    [AllowAnonymous]
+    [HttpGet("comments/{itemId}")]
+    public async Task<IActionResult> GetComments([FromRoute] int itemId)
+        => Ok(await Mediator.Send(new GetCommentsQuery { ItemId = itemId }));
 }

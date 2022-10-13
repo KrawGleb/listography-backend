@@ -4,17 +4,20 @@ namespace iLearning.Listography.DataAccess.Models.Constants;
 
 public static class RolesEnum
 {
+    public const string Admin = "Admin";
+    public const string User = "User";
+
     public static readonly IEnumerable<IdentityRole> Roles = new List<IdentityRole>
     {
         new IdentityRole
         {
-            Name = "Admin",
-            NormalizedName = "ADMIN"
+            Name = Admin,
+            NormalizedName = Admin.ToUpper()
         },
         new IdentityRole()
         {
-            Name = "User",
-            NormalizedName = "USER",
+            Name = User,
+            NormalizedName = User.ToUpper(),
         }
     };
 }

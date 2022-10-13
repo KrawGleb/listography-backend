@@ -36,6 +36,7 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
             .Include(i => i.CustomFields)
             .Include(i => i.Tags)
             .Include(i => i.Comments)
+                .ThenInclude(c => c.Account)
             .Include(i => i.Likes)
             .SingleAsync(i => i.Id == id);
 
@@ -76,6 +77,26 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         
         await _customFieldsRepository.UpdateCustomFieldsAsync(oldEntity.CustomFields, newEntity.CustomFields);
         await _tagsRepository.UpdateTagsAsync(oldEntity.Tags, newEntity.Tags);
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddLike(int id, Like like)
+    {
+        var entity = _table
+            .Include(i => i.Likes)
+            .Single(i => i.Id == id);
+        entity.Likes!.Add(like);
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddComment(int id, Comment comment)
+    {
+        var entity = _table
+            .Include(i => i.Comments)
+            .Single(i => i.Id == id);
+        entity.Comments!.Add(comment);
 
         await _context.SaveChangesAsync();
     }

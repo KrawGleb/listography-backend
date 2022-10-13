@@ -22,9 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Handlers\Accounts\CommandHandlers\" />
-    <Folder Include="Handlers\Social\QueryHandlers\" />
     <Folder Include="Requests\Accounts\Commands\" />
-    <Folder Include="Requests\Social\Queries\" />
   </ItemGroup>
 
 </Project>

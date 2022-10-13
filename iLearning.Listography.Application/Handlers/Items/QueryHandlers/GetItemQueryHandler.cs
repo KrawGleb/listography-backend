@@ -31,7 +31,8 @@ public class GetItemQueryHandler : IRequestHandler<GetItemQuery, Response>
         var item = await _repository.GetByIdAsync(request.Id);
         var itemModel = _mapper.Map<ItemModel>(item);
 
-        itemModel.Liked = item.Likes.Any(l => l.AccountId == userId);
+        itemModel.Comments = _mapper.Map<ICollection<CommentModel>>(item.Comments);
+        itemModel.Liked = item?.Likes?.Any(l => l.AccountId == userId);
 
         return new CommonResponse()
         {

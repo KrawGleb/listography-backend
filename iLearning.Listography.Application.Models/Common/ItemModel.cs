@@ -10,8 +10,8 @@ public class ItemModel
     public DateTime CreatedAt { get; set; }
     public ICollection<CustomField>? CustomFields { get; set; }
     public ICollection<ListTag>? Tags { get; set; }
-    public ICollection<Comment>? Comments { get; set; }
+    public ICollection<CommentModel>? Comments { get; set; }
 
     public int TotalLikesCount { get; set; }
-    public bool Liked { get; set; }
+    public bool? Liked { get; set; }
 }

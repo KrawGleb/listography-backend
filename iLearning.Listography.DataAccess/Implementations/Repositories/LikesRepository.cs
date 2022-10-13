@@ -23,4 +23,15 @@ public class LikesRepository : EFRepository<Like>, ILikesRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<bool> CheckIfExsists(string accountId, int itemId)
+    {
+        var entity = _table
+            .Where(e =>
+                e.ListItemId == itemId &&
+                e.AccountId == accountId)
+            .SingleOrDefault();
+
+        return entity is not null;
+    }
 }

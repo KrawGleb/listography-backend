@@ -1,4 +1,5 @@
 ﻿using iLearning.Listography.Application.Requests.Social.Commands.AddLike;
+using iLearning.Listography.Application.Requests.Social.Commands.Comment;
 using iLearning.Listography.Application.Requests.Social.Commands.DeleteLike;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,6 @@ public class SocialController : ApiControllerBase
         => Ok(await Mediator.Send(command));
 
     [HttpPost("comment")]
-    public async Task<IActionResult> Comment()
-        => Ok();
+    public async Task<IActionResult> Comment([FromBody] CommentCommand command)
+        => Ok(await Mediator.Send(command));
 }

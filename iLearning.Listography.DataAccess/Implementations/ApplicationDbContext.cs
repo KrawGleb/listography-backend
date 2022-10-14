@@ -4,6 +4,7 @@ using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace iLearning.Listography.DataAccess.Implementations;
 
@@ -27,15 +28,7 @@ public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole, str
         builder.SeedWithRoles();
         builder.SeedWithTopics();
 
-        builder
-            .Entity<Account>()
-            .HasMany(a => a.Lists)
-            .WithOne(l => l.Account);
-
-        builder
-            .Entity<UserList>()
-            .HasMany(l => l.Items)
-            .WithOne(i => i.UserList);
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         base.OnModelCreating(builder);
     }

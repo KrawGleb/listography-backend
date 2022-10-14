@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221014192632_ChangeOnDeleteBehaviorForAccountEntity")]
+    partial class ChangeOnDeleteBehaviorForAccountEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +121,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("ListItemId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.CustomField", b =>
@@ -166,7 +168,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("ListItemTemplateId");
 
-                    b.ToTable("CustomFields", (string)null);
+                    b.ToTable("CustomFields");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.Like", b =>
@@ -189,7 +191,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("ListItemId");
 
-                    b.ToTable("Likes", (string)null);
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListItem", b =>
@@ -213,7 +215,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("UserListId");
 
-                    b.ToTable("Items", (string)null);
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListItemTemplate", b =>
@@ -229,7 +231,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemTemplates", (string)null);
+                    b.ToTable("ItemTemplates");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListTag", b =>
@@ -250,7 +252,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("ListItemId");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListTopic", b =>
@@ -266,7 +268,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Topics", (string)null);
+                    b.ToTable("Topics");
 
                     b.HasData(
                         new
@@ -345,7 +347,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("Lists", (string)null);
+                    b.ToTable("Lists");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

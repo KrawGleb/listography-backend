@@ -1,4 +1,7 @@
-﻿namespace iLearning.Listography.Application.Requests.Tags.Queries.GetAll;
+﻿using iLearning.Listography.Application.Models.Responses;
+using MediatR;
 
-public class GetAllTagsQuery 
+namespace iLearning.Listography.Application.Requests.Tags.Queries.GetAll;
+
+public class GetAllTagsQuery : IRequest<Response>
 { }

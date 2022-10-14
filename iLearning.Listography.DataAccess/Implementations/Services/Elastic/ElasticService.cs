@@ -29,5 +29,4 @@ public class ElasticService : IElasticService
 
     public async Task DeleteItemAsync(int id)
         => await _client.DeleteAsync<SearchItem>(id.ToString());
-
 }

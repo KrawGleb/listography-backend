@@ -3,6 +3,7 @@ using iLearning.Listography.Application.Requests.Admin.Commands.BlockUser;
 using iLearning.Listography.Application.Requests.Admin.Commands.DeleteUser;
 using iLearning.Listography.Application.Requests.Admin.Commands.RemoveAdmin;
 using iLearning.Listography.Application.Requests.Admin.Commands.UnblockUser;
+using iLearning.Listography.Application.Requests.Admin.Queries.GetUserInfo;
 using iLearning.Listography.DataAccess.Models.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,4 +34,8 @@ public class AdminsController : ApiControllerBase
     [HttpDelete("delete")]
     public async Task<IActionResult> DeleteUser([FromBody] DeleteUserCommand command)
         => Ok(await Mediator.Send(command));
+
+    [HttpGet("{username}")]
+    public async Task<IActionResult> GetUserInfo([FromRoute] string username)
+        => Ok(await Mediator.Send(new GetUserInfoQuery { Username = username }));
 }

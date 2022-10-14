@@ -2,6 +2,7 @@
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Models.Responses.Identity;
 using iLearning.Listography.Application.Requests.Identity.Queries.Login;
+using iLearning.Listography.DataAccess.Models.Constants;
 using iLearning.Listography.DataAccess.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -31,13 +32,23 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
 
     public async Task<Response> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var loginResult = await LoginAsync(request);
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
-        if (loginResult.Succeeded)
+        if (user is not null && user.State == AccountState.Blocked)
         {
-            var account = await _userManager.FindByEmailAsync(request.Email);
-            var token = await GenerateTokenAsync(account);
-            var isAdmin = await _userManager.IsInRoleAsync(account, "admin");
+            return new ErrorResponse
+            {
+                Succeeded = false,
+                Errors = new string[] { "This user is blocked by admin" }
+            };
+        }
+
+        var signInResult = await _signInManager.PasswordSignInAsync(user?.UserName ?? "", request.Password, false, false);
+
+        if (user is not null && signInResult.Succeeded)
+        {
+            var token = await GenerateTokenAsync(user);
+            var isAdmin = await _userManager.IsInRoleAsync(user, "admin");
 
             return new LoginResponse()
             {
@@ -52,14 +63,6 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
             Succeeded = false,
             Errors = new string[] { "Invalid password or email" }
         };
-    }
-
-    private async Task<SignInResult> LoginAsync(LoginQuery request)
-    {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, false);
-
-        return signInResult;
     }
 
     private async Task<string> GenerateTokenAsync(Account account)

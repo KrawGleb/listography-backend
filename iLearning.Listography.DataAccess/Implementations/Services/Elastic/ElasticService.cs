@@ -22,13 +22,13 @@ public class ElasticService : IElasticService
                 s.Index(ElasticConstants.ItemIndexName)
                 .Query(q => q.QueryString(q => q.Query(value))))).Documents;
 
-    public async Task<string> IndexItemAsync(SearchItem item)
+    public async Task<IndexResponse> IndexItemAsync(SearchItem item)
     {
         var response = await _client.IndexAsync(item, x => x.Index(ElasticConstants.ItemIndexName));
 
         _logger.LogInformation("ElasticSearch responses with: ", response);
 
-        return response.Id;
+        return response;
     }
 
     public async Task UpdateItemAsync(SearchItem item)

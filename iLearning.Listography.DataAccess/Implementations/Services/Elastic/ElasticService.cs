@@ -19,8 +19,10 @@ public class ElasticService : IElasticService
             s.Index(ElasticConstants.ItemIndexName)
             .Query(q => q.QueryString(q => q.Query(value))))).Documents;
 
-    public async Task<string> IndexItemAsync(SearchItem item)
-        => (await _client.IndexAsync(item, x => x.Index(ElasticConstants.ItemIndexName))).Id;
+    public async Task<IndexResponse> IndexItemAsync(SearchItem item)
+        => await _client
+            .IndexAsync(
+                item, x => x.Index(ElasticConstants.ItemIndexName));
 
     public async Task UpdateItemAsync(SearchItem item)
         => await _client

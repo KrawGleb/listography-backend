@@ -65,7 +65,7 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             .ToListAsync();
     }
 
-    public async override Task DeleteAsync(int id)
+    public async Task<UserList?> DeleteAsync(int id)
     {
         var list = await GetByIdAsync(id, true, true, true, true);
 
@@ -74,6 +74,8 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             _table.Remove(list);
             await _context.SaveChangesAsync();
         }
+
+        return list;
     }
 
     public async override Task UpdateAsync(UserList entity)

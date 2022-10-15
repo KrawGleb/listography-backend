@@ -1,16 +1,11 @@
 ﻿using iLearning.Listography.Application.Common.Exceptions;
-using iLearning.Listography.Application.Models.Common;
+using iLearning.Listography.Application.Models.Common.Identity;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Admin.Queries.GetUserInfo;
 using iLearning.Listography.DataAccess.Models.Constants;
 using iLearning.Listography.DataAccess.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iLearning.Listography.Application.Handlers.Admin.QueryHandlers;
 

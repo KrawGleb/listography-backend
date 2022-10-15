@@ -13,4 +13,5 @@ public interface IListsRepository : IEFRepository<UserList>
          bool trackEntity = false);
     Task<string?> GetOwnerIdAsync(int listId);
     Task<IEnumerable<UserList>> GetLargestAsync(int count);
+    Task<UserList?> DeleteAsync(int id);
 }

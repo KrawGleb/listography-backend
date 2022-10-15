@@ -6,5 +6,5 @@ public class HomeInfo
 {
     public IEnumerable<ListTag>? Tags { get; set; }
     public IEnumerable<UserList>? LargestLists { get; set; }
-    public IEnumerable<ItemMainDescription>? LastCreatedItems { get; set; }
+    public IEnumerable<ItemShortDescription>? LastCreatedItems { get; set; }
 }

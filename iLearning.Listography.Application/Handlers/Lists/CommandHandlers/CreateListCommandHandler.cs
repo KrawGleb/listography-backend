@@ -61,12 +61,8 @@ public class CreateListCommandHandler : IRequestHandler<CreateListCommand, Respo
         var listOwner = await _userManager
             .Users
             .Include(u => u.Lists)
-            .FirstOrDefaultAsync(u => u.Id == id);
-
-        if (listOwner is null)
-        {
-            throw new NotFoundException("Invalid user id.");
-        }
+            .FirstOrDefaultAsync(u => u.Id == id)
+        ?? throw new NotFoundException("Invalid user id.");
 
         return listOwner;
     }

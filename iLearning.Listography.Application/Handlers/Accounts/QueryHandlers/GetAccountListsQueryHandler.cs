@@ -29,18 +29,14 @@ public class GetAccountListsQueryHandler : IRequestHandler<GetAccountListsQuery,
         };
     }
 
-    private async Task<IEnumerable<UserList>?> GetAccountListsAsync(string username)
+    private async Task<IEnumerable<UserList>?> GetAccountListsAsync(string? username)
     {
         var account = await _userManager
             .Users
             .Include(u => u.Lists!)
                 .ThenInclude(l => l.Topic)
-            .FirstOrDefaultAsync(u => u.UserName == username);
-
-        if (account is null)
-        {
-            throw new NotFoundException("Account not found.");
-        }
+            .FirstOrDefaultAsync(u => u.UserName == username)
+        ?? throw new NotFoundException("Account not found");
 
         return account.Lists;
     }

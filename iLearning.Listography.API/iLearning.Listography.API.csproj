@@ -21,8 +21,4 @@
     <ProjectReference Include="..\iLearning.Listography.Infrastructure\iLearning.Listography.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\FilterAttributes\" />
-  </ItemGroup>
-
 </Project>

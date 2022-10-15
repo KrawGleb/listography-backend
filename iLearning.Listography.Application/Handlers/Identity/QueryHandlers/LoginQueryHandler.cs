@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.Application.Models.Configurations;
+﻿using iLearning.Listography.Application.Common.Exceptions;
+using iLearning.Listography.Application.Models.Configurations;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Models.Responses.Identity;
 using iLearning.Listography.Application.Requests.Identity.Queries.Login;
@@ -8,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Nest;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -32,23 +34,14 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
 
     public async Task<Response> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-
-        if (user is not null && user.State == AccountState.Blocked)
-        {
-            return new ErrorResponse
-            {
-                Succeeded = false,
-                Errors = new string[] { "This user is blocked by admin" }
-            };
-        }
+        var user = await GetUserByEmailAsync(request.Email!);
 
         var signInResult = await _signInManager.PasswordSignInAsync(user?.UserName ?? "", request.Password, false, false);
 
-        if (user is not null && signInResult.Succeeded)
+        if (signInResult.Succeeded)
         {
-            var token = await GenerateTokenAsync(user);
-            var isAdmin = await _userManager.IsInRoleAsync(user, "admin");
+            var token = await GenerateTokenAsync(user!);
+            var isAdmin = await _userManager.IsInRoleAsync(user!, "admin");
 
             return new LoginResponse()
             {
@@ -58,11 +51,18 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
             };
         }
 
-        return new ErrorResponse()
-        {
-            Succeeded = false,
-            Errors = new string[] { "Invalid password or email" }
-        };
+        return new ErrorResponse() { Succeeded = false, Errors = new string[] { "Invalid password or email" } };
+    }
+
+    private async Task<Account> GetUserByEmailAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email)
+            ?? throw new NotFoundException("User not found.");
+
+        if (user.IsBlocked())
+            throw new UserIsBlockedException("This user is blocked.");
+
+        return user;
     }
 
     private async Task<string> GenerateTokenAsync(Account account)

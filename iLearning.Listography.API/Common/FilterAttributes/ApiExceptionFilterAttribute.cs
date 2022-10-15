@@ -13,7 +13,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
         {
-            { typeof(NotFoundException), HandleNotFoundException }
+            { typeof(NotFoundException), HandleNotFoundException },
+            { typeof(UserIsBlockedException), HandlerUserIsBlockedException }
         };
     }
 
@@ -47,6 +48,20 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         context.Result = new ObjectResult(response)
         {
             StatusCode = StatusCodes.Status404NotFound
+        };
+    }
+
+    private void HandlerUserIsBlockedException(ExceptionContext context)
+    {
+        var response = new ErrorResponse()
+        {
+            Succeeded = false,
+            Errors = new string[] { context.Exception.Message }
+        };
+
+        context.Result = new ObjectResult(response)
+        {
+            StatusCode = StatusCodes.Status403Forbidden
         };
     }
 

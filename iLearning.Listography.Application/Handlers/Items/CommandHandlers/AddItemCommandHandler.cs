@@ -27,16 +27,28 @@ public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Response>
 
     public async Task<Response> Handle(AddItemCommand request, CancellationToken cancellationToken)
     {
-        var item = _mapper.Map<ListItem>(request);
-        await _listsRepository.AddItemToListAsync(request.ListId, item);
+        var item = await AddItemToList(request);
 
-        var searchItem = _mapper.Map<SearchItem>(item);
-        await _elasticService.IndexItemAsync(searchItem);
+        await IndexItemForSearch(item);
 
         return new CommonResponse
         {
             Succeeded = true,
             Body = item
         };
+    }
+
+    private async Task<ListItem> AddItemToList(AddItemCommand request)
+    {
+        var item = _mapper.Map<ListItem>(request);
+        await _listsRepository.AddItemToListAsync(request.ListId, item);
+
+        return item;
+    }
+
+    private async Task IndexItemForSearch(ListItem item)
+    {
+        var searchItem = _mapper.Map<SearchItem>(item);
+        await _elasticService.IndexItemAsync(searchItem);
     }
 }

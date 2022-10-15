@@ -35,12 +35,8 @@ public class GetMeCommandHandler : IRequestHandler<GetMeQuery, Response>
             .Users
             .Include(u => u.Lists!)
                 .ThenInclude(l => l.Topic)
-            .FirstOrDefaultAsync(u => u.Id == id);
-
-        if (account is null)
-        {
-            throw new NotFoundException("Account not found");
-        }
+            .FirstOrDefaultAsync(u => u.Id == id)
+       ?? throw new NotFoundException("Account not found");
 
         return account;
     }

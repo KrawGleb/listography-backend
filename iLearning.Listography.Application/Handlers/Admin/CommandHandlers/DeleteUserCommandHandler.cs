@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.Application.Models.Responses;
+﻿using iLearning.Listography.Application.Common.Exceptions;
+using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Admin.Commands.DeleteUser;
 using iLearning.Listography.DataAccess.Models.Identity;
 using MediatR;
@@ -23,7 +24,8 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
             .Include(u => u.Lists)
             .Include(u => u.Comments)
             .Include(u => u.Likes)
-            .FirstOrDefaultAsync(a => a.UserName == request.Username);
+            .FirstOrDefaultAsync(a => a.UserName == request.Username, cancellationToken: cancellationToken)
+        ?? throw new NotFoundException("Account not found");
 
         await _userManager.DeleteAsync(query);
 

@@ -1,6 +1,6 @@
 ﻿namespace iLearning.Listography.Application.Models.Home;
 
-public class ItemMainDescription
+public class ItemShortDescription
 {
     public int Id { get; set; }
     public string? ListName { get; set; }

@@ -37,12 +37,21 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddElasticClient(configuration);
+        services.AddRepositories();
+       
 
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
         services.AddScoped<IListsRepository, ListsRepository>();
         services.AddScoped<ITagsRepository, TagsRepository>();
         services.AddScoped<ICustomFieldsRepository, CustomFieldsRepository>();
         services.AddScoped<ITopicsRepository, TopicsRepository>();
         services.AddScoped<IItemsRepository, ItemsRepository>();
+        services.AddScoped<ILikesRepository, LikesRepository>();
+        services.AddScoped<ICommentsRespository, CommentsRepository>();
 
         return services;
     }

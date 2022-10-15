@@ -41,14 +41,14 @@ public class EFRepository<T> : IEFRepository<T>
         await _context.SaveChangesAsync();
     }
 
-    public virtual async Task CreateAsync(T entity)
+    public virtual async Task<T> CreateAsync(T entity)
     {
         await _table.AddAsync(entity);
 
         await _context.SaveChangesAsync();
-    }
 
-    public async virtual Task UpdateAsync(T entity) => _table.Update(entity);
+        return entity;
+    }
 
     public virtual async Task DeleteAsync(T entity)
     {

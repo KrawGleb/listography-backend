@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.Application.Models;
+﻿using AutoMapper;
+using iLearning.Listography.Application.Models.Home;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Home.Queries.Get;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
@@ -11,47 +12,46 @@ public class GetHomeInfoQueryHandler : IRequestHandler<GetHomeInfoQuery, Respons
     private readonly IItemsRepository _itemsRepository;
     private readonly ITagsRepository _tagsRepository;
     private readonly IListsRepository _listsRepository;
+    private readonly IMapper _mapper;
 
     public GetHomeInfoQueryHandler(
         IItemsRepository itemsRepository,
         ITagsRepository tagsRepository,
-        IListsRepository listsRepository)
+        IListsRepository listsRepository,
+        IMapper mapper)
     {
         _itemsRepository = itemsRepository;
         _tagsRepository = tagsRepository;
         _listsRepository = listsRepository;
+        _mapper = mapper;
     }
 
     public async Task<Response> Handle(GetHomeInfoQuery request, CancellationToken cancellationToken)
     {
-        // TODO: Review it.
-        var fiveLastCreated = await _itemsRepository.GetLastCreated(5);
-        var tenRandomTags = await _tagsRepository.GetRandomAsync(10);
-        var fiveLargesLists = await _listsRepository.GetLargestAsync(5);
-
-        // TODO: Use automapper.
-        var itemDescriptions = fiveLastCreated.Select(i =>
-        {
-            return new ItemDescription
-            {
-                Id = i.Id,
-                Name = i.Name,
-                ListName = i.UserList?.Title,
-                Author = i.UserList?.Account?.UserName
-            };
-        });
-
-        var homeInfo = new HomeInfo
-        {
-            LargestLists = fiveLargesLists,
-            LastCreatedItems = itemDescriptions,
-            Tags = tenRandomTags
-        };
+        var homeInfo = await GetHomeInfoAsync(request);
 
         return new CommonResponse
         {
             Succeeded = true,
             Body = homeInfo
         };
+    }
+
+    private async Task<HomeInfo> GetHomeInfoAsync(GetHomeInfoQuery request)
+    {
+        var items = await _itemsRepository.GetLastCreated(request.ItemsCount);
+        var tags = await _tagsRepository.GetRandomAsync(request.TagsCount);
+        var lists = await _listsRepository.GetLargestAsync(request.ListsCount);
+
+        var itemDescriptions = _mapper.Map<IEnumerable<ItemShortDescription>>(items);
+
+        var homeInfo = new HomeInfo
+        {
+            LargestLists = lists,
+            LastCreatedItems = itemDescriptions,
+            Tags = tags
+        };
+
+        return homeInfo;
     }
 }

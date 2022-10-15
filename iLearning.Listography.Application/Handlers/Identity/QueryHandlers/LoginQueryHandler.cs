@@ -1,12 +1,15 @@
-﻿using iLearning.Listography.Application.Models.Configurations;
+﻿using iLearning.Listography.Application.Common.Exceptions;
+using iLearning.Listography.Application.Models.Configurations;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Models.Responses.Identity;
 using iLearning.Listography.Application.Requests.Identity.Queries.Login;
+using iLearning.Listography.DataAccess.Models.Constants;
 using iLearning.Listography.DataAccess.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Nest;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -31,13 +34,14 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
 
     public async Task<Response> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var loginResult = await LoginAsync(request);
+        var user = await GetUserByEmailAsync(request.Email!);
 
-        if (loginResult.Succeeded)
+        var signInResult = await _signInManager.PasswordSignInAsync(user?.UserName ?? "", request.Password, false, false);
+
+        if (signInResult.Succeeded)
         {
-            var account = await _userManager.FindByEmailAsync(request.Email);
-            var token = GenerateToken(account);
-            var isAdmin = await _userManager.IsInRoleAsync(account, "admin");
+            var token = await GenerateTokenAsync(user!);
+            var isAdmin = await _userManager.IsInRoleAsync(user!, "admin");
 
             return new LoginResponse()
             {
@@ -47,25 +51,25 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
             };
         }
 
-        return new ErrorResponse()
-        {
-            Succeeded = false,
-            Errors = new string[] { "Invalid password or email" }
-        };
+        return new ErrorResponse() { Succeeded = false, Errors = new string[] { "Invalid password or email" } };
     }
 
-    private async Task<SignInResult> LoginAsync(LoginQuery request)
+    private async Task<Account> GetUserByEmailAsync(string email)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, false);
+        var user = await _userManager.FindByEmailAsync(email)
+            ?? throw new NotFoundException("User not found.");
 
-        return signInResult;
+        if (user.IsBlocked())
+            throw new UserIsBlockedException("This user is blocked.");
+
+        return user;
     }
 
-    private string GenerateToken(Account account)
+    private async Task<string> GenerateTokenAsync(Account account)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Key);
+        var role = (await _userManager.GetRolesAsync(account)).FirstOrDefault();
 
         var tokenDescription = new SecurityTokenDescriptor()
         {
@@ -74,6 +78,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
                 new Claim(JwtRegisteredClaimNames.NameId, account.Id),
                 new Claim(JwtRegisteredClaimNames.Email, account.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, role ?? ""),
                 new Claim("id", account.Id)
             }),
             Expires = DateTime.UtcNow.AddHours(12),

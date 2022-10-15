@@ -28,19 +28,27 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Respo
 
     public async Task<Response> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
     {
-        var existingItem = await _repository.GetByIdAsync(request.Id, trackEntity: true);
+        var item = await UpdateItem(request);
 
-        if (existingItem is null)
-        {
-            throw new NotFoundException("Item not exists");
-        }
+        await UpdateItemForSearch(item);
+
+        return new Response { Succeeded = true };
+    }
+
+    private async Task<ListItem> UpdateItem(UpdateItemCommand request)
+    {
+        var existingItem = await _repository.GetByIdAsync(request.Id, trackEntity: true)
+            ?? throw new NotFoundException("Item not exists");
 
         var item = _mapper.Map<ListItem>(request);
         await _repository.UpdateAsync(existingItem, item);
 
-        var elasticRecord = _mapper.Map<SearchItem>(item);
-       await _elasticService.UpdateItemAsync(elasticRecord);
+        return item;
+    }
 
-        return new Response { Succeeded = true };
+    private async Task UpdateItemForSearch(ListItem item)
+    {
+        var elasticRecord = _mapper.Map<SearchItem>(item);
+        await _elasticService.UpdateItemAsync(elasticRecord);
     }
 }

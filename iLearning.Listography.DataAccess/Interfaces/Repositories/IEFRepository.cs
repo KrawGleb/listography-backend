@@ -5,8 +5,7 @@ public interface IEFRepository<T>
     where T : class, IEntity, new()
 {
     Task AddRangeAsync(IEnumerable<T> entities);
-    Task CreateAsync(T entity);
-    Task UpdateAsync(T entity);
+    Task<T> CreateAsync(T entity);
     Task DeleteAsync(int id);
     Task DeleteAsync(T entity);
     Task<IEnumerable<T>> GetAllAsync(bool trackEntities = false);

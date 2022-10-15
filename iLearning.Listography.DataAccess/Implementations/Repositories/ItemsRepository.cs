@@ -1,7 +1,6 @@
 ﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
@@ -20,10 +19,14 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         _tagsRepository = tagsRepository;
     }
 
-    public async override Task CreateAsync(ListItem entity)
+    public async override Task<ListItem> CreateAsync(ListItem entity)
     {
+        await _customFieldsRepository.AddRangeAsync(entity.CustomFields);
+        await _tagsRepository.CreateTagsAsync(entity.Tags);
+
         entity.CreatedAt = DateTime.Now;
-        await base.CreateAsync(entity);
+
+        return entity;
     }
 
     public async override Task<ListItem?> GetByIdAsync(int id, bool trackEntity = false)
@@ -35,22 +38,29 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         var entity = await query
             .Include(i => i.CustomFields)
             .Include(i => i.Tags)
-            .SingleAsync(i => i.Id == id);
+            .Include(i => i.Comments)!
+                .ThenInclude(c => c.Account)
+            .Include(i => i.Likes)
+            .SingleOrDefaultAsync(i => i.Id == id);
 
         return entity;
     }
 
     public async Task<int?> GetListIdAsync(int id)
     {
-        return (await _table.FirstOrDefaultAsync(i => i.Id == id))?.UserListId;
+        var item = await _table
+            .AsNoTracking()
+            .SingleOrDefaultAsync(i => i.Id == id);
+
+        return item?.UserListId;
     }
 
     public async Task<IEnumerable<ListItem>> GetLastCreated(int count)
     {
         var query = _table
-            .Include(i => i.UserList)
-                .ThenInclude(l => l.Account)
             .AsNoTracking()
+            .Include(i => i.UserList)
+                .ThenInclude(l => l!.Account)
             .OrderByDescending(i => i.CreatedAt)
             .Take(count);
 
@@ -59,7 +69,7 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
 
     public async override Task DeleteAsync(int id)
     {
-        var entity = await GetByIdAsync(id, true);
+        var entity = await GetByIdAsync(id, trackEntity: true);
 
         if (entity is not null)
         {
@@ -70,10 +80,34 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
 
     public async Task UpdateAsync(ListItem oldEntity, ListItem newEntity)
     {
+        var updatedCustomFields = await _customFieldsRepository.UpdateCustomFieldsAsync(oldEntity.CustomFields, newEntity.CustomFields);
+        var updatedTags = await _tagsRepository.UpdateTagsAsync(oldEntity.Tags, newEntity.Tags);
+
         oldEntity.Name = newEntity.Name;
-        
-        await _customFieldsRepository.UpdateCustomFieldsAsync(oldEntity.CustomFields, newEntity.CustomFields);
-        await _tagsRepository.UpdateTagsAsync(oldEntity.Tags, newEntity.Tags);
+        oldEntity.CustomFields = updatedCustomFields.ToList();
+        oldEntity.Tags = updatedTags.ToList();
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddLike(int id, Like like)
+    {
+        var entity = _table
+            .Include(i => i.Likes)
+            .Single(i => i.Id == id);
+
+        entity.Likes!.Add(like);
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddComment(int id, Comment comment)
+    {
+        var entity = _table
+            .Include(i => i.Comments)
+            .Single(i => i.Id == id);
+
+        entity.Comments!.Add(comment);
 
         await _context.SaveChangesAsync();
     }

@@ -6,17 +6,20 @@ namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
 public class ListsRepository : EFRepository<UserList>, IListsRepository
 {
+    private readonly IItemsRepository _itemsRepository;
     private readonly ITagsRepository _tagsRepository;
     private readonly ICustomFieldsRepository _customFieldsRepository;
     private readonly ITopicsRepository _topicsRepository;
 
     public ListsRepository(
         ApplicationDbContext context,
+        IItemsRepository itemsRepository,
         ITagsRepository tagsRepository,
         ICustomFieldsRepository customFieldsRepository,
         ITopicsRepository topicsRepository)
         : base(context)
     {
+        _itemsRepository = itemsRepository;
         _tagsRepository = tagsRepository;
         _customFieldsRepository = customFieldsRepository;
         _topicsRepository = topicsRepository;
@@ -52,42 +55,44 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
     public async Task<string?> GetOwnerIdAsync(int listId)
     {
-        var entity = await _table.FirstOrDefaultAsync(l => l.Id == listId);
+        var entity = await _table
+            .AsNoTracking()
+            .FirstOrDefaultAsync(l => l.Id == listId);
+
         return entity?.AccountId;
     }
 
     public async Task<IEnumerable<UserList>> GetLargestAsync(int count)
     {
         return await _table
+            .AsNoTracking()
             .Include(l => l.Items)
             .OrderByDescending(l => l.Items.Count)
             .Take(count)
             .ToListAsync();
     }
 
-    public async override Task DeleteAsync(int id)
+    public async Task<UserList?> DeleteAsync(int id)
     {
-        var list = await GetByIdAsync(id, true, true, true, true);
+        var list = await GetByIdAsync(id, trackEntity: true);
 
         if (list is not null)
         {
             _table.Remove(list);
             await _context.SaveChangesAsync();
         }
+
+        return list;
     }
 
-    public async override Task UpdateAsync(UserList entity)
+    public async Task UpdateAsync(UserList entity)
     {
         var existingList = await GetByIdAsync(
             entity.Id,
             includeItems: false,
             includeItemTemplate: false,
-            trackEntity: true);
-
-        if (existingList is null)
-        {
-            throw new InvalidOperationException();
-        }
+            trackEntity: true)
+        ?? throw new InvalidOperationException();
 
         await ApplyFieldsChangesAsync(existingList, entity);
         await _context.SaveChangesAsync();
@@ -95,17 +100,11 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
     public async Task<ListItem> AddItemToListAsync(int id, ListItem item)
     {
-        var list = await GetByIdAsync(id, trackEntity: true);
+        var list = await GetByIdAsync(id, trackEntity: true)
+            ?? throw new InvalidOperationException();
 
-        if (list is null)
-        {
-            throw new InvalidOperationException();
-        }
+        await _itemsRepository.CreateAsync(item);
 
-        await _customFieldsRepository.AddRangeAsync(item.CustomFields);
-        await _tagsRepository.CreateTagsAsync(item.Tags);
-
-        item.CreatedAt = DateTime.Now;
         list.Items!.Add(item);
 
         await _context.SaveChangesAsync();

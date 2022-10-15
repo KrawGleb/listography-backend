@@ -13,14 +13,10 @@ public class CustomFieldsRepository : EFRepository<CustomField>, ICustomFieldsRe
     public async Task<IEnumerable<CustomField>> UpdateCustomFieldsAsync(IEnumerable<CustomField> oldValues, IEnumerable<CustomField>? newValues)
     {
         if (oldValues is null || newValues is null)
-        {
             return Enumerable.Empty<CustomField>();
-        }
 
         if (oldValues.Count() != newValues.Count())
-        {
             throw new InvalidOperationException();
-        }
 
         for (int i = 0; i < oldValues.Count(); i++)
         {
@@ -29,16 +25,13 @@ public class CustomFieldsRepository : EFRepository<CustomField>, ICustomFieldsRe
         }
 
         await _context.SaveChangesAsync();
-        
-        return oldValues;   
+
+        return oldValues;
     }
 
     public async override Task AddRangeAsync(IEnumerable<CustomField>? entities)
     {
-        if (entities is null)
-        {
-            return;
-        }
+        _ = entities ?? throw new ArgumentNullException(nameof(entities));
 
         entities = entities.Select(entity =>
         {

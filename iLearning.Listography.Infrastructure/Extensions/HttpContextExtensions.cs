@@ -8,10 +8,6 @@ public static class HttpContextExtensions
     {
         return context is null
             ? string.Empty
-            : context
-                .User
-                .Claims
-                .Single(x => x.Type == "id")
-                .Value;
+            : context.User.Claims.SingleOrDefault(x => x.Type == "id")?.Value ?? string.Empty;
     }
 }

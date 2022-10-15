@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.Application.Models.Responses;
+﻿using iLearning.Listography.Application.Models.Common.List;
+using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Common.Interfaces;
 using iLearning.Listography.DataAccess.Models.List;
 using MediatR;
@@ -10,5 +11,5 @@ public class AddItemCommand : IRequest<Response>, IProtectedListRequest
     public int ListId { get; set; }
     public string? Name { get; set; }
     public ICollection<ListTag>? Tags { get; set; }
-    public ICollection<CustomField>? CustomFields { get; set; }
+    public ICollection<CustomFieldModel>? CustomFields { get; set; }
 }

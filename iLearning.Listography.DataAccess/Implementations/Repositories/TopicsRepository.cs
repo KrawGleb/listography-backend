@@ -10,7 +10,7 @@ public class TopicsRepository : EFRepository<ListTopic>, ITopicsRepository
         : base(context)
     { }
 
-    public async Task<ListTopic?> GetTopicByNameAsync(string? name)
+    public async Task<ListTopic> GetTopicByNameAsync(string? name)
     {
         if (string.IsNullOrEmpty(name))
             return await GetDefaultTopic();

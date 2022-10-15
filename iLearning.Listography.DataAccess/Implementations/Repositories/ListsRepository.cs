@@ -6,17 +6,20 @@ namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
 public class ListsRepository : EFRepository<UserList>, IListsRepository
 {
+    private readonly IItemsRepository _itemsRepository;
     private readonly ITagsRepository _tagsRepository;
     private readonly ICustomFieldsRepository _customFieldsRepository;
     private readonly ITopicsRepository _topicsRepository;
 
     public ListsRepository(
         ApplicationDbContext context,
+        IItemsRepository itemsRepository,
         ITagsRepository tagsRepository,
         ICustomFieldsRepository customFieldsRepository,
         ITopicsRepository topicsRepository)
         : base(context)
     {
+        _itemsRepository = itemsRepository;
         _tagsRepository = tagsRepository;
         _customFieldsRepository = customFieldsRepository;
         _topicsRepository = topicsRepository;
@@ -100,10 +103,8 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         var list = await GetByIdAsync(id, trackEntity: true)
             ?? throw new InvalidOperationException();
 
-        await _customFieldsRepository.AddRangeAsync(item.CustomFields);
-        await _tagsRepository.CreateTagsAsync(item.Tags);
+        await _itemsRepository.CreateAsync(item);
 
-        item.CreatedAt = DateTime.Now;
         list.Items!.Add(item);
 
         await _context.SaveChangesAsync();

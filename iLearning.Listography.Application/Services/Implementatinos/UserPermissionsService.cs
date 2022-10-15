@@ -1,5 +1,6 @@
 ﻿using iLearning.Listography.Application.Services.Interfaces;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
+using iLearning.Listography.DataAccess.Models.Constants;
 using iLearning.Listography.DataAccess.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 
@@ -26,20 +27,18 @@ public class UserPermissionsService : IUserPermissionsService
     {
         var listId = await _itemsRepository.GetListIdAsync(itemId);
 
-        return 
-            listId is not null && 
+        return
+            listId is not null &&
             await AllowEditListAsync(userId, listId ?? -1);
     }
 
     public async Task<bool> AllowEditListAsync(string userId, int listId)
     {
+        var user = await _userManager.FindByIdAsync(userId);
         var ownerId = await _listsRepository.GetOwnerIdAsync(listId);
 
-        var isUserListOwner = ownerId is not null &&
-            ownerId == userId;
-
-        var isUserAdmin = await _userManager.IsInRoleAsync(
-            await _userManager.FindByIdAsync(userId), "admin");
+        var isUserListOwner = ownerId == userId;
+        var isUserAdmin = await _userManager.IsInRoleAsync(user, RolesEnum.Admin);
 
         return isUserListOwner || isUserAdmin;
     }

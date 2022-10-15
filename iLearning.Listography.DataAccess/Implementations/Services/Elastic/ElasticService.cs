@@ -16,8 +16,8 @@ public class ElasticService : IElasticService
 
     public async Task<IEnumerable<SearchItem>?> SearchByValueAsync(string value)
         => (await _client.SearchAsync<SearchItem>(s =>
-            s.Index(ElasticConstants.ItemIndexName)
-            .Query(q => q.QueryString(q => q.Query(value))))).Documents;
+                s.Index(ElasticConstants.ItemIndexName)
+                .Query(q => q.QueryString(q => q.Query(value))))).Documents;
 
     public async Task<IndexResponse> IndexItemAsync(SearchItem item)
         => await _client

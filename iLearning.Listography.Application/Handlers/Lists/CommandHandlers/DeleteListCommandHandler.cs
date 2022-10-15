@@ -23,7 +23,7 @@ public class DeleteListCommandHandler : IRequestHandler<DeleteListCommand, Respo
     {
         var deletedList = await _repository.DeleteAsync(request.ListId);
 
-        foreach (var deletedItem in deletedList?.Items)
+        foreach (var deletedItem in deletedList?.Items!)
         {
             await _elasticService.DeleteItemAsync(deletedItem.Id);
         }

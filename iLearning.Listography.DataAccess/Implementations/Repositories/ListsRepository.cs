@@ -52,13 +52,17 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
     public async Task<string?> GetOwnerIdAsync(int listId)
     {
-        var entity = await _table.FirstOrDefaultAsync(l => l.Id == listId);
+        var entity = await _table
+            .AsNoTracking()
+            .FirstOrDefaultAsync(l => l.Id == listId);
+
         return entity?.AccountId;
     }
 
     public async Task<IEnumerable<UserList>> GetLargestAsync(int count)
     {
         return await _table
+            .AsNoTracking()
             .Include(l => l.Items)
             .OrderByDescending(l => l.Items.Count)
             .Take(count)
@@ -67,7 +71,7 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
     public async Task<UserList?> DeleteAsync(int id)
     {
-        var list = await GetByIdAsync(id, true, true, true, true);
+        var list = await GetByIdAsync(id, trackEntity: true);
 
         if (list is not null)
         {
@@ -78,18 +82,14 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         return list;
     }
 
-    public async override Task UpdateAsync(UserList entity)
+    public async Task UpdateAsync(UserList entity)
     {
         var existingList = await GetByIdAsync(
             entity.Id,
             includeItems: false,
             includeItemTemplate: false,
-            trackEntity: true);
-
-        if (existingList is null)
-        {
-            throw new InvalidOperationException();
-        }
+            trackEntity: true)
+        ?? throw new InvalidOperationException();
 
         await ApplyFieldsChangesAsync(existingList, entity);
         await _context.SaveChangesAsync();
@@ -97,12 +97,8 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
     public async Task<ListItem> AddItemToListAsync(int id, ListItem item)
     {
-        var list = await GetByIdAsync(id, trackEntity: true);
-
-        if (list is null)
-        {
-            throw new InvalidOperationException();
-        }
+        var list = await GetByIdAsync(id, trackEntity: true)
+            ?? throw new InvalidOperationException();
 
         await _customFieldsRepository.AddRangeAsync(item.CustomFields);
         await _tagsRepository.CreateTagsAsync(item.Tags);

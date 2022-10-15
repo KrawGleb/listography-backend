@@ -12,14 +12,20 @@ public class TopicsRepository : EFRepository<ListTopic>, ITopicsRepository
 
     public async Task<ListTopic?> GetTopicByNameAsync(string? name)
     {
-        return name is null 
-            ? await GetDefaultTopic()
-            : await _table.FirstOrDefaultAsync(t => t.Name!.ToLower() == name.ToLower())
-                ?? await GetDefaultTopic();
+        if (string.IsNullOrEmpty(name))
+            return await GetDefaultTopic();
+
+        var topic = await _table
+            .AsNoTracking()
+            .SingleOrDefaultAsync(t => t.Name!.ToLower() == name.ToLower());
+
+        return topic ?? await GetDefaultTopic();
     }
 
     private async Task<ListTopic> GetDefaultTopic()
     {
-        return await _table.FirstAsync(t => t.Name!.ToLower() == "other");
+        return await _table
+            .AsNoTracking()
+            .SingleAsync(t => t.Name!.ToLower() == "other");
     }
 }

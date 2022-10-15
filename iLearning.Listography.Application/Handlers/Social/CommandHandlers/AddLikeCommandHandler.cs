@@ -28,7 +28,7 @@ public class AddLikeCommandHandler : IRequestHandler<AddLikeCommand, Response>
     {
         var userId = _contextAccessor.HttpContext.GetUserId();
 
-        var isExists = await _likesRepository.CheckIfExsists(userId, request.ItemId);
+        var isExists = await _likesRepository.CheckIfExsistsAsync(userId, request.ItemId);
 
         if (isExists)
         {

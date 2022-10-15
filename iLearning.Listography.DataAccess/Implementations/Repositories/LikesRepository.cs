@@ -1,5 +1,6 @@
 ﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
+using Microsoft.EntityFrameworkCore;
 
 namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
@@ -15,7 +16,7 @@ public class LikesRepository : EFRepository<Like>, ILikesRepository
             .Where(e =>
                 e.ListItemId == itemId &&
                 e.AccountId == userId)
-            .Single();
+            .SingleOrDefault();
 
         if (entity is not null)
         {
@@ -24,13 +25,13 @@ public class LikesRepository : EFRepository<Like>, ILikesRepository
         }
     }
 
-    public async Task<bool> CheckIfExsists(string accountId, int itemId)
+    public async Task<bool> CheckIfExsistsAsync(string accountId, int itemId)
     {
-        var entity = _table
+        var entity = await _table
             .Where(e =>
                 e.ListItemId == itemId &&
                 e.AccountId == accountId)
-            .SingleOrDefault();
+            .SingleOrDefaultAsync();
 
         return entity is not null;
     }

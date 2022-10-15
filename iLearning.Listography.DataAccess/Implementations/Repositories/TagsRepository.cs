@@ -12,16 +12,16 @@ public class TagsRepository : EFRepository<ListTag>, ITagsRepository
 
     public async Task<IEnumerable<ListTag>?> CreateTagsAsync(IEnumerable<ListTag>? tags)
     {
-        if (tags is not null)
-        {
-            tags = tags.Select(tag =>
-            {
-                tag.Id = 0;
-                return tag;
-            });
+        if (tags is null)
+            return tags;
 
-            await _table.AddRangeAsync(tags);
-        }
+        tags = tags.Select(tag =>
+        {
+            tag.Id = 0;
+            return tag;
+        });
+
+        await _table.AddRangeAsync(tags);
 
         return tags;
     }
@@ -54,6 +54,7 @@ public class TagsRepository : EFRepository<ListTag>, ITagsRepository
     public async Task<IEnumerable<ListTag>> GetRandomAsync(int count)
     {
         return await _table
+            .AsNoTracking()
             .Select(t => t.Name)
             .Distinct()
             .OrderBy(i => Guid.NewGuid())

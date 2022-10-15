@@ -1,6 +1,6 @@
 ﻿using iLearning.Listography.DataAccess.Models.Helpers;
 
-namespace iLearning.Listography.Application.Models.Common;
+namespace iLearning.Listography.Application.Models.Common.List;
 
 public class CustomFieldModel
 {

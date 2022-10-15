@@ -1,4 +1,4 @@
-﻿namespace iLearning.Listography.Application.Models.Common;
+﻿namespace iLearning.Listography.Application.Models.Common.Identity;
 
 public class AccountModel
 {

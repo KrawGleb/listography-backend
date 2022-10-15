@@ -1,4 +1,4 @@
-﻿using iLearning.Listography.Application.Models.Common;
+﻿using iLearning.Listography.Application.Models.Common.List;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Common.Interfaces;
 using iLearning.Listography.DataAccess.Models.List;

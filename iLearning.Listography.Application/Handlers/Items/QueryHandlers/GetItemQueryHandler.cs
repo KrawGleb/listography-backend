@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using iLearning.Listography.Application.Models.Common;
+using iLearning.Listography.Application.Models.Common.List;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Items.Queries.Get;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;

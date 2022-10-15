@@ -39,7 +39,7 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Respo
         await _repository.UpdateAsync(existingItem, item);
 
         var elasticRecord = _mapper.Map<SearchItem>(item);
-       await _elasticService.UpdateItemAsync(elasticRecord);
+        await _elasticService.UpdateItemAsync(elasticRecord);
 
         return new Response { Succeeded = true };
     }

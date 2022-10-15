@@ -10,5 +10,5 @@ public class ListTag : IEntity
 
     [JsonIgnore]
     public ListItem? ListItem { get; set; }
-    public int ListItemId { get; set; }
+    public int? ListItemId { get; set; }
 }

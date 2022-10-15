@@ -74,9 +74,9 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
     public async Task UpdateAsync(ListItem oldEntity, ListItem newEntity)
     {
         oldEntity.Name = newEntity.Name;
-        
-        await _customFieldsRepository.UpdateCustomFieldsAsync(oldEntity.CustomFields, newEntity.CustomFields);
-        await _tagsRepository.UpdateTagsAsync(oldEntity.Tags, newEntity.Tags);
+
+        oldEntity.CustomFields = (await _customFieldsRepository.UpdateCustomFieldsAsync(oldEntity.CustomFields, newEntity.CustomFields)).ToList();
+        oldEntity.Tags = (await _tagsRepository.UpdateTagsAsync(oldEntity.Tags, newEntity.Tags)).ToList();
 
         await _context.SaveChangesAsync();
     }

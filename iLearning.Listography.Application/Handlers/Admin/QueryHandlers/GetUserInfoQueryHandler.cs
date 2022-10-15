@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.Application.Models.Common;
+﻿using iLearning.Listography.Application.Common.Exceptions;
+using iLearning.Listography.Application.Models.Common;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Admin.Queries.GetUserInfo;
 using iLearning.Listography.DataAccess.Models.Constants;
@@ -24,7 +25,9 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, Respons
 
     public async Task<Response> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByNameAsync(request.Username);
+        var user = await _userManager.FindByNameAsync(request.Username) 
+            ?? throw new NotFoundException($"There isn't any user with ${request.Username} username");
+
         var info = new AccountModel
         {
             Username = request.Username,

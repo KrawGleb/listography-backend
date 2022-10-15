@@ -10,7 +10,7 @@ public class Like : IEntity
 
     [JsonIgnore]
     public ListItem? ListItem { get; set; }
-    public int ListItemId { get; set; }
+    public int? ListItemId { get; set; }
 
     [JsonIgnore]
     public Account? Account { get; set; }

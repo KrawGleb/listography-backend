@@ -1,10 +1,8 @@
 ﻿using iLearning.Listography.DataAccess.Models.Helpers;
-using iLearning.Listography.DataAccess.Models.Interfaces;
-using System.Text.Json.Serialization;
 
-namespace iLearning.Listography.DataAccess.Models.List;
+namespace iLearning.Listography.Application.Models.Common;
 
-public class CustomField : IEntity
+public class CustomFieldModel
 {
     public int Id { get; set; }
     public string? Name { get; set; }
@@ -16,12 +14,4 @@ public class CustomField : IEntity
     public int? IntValue { get; set; }
     public DateTime? DateTimeValue { get; set; }
     public bool? BoolValue { get; set; }
-
-    [JsonIgnore]
-    public ListItem? ListItem { get; set; }
-    public int? ListItemId { get; set; }
-
-    [JsonIgnore]
-    public ListItemTemplate? ListItemTemplate { get; set; }
-    public int? ListItemTemplateId { get; set; }
 }

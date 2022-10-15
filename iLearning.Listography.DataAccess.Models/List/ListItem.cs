@@ -17,5 +17,5 @@ public class ListItem : IEntity
     [Ignore]
     [JsonIgnore]
     public UserList? UserList { get; set; }
-    public int UserListId { get; set; }
+    public int? UserListId { get; set; }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221015105106_ChangeFKeys")]
+    partial class ChangeFKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,14 +229,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserListId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserListId")
-                        .IsUnique()
-                        .HasFilter("[UserListId] IS NOT NULL");
 
                     b.ToTable("ItemTemplates");
                 });
@@ -335,6 +330,9 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ItemTemplateId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -344,6 +342,8 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("ItemTemplateId");
 
                     b.HasIndex("TopicId");
 
@@ -379,15 +379,15 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "40854765-4665-492c-99dc-45179d49f62b",
-                            ConcurrencyStamp = "9b51074d-fbc1-47ca-9e23-9324eac0d985",
+                            Id = "cbdbee11-d170-45b4-8a5e-22f79826cc25",
+                            ConcurrencyStamp = "7e47ca15-8019-42d3-b232-d2db7ecd26fc",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0e144d97-2100-46d9-8cfb-218aaf99aa96",
-                            ConcurrencyStamp = "46105541-8a79-4873-a935-b9de36dcbdde",
+                            Id = "a3369fe1-98a0-4e25-b6ad-b34bb3adfd83",
+                            ConcurrencyStamp = "3ac30df0-b97a-4ed3-8427-306a7c154bbe",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -525,8 +525,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.ListItemTemplate", "ListItemTemplate")
                         .WithMany("CustomFields")
-                        .HasForeignKey("ListItemTemplateId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ListItemTemplateId");
 
                     b.Navigation("ListItem");
 
@@ -560,16 +559,6 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.Navigation("UserList");
                 });
 
-            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListItemTemplate", b =>
-                {
-                    b.HasOne("iLearning.Listography.DataAccess.Models.List.UserList", "UserList")
-                        .WithOne("ItemTemplate")
-                        .HasForeignKey("iLearning.Listography.DataAccess.Models.List.ListItemTemplate", "UserListId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("UserList");
-                });
-
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.ListTag", b =>
                 {
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.ListItem", "ListItem")
@@ -587,12 +576,18 @@ namespace iLearning.Listography.DataAccess.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("iLearning.Listography.DataAccess.Models.List.ListItemTemplate", "ItemTemplate")
+                        .WithMany()
+                        .HasForeignKey("ItemTemplateId");
+
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.ListTopic", "Topic")
                         .WithMany("UserLists")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Account");
+
+                    b.Navigation("ItemTemplate");
 
                     b.Navigation("Topic");
                 });
@@ -680,8 +675,6 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.UserList", b =>
                 {
-                    b.Navigation("ItemTemplate");
-
                     b.Navigation("Items");
                 });
 #pragma warning restore 612, 618

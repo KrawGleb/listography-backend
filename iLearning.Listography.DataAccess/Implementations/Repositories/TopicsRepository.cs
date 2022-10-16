@@ -16,7 +16,6 @@ public class TopicsRepository : EFRepository<ListTopic>, ITopicsRepository
             return await GetDefaultTopic();
 
         var topic = await _table
-            .AsNoTracking()
             .SingleOrDefaultAsync(t => t.Name!.ToLower() == name.ToLower());
 
         return topic ?? await GetDefaultTopic();

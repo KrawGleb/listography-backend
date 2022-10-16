@@ -8,9 +8,23 @@ public class CommentEntityConfiguration : IEntityTypeConfiguration<Comment>
 {
     public void Configure(EntityTypeBuilder<Comment> builder)
     {
+        ConfigureRelationships(builder);
+        ConfigureConstraints(builder);
+    }
+
+    private void ConfigureRelationships(EntityTypeBuilder<Comment> builder)
+    {
         builder
             .HasOne(c => c.Account)
             .WithMany(a => a.Comments)
             .OnDelete(DeleteBehavior.NoAction);
+    }
+
+    private void ConfigureConstraints(EntityTypeBuilder<Comment> builder)
+    {
+        builder
+            .Property(e => e.Text)
+            .HasMaxLength(300)
+            .IsRequired();
     }
 }

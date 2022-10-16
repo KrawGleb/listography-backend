@@ -13,7 +13,7 @@ public class CustomField : IEntity
 
     public string? StringValue { get; set; }
     public string? TextValue { get; set; }
-    public int? IntValue { get; set; }
+    public decimal? NumberValue { get; set; }
     public DateTime? DateTimeValue { get; set; }
     public bool? BoolValue { get; set; }
 

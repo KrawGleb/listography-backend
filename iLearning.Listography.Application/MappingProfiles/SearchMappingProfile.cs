@@ -29,7 +29,8 @@ public class SearchMappingProfile : Profile
 
     private object GetCustomFieldValue(CustomField field)
     {
-        if (field.Type == CustomFieldType.TextType)
+        if (field.Type == CustomFieldType.TextType 
+            && field.TextValue is not null)
         {
             return ClearTextFromTags(field.TextValue);
         }

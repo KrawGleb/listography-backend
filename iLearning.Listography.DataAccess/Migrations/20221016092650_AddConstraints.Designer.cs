@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221016092650_AddConstraints")]
+    partial class AddConstraints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,8 +151,9 @@ namespace iLearning.Listography.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal?>("NumberValue")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("NumberValue")
+                        .HasPrecision(2)
+                        .HasColumnType("float(2)");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
@@ -396,15 +399,15 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "90c75460-d563-4733-b4f8-60842f0b688b",
-                            ConcurrencyStamp = "a15a0d3d-a8c3-4f1f-b65c-c5f81fdf134d",
+                            Id = "7fbacee1-ae62-4ecd-9481-28596bd536e6",
+                            ConcurrencyStamp = "3c387efe-5fba-4609-b0d6-7bdaf072298e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "77560bf0-d9cd-432e-95f0-e9495b61f8b6",
-                            ConcurrencyStamp = "73109163-e8bb-48f4-9efe-6f6a14b73bfc",
+                            Id = "8542c349-159b-4def-9b6a-c02696540d84",
+                            ConcurrencyStamp = "db8bf9ef-87c9-47de-a7fd-dc2471e1f06c",
                             Name = "User",
                             NormalizedName = "USER"
                         });

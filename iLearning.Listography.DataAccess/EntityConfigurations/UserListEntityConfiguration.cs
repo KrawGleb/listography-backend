@@ -8,10 +8,16 @@ public class UserListEntityConfiguration : IEntityTypeConfiguration<UserList>
 {
     public void Configure(EntityTypeBuilder<UserList> builder)
     {
+        ConfigureRelationships(builder);
+        ConfigureConstraints(builder);
+    }
+
+    private void ConfigureRelationships(EntityTypeBuilder<UserList> builder)
+    {
         builder
-           .HasMany(l => l.Items)
-           .WithOne(i => i.UserList)
-           .OnDelete(DeleteBehavior.Cascade);
+            .HasMany(l => l.Items)
+            .WithOne(i => i.UserList)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(l => l.Topic)
@@ -22,5 +28,23 @@ public class UserListEntityConfiguration : IEntityTypeConfiguration<UserList>
             .HasOne(l => l.ItemTemplate)
             .WithOne(t => t.UserList)
             .OnDelete(DeleteBehavior.SetNull);
+    }
+
+    private void ConfigureConstraints(EntityTypeBuilder<UserList> builder)
+    {
+        builder
+            .Property(e => e.Title)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder
+            .Property(e => e.Description)
+            .HasMaxLength(300)
+            .IsRequired(false);
+
+        builder
+            .Property(e => e.ImageUrl)
+            .HasMaxLength(300)
+            .IsRequired(false);
     }
 }

@@ -3,7 +3,7 @@
 public enum CustomFieldType
 {
     StringType = 0,
-    IntType = 1,
+    NumberType = 1,
     DateTimeType = 2,
     BoolType = 3,
     TextType = 4

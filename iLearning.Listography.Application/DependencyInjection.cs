@@ -5,6 +5,8 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using FluentValidation;
+using iLearning.Listography.Application.Common.Behaviours;
 
 namespace iLearning.Listography.Application;
 
@@ -12,12 +14,17 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
+        var assembly = Assembly.GetExecutingAssembly();
+
+        services.AddValidatorsFromAssembly(assembly);
+        services.AddMediatR(assembly);
+        services.AddAutoMapper(assembly);
+
         services.Configure<JWTConfiguration>(configuration.GetSection("JWT"));
 
         services.AddScoped<IUserPermissionsService, UserPermissionsService>();
 
-        services.AddMediatR(Assembly.GetExecutingAssembly());
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         return services;
     }

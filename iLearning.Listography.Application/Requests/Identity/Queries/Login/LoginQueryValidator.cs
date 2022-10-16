@@ -8,16 +8,13 @@ public class LoginQueryValidator : AbstractValidator<LoginQuery>
 	{
 		RuleFor(x => x.Email)
 			.NotEmpty()
-			.NotNull()
-			.WithMessage("Email cannot be null or empty");
+			.NotNull();
 
 		RuleFor(x => x.Email)
-			.EmailAddress()
-			.WithMessage("Invalid email format");
+			.EmailAddress();
 
 		RuleFor(x => x.Password)
 			.NotEmpty()
-			.NotNull()
-			.WithMessage("Password cannot be null or empty");
+			.NotNull();
 	}
 }

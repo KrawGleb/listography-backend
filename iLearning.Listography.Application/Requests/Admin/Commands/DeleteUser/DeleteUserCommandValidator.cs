@@ -8,7 +8,6 @@ public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
 	{
         RuleFor(x => x.Username)
             .NotEmpty()
-            .NotNull()
-            .WithMessage("Username cannot be empty or null");
+            .NotNull();
     }
 }

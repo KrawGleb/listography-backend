@@ -8,7 +8,6 @@ public class GetMeQueryValidator : AbstractValidator<GetMeQuery>
 	{
 		RuleFor(x => x.Id)
 			.NotEmpty()
-			.NotNull()
-			.WithMessage("Id cannot be empty or null");
+			.NotNull();
 	}
 }

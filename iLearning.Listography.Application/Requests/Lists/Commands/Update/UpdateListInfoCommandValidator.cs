@@ -9,15 +9,12 @@ public class UpdateListInfoCommandValidator : AbstractValidator<UpdateListInfoCo
     {
         RuleFor(x => x.Title)
             .NotEmpty()
-            .NotNull()
-            .WithMessage("Title cannot be empty or null");
+            .NotNull();
 
         RuleFor(x => x.Title)
-            .MaximumLength(ListValidationRulesConstants.MaxTitleLength)
-            .WithMessage($"Title max length is {ListValidationRulesConstants.MaxTitleLength}");
+            .MaximumLength(ListValidationRulesConstants.MaxTitleLength);
 
         RuleFor(x => x.Description)
-            .MaximumLength(ListValidationRulesConstants.MaxDescriptionLength)
-            .WithMessage($"Description max length is {ListValidationRulesConstants.MaxDescriptionLength}");
+            .MaximumLength(ListValidationRulesConstants.MaxDescriptionLength);
     }
 }

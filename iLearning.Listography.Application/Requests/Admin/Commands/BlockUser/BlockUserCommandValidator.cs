@@ -8,7 +8,6 @@ public class BlockUserCommandValidator : AbstractValidator<BlockUserCommand>
 	{
         RuleFor(x => x.Username)
             .NotEmpty()
-            .NotNull()
-            .WithMessage("Username cannot be empty or null");
+            .NotNull();
     }
 }

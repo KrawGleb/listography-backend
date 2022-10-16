@@ -9,8 +9,7 @@ public class UpdateItemCommandValidator : AbstractValidator<UpdateItemCommand>
 	{
         RuleFor(x => x.Name)
             .NotEmpty()
-            .NotNull()
-            .WithMessage("Name cannot be empty or null");
+            .NotNull();
 
         RuleFor(x => x.Tags)
             .Must(t => 

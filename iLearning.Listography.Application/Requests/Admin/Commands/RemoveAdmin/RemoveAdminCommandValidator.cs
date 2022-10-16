@@ -8,7 +8,6 @@ public class RemoveAdminCommandValidator : AbstractValidator<RemoveAdminCommand>
     {
         RuleFor(x => x.Username)
             .NotEmpty()
-            .NotNull()
-            .WithMessage("Username cannot be empty or null");
+            .NotNull();
     }
 }

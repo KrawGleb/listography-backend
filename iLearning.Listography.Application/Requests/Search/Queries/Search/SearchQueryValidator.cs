@@ -8,7 +8,6 @@ public class SearchQueryValidator : AbstractValidator<SearchQuery>
 	{
 		RuleFor(x => x.SearchValue)
 			.NotEmpty()
-			.NotNull()
-			.WithMessage("Search value cannot be null or empty");
+			.NotNull();
 	}
 }

@@ -11,8 +11,8 @@ public static class CustomFieldExtensions
             case CustomFieldType.StringType:
                 field.StringValue = value.ToString();
                 break;
-            case CustomFieldType.IntType:
-                field.IntValue = (int)value;
+            case CustomFieldType.NumberType:
+                field.NumberValue = (int)value;
                 break;
             case CustomFieldType.DateTimeType:
                 field.DateTimeValue = (DateTime)value;
@@ -33,7 +33,7 @@ public static class CustomFieldExtensions
         return field.Type switch
         {
             CustomFieldType.StringType => field.StringValue,
-            CustomFieldType.IntType => field.IntValue,
+            CustomFieldType.NumberType => field.NumberValue,
             CustomFieldType.DateTimeType => field.DateTimeValue,
             CustomFieldType.BoolType => field.BoolValue,
             CustomFieldType.TextType => field.TextValue,

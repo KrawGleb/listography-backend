@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.Application.Common.Exceptions;
+﻿using FluentValidation;
+using iLearning.Listography.Application.Common.Exceptions;
 using iLearning.Listography.Application.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -14,6 +15,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
         {
             { typeof(NotFoundException), HandleNotFoundException },
+            { typeof(ValidationException), HandleValidationException },
             { typeof(UserIsBlockedException), HandlerUserIsBlockedException }
         };
     }
@@ -35,6 +37,23 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         }
 
         HandleUnknownException(context);
+    }
+
+    private void HandleValidationException(ExceptionContext context)
+    {
+        var exception = (ValidationException)context.Exception;
+        var errors = exception.Errors.Select(e => e.ErrorMessage);
+
+        var response = new ErrorResponse()
+        {
+            Succeeded = false,
+            Errors = errors
+        };
+
+        context.Result = new ObjectResult(response)
+        {
+            StatusCode = StatusCodes.Status400BadRequest
+        };
     }
 
     private void HandleNotFoundException(ExceptionContext context)
@@ -70,7 +89,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         var response = new ErrorResponse()
         {
             Succeeded = false,
-            Errors = new string[] { 
+            Errors = new string[] {
                 "An error occured while processing request.",
                 context.Exception.Message
             }

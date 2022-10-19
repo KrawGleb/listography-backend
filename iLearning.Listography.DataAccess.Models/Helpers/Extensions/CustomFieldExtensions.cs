@@ -23,6 +23,9 @@ public static class CustomFieldExtensions
             case CustomFieldType.TextType:
                 field.TextValue = value.ToString();
                 break;
+            case CustomFieldType.SelectType:
+                field.SelectValue = (int)value;
+                break;
             default:
                 throw new InvalidOperationException("Unknown field type.");
         }
@@ -37,7 +40,11 @@ public static class CustomFieldExtensions
             CustomFieldType.DateTimeType => field.DateTimeValue,
             CustomFieldType.BoolType => field.BoolValue,
             CustomFieldType.TextType => field.TextValue,
+            CustomFieldType.SelectType => GetSelectedOption(field),
             _ => throw new InvalidOperationException("Unknown field type."),
         };
     }
+
+    private static SelectOption? GetSelectedOption(CustomField field)
+        => field.SelectOptions?.SingleOrDefault(o => o.Value == field.SelectValue);
 }

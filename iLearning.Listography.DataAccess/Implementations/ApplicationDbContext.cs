@@ -18,6 +18,7 @@ public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole, str
     private DbSet<ListItemTemplate> ItemTemplates { get; set; }
     private DbSet<Like> Likes { get; set; }
     private DbSet<Comment> Comments { get; set; }
+    private DbSet<SelectOption> SelectOptions { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

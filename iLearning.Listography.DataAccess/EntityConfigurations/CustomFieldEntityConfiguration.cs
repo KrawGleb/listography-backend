@@ -25,6 +25,12 @@ public class CustomFieldEntityConfiguration : IEntityTypeConfiguration<CustomFie
             .WithMany(l => l.CustomFields)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder
+            .HasMany(f => f.SelectOptions)
+            .WithOne(o => o.CustomField)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private void ConfigureConstraints(EntityTypeBuilder<CustomField> builder)

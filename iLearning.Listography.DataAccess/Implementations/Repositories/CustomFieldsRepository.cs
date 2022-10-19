@@ -36,6 +36,13 @@ public class CustomFieldsRepository : EFRepository<CustomField>, ICustomFieldsRe
         entities = entities.Select(entity =>
         {
             entity.Id = 0;
+
+            entity.SelectOptions = entity.SelectOptions?.Select(option =>
+            {
+                option.Id = 0;
+                return option;
+            }).ToList();
+
             return entity;
         });
 

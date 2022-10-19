@@ -6,5 +6,6 @@ public enum CustomFieldType
     NumberType = 1,
     DateTimeType = 2,
     BoolType = 3,
-    TextType = 4
+    TextType = 4,
+    SelectType = 5
 }

@@ -24,7 +24,6 @@ public class TopicsRepository : EFRepository<ListTopic>, ITopicsRepository
     private async Task<ListTopic> GetDefaultTopic()
     {
         return await _table
-            .AsNoTracking()
             .SingleAsync(t => t.Name!.ToLower() == "other");
     }
 }

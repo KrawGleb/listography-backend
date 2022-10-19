@@ -38,12 +38,17 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
         query = includeItems
             ? query
-                .Include(l => l.Items!).ThenInclude(i => i.CustomFields)
+                .Include(l => l.Items!)
+                    .ThenInclude(i => i.CustomFields)!
+                    .ThenInclude(f => f.SelectOptions)
                 .Include(l => l.Items!).ThenInclude(i => i.Tags)
             : query;
 
         query = includeItemTemplate
-            ? query.Include(l => l.ItemTemplate!).ThenInclude(i => i.CustomFields)
+            ? query
+                .Include(l => l.ItemTemplate!)
+                    .ThenInclude(i => i.CustomFields)!
+                    .ThenInclude(f => f.SelectOptions)
             : query;
 
         query = includeTopic
@@ -104,6 +109,7 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             ?? throw new InvalidOperationException();
 
         await _itemsRepository.CreateAsync(item);
+
 
         list.Items!.Add(item);
 

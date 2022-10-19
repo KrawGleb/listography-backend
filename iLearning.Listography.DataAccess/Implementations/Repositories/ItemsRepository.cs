@@ -36,7 +36,8 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
             : _table.AsNoTracking();
 
         var entity = await query
-            .Include(i => i.CustomFields)
+            .Include(i => i.CustomFields)!
+                .ThenInclude(c => c.SelectOptions)
             .Include(i => i.Tags)
             .Include(i => i.Comments)!
                 .ThenInclude(c => c.Account)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221019085642_AddSelectType")]
+    partial class AddSelectType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -345,12 +347,9 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.Property<int>("CustomFieldId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("Value")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -424,15 +423,15 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a12009e5-03da-4f5e-af58-8d5e163e13ef",
-                            ConcurrencyStamp = "35f1a615-c157-4833-9bf2-49dd88a8b27b",
+                            Id = "f21141d6-494f-4e4e-8aaa-188d59bd5c79",
+                            ConcurrencyStamp = "9d68a16e-e7d4-4eec-ad47-68ef635f7593",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "1a3aa162-2851-4869-b84b-7cf90010f134",
-                            ConcurrencyStamp = "bb99f8b3-e2bf-4af4-8568-b282a93be6d9",
+                            Id = "66e140e8-28df-41d0-86bb-47dcbd947460",
+                            ConcurrencyStamp = "dd2ef292-dd28-4303-bcfb-1e686d6c822a",
                             Name = "User",
                             NormalizedName = "USER"
                         });

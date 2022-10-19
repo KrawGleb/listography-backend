@@ -12,7 +12,7 @@ public static class CustomFieldExtensions
                 field.StringValue = value.ToString();
                 break;
             case CustomFieldType.NumberType:
-                field.NumberValue = (int)value;
+                field.NumberValue = (decimal)value;
                 break;
             case CustomFieldType.DateTimeType:
                 field.DateTimeValue = (DateTime)value;
@@ -40,11 +40,8 @@ public static class CustomFieldExtensions
             CustomFieldType.DateTimeType => field.DateTimeValue,
             CustomFieldType.BoolType => field.BoolValue,
             CustomFieldType.TextType => field.TextValue,
-            CustomFieldType.SelectType => GetSelectedOption(field),
+            CustomFieldType.SelectType => field.SelectValue,
             _ => throw new InvalidOperationException("Unknown field type."),
         };
     }
-
-    private static SelectOption? GetSelectedOption(CustomField field)
-        => field.SelectOptions?.SingleOrDefault(o => o.Value == field.SelectValue);
 }

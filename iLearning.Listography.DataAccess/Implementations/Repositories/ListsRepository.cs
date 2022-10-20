@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
+﻿using iLearning.Listography.DataAccess.Interfaces.QueryBuilders;
+using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,15 +7,18 @@ namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
 public class ListsRepository : EFRepository<UserList>, IListsRepository
 {
+    private readonly IListsQueryBuilder _queryBuilder;
     private readonly IItemsRepository _itemsRepository;
     private readonly ITopicsRepository _topicsRepository;
 
     public ListsRepository(
         ApplicationDbContext context,
+        IListsQueryBuilder queryBuilder,
         IItemsRepository itemsRepository,
         ITopicsRepository topicsRepository)
         : base(context)
     {
+        _queryBuilder = queryBuilder;
         _itemsRepository = itemsRepository;
         _topicsRepository = topicsRepository;
     }
@@ -26,30 +30,14 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         bool includeTopic = true,
         bool trackEntity = false)
     {
-        var query = trackEntity
-            ? _table
-            : _table.AsNoTracking();
+        var query = _queryBuilder
+            .AsNoTracking(trackEntity)
+            .IncludeItems(includeItems)
+            .IncludeItemTemplate(includeItemTemplate)
+            .IncludeTopic(includeTopic)
+            .Build();
 
-        query = includeItems
-            ? query
-                .Include(l => l.Items!)
-                    .ThenInclude(i => i.CustomFields)!
-                    .ThenInclude(f => f.SelectOptions)
-                .Include(l => l.Items!).ThenInclude(i => i.Tags)
-            : query;
-
-        query = includeItemTemplate
-            ? query
-                .Include(l => l.ItemTemplate!)
-                    .ThenInclude(i => i.CustomFields)!
-                    .ThenInclude(f => f.SelectOptions)
-            : query;
-
-        query = includeTopic
-            ? query.Include(l => l.Topic)
-            : query;
-
-        return await query.FirstOrDefaultAsync(l => l.Id == id);
+        return await query.SingleOrDefaultAsync(l => l.Id == id);
     }
 
     public async Task<string?> GetOwnerIdAsync(int listId)
@@ -66,7 +54,7 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         return await _table
             .AsNoTracking()
             .Include(l => l.Items)
-            .OrderByDescending(l => l.Items.Count)
+            .OrderByDescending(l => l.Items!.Count)
             .Take(count)
             .ToListAsync();
     }
@@ -90,7 +78,6 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             ?? throw new InvalidOperationException();
 
         await _itemsRepository.CreateAsync(item);
-
 
         list.Items!.Add(item);
 

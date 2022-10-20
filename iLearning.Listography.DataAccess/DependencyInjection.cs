@@ -1,6 +1,8 @@
 ﻿using iLearning.Listography.DataAccess.Implementations;
+using iLearning.Listography.DataAccess.Implementations.QueryBuilders;
 using iLearning.Listography.DataAccess.Implementations.Repositories;
 using iLearning.Listography.DataAccess.Implementations.Services.Elastic;
+using iLearning.Listography.DataAccess.Interfaces.QueryBuilders;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Interfaces.Services.Elastic;
 using iLearning.Listography.DataAccess.Models.Common;
@@ -39,7 +41,6 @@ public static class DependencyInjection
         services.AddElasticClient(configuration);
         services.AddRepositories();
        
-
         return services;
     }
 
@@ -52,6 +53,9 @@ public static class DependencyInjection
         services.AddScoped<IItemsRepository, ItemsRepository>();
         services.AddScoped<ILikesRepository, LikesRepository>();
         services.AddScoped<ICommentsRespository, CommentsRepository>();
+
+        services.AddScoped<IItemsQueryBuilder, ItemsQueryBuilder>();
+        services.AddScoped<IListsQueryBuilder, ListsQueryBuilder>();
 
         return services;
     }

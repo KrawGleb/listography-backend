@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
+﻿using iLearning.Listography.DataAccess.Interfaces.QueryBuilders;
+using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,15 +7,18 @@ namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
 public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
 {
+    private readonly IItemsQueryBuilder _queryBuilder;
     private readonly ICustomFieldsRepository _customFieldsRepository;
     private readonly ITagsRepository _tagsRepository;
 
     public ItemsRepository(
         ApplicationDbContext context,
+        IItemsQueryBuilder queryBuilder,
         ICustomFieldsRepository customFieldsRepository,
         ITagsRepository tagsRepository)
         : base(context)
     {
+        _queryBuilder = queryBuilder;
         _customFieldsRepository = customFieldsRepository;
         _tagsRepository = tagsRepository;
     }
@@ -31,17 +35,15 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
 
     public async override Task<ListItem?> GetByIdAsync(int id, bool trackEntity = false)
     {
-        var query = trackEntity
-            ? _table
-            : _table.AsNoTracking();
+        var query = _queryBuilder
+            .AsNoTracking(trackEntity)
+            .IncludeCustomFields()
+            .IncludeTags()
+            .IncludeComments()
+            .IncludeLikes()
+            .Build();
 
         var entity = await query
-            .Include(i => i.CustomFields)!
-                .ThenInclude(c => c.SelectOptions)
-            .Include(i => i.Tags)
-            .Include(i => i.Comments)!
-                .ThenInclude(c => c.ApplicationUser)
-            .Include(i => i.Likes)
             .SingleOrDefaultAsync(i => i.Id == id);
 
         return entity;

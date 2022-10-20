@@ -32,6 +32,8 @@ public class GetItemQueryHandler : IRequestHandler<GetItemQuery, Response>
         var item = await _repository.GetByIdAsync(request.Id);
         var itemModel = _mapper.Map<ItemViewModel>(item);
 
+        // TODO: Handle if item not found.
+
         itemModel.Comments = _mapper.Map<ICollection<CommentViewModel>>(item.Comments);
         itemModel.Liked = item?.Likes?.Any(l => l.ApplicationUserId == userId);
 

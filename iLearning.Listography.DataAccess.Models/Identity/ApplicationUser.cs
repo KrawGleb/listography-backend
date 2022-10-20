@@ -18,7 +18,6 @@ public class ApplicationUser : IdentityUser
     [JsonIgnore]
     public ICollection<Like>? Likes { get; set; }
 
-
     public bool IsBlocked() 
         => State == UserState.Blocked;
 }

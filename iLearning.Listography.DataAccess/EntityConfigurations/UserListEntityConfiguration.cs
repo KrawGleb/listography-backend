@@ -28,6 +28,11 @@ public class UserListEntityConfiguration : IEntityTypeConfiguration<UserList>
             .HasOne(l => l.ItemTemplate)
             .WithOne(t => t.UserList)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder
+            .HasOne(l => l.ApplicationUser)
+            .WithMany(u => u.Lists)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 
     private void ConfigureConstraints(EntityTypeBuilder<UserList> builder)

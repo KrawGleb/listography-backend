@@ -1,5 +1,7 @@
-﻿using iLearning.Listography.Application.Common.Exceptions;
+﻿using AutoMapper;
+using iLearning.Listography.Application.Common.Exceptions;
 using iLearning.Listography.Application.Models.Responses;
+using iLearning.Listography.Application.Models.ViewModels.Identity;
 using iLearning.Listography.Application.Requests.Accounts.Queries.GetMe;
 using iLearning.Listography.DataAccess.Models.Identity;
 using MediatR;
@@ -11,20 +13,25 @@ namespace iLearning.Listography.Application.Handlers.Accounts.QueryHandlers;
 public class GetMeCommandHandler : IRequestHandler<GetMeQuery, Response>
 {
     private readonly UserManager<Account> _userManager;
+    private readonly IMapper _mapper;
 
-    public GetMeCommandHandler(UserManager<Account> userManager)
+    public GetMeCommandHandler(
+        UserManager<Account> userManager,
+        IMapper mapper)
     {
         _userManager = userManager;
+        _mapper = mapper;
     }
 
     public async Task<Response> Handle(GetMeQuery request, CancellationToken cancellationToken)
     {
         var account = await GetAccountAsync(request.Id!);
+        var me = _mapper.Map<MeViewModel>(account);
 
         return new CommonResponse()
         {
             Succeeded = true,
-            Body = account
+            Body = me
         };
 
     }

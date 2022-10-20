@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using iLearning.Listography.Application.Models.Home;
 using iLearning.Listography.Application.Models.Responses;
+using iLearning.Listography.Application.Models.ViewModels.Home;
 using iLearning.Listography.Application.Requests.Home.Queries.Get;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using MediatR;
@@ -37,15 +37,15 @@ public class GetHomeInfoQueryHandler : IRequestHandler<GetHomeInfoQuery, Respons
         };
     }
 
-    private async Task<HomeInfo> GetHomeInfoAsync(GetHomeInfoQuery request)
+    private async Task<HomeViewModel> GetHomeInfoAsync(GetHomeInfoQuery request)
     {
         var items = await _itemsRepository.GetLastCreated(request.ItemsCount);
         var tags = await _tagsRepository.GetRandomAsync(request.TagsCount);
         var lists = await _listsRepository.GetLargestAsync(request.ListsCount);
 
-        var itemDescriptions = _mapper.Map<IEnumerable<ItemShortDescription>>(items);
+        var itemDescriptions = _mapper.Map<IEnumerable<ItemShortViewModel>>(items);
 
-        var homeInfo = new HomeInfo
+        var homeInfo = new HomeViewModel
         {
             LargestLists = lists,
             LastCreatedItems = itemDescriptions,

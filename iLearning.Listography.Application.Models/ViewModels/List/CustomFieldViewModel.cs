@@ -1,9 +1,9 @@
 ﻿using iLearning.Listography.DataAccess.Models.Helpers;
 using iLearning.Listography.DataAccess.Models.List;
 
-namespace iLearning.Listography.Application.Models.Common.List;
+namespace iLearning.Listography.Application.Models.ViewModels.List;
 
-public class CustomFieldModel
+public class CustomFieldViewModel
 {
     public int Id { get; set; }
     public string? Name { get; set; }

@@ -1,6 +1,6 @@
 ﻿using iLearning.Listography.Application.Common.Exceptions;
-using iLearning.Listography.Application.Models.Common.Identity;
 using iLearning.Listography.Application.Models.Responses;
+using iLearning.Listography.Application.Models.ViewModels.Common.Identity;
 using iLearning.Listography.Application.Requests.Admin.Queries.GetUserInfo;
 using iLearning.Listography.DataAccess.Models.Constants;
 using iLearning.Listography.DataAccess.Models.Identity;
@@ -23,7 +23,7 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, Respons
         var user = await _userManager.FindByNameAsync(request.Username) 
             ?? throw new NotFoundException($"There isn't any user with ${request.Username} username");
 
-        var info = new AccountModel
+        var info = new AccountViewModel
         {
             Username = request.Username,
             Blocked = user.State == AccountState.Blocked,

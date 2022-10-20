@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using iLearning.Listography.Application.Models.Common.List;
 using iLearning.Listography.Application.Models.Responses;
+using iLearning.Listography.Application.Models.ViewModels.Common.List;
 using iLearning.Listography.Application.Requests.Social.Queries.GetComments;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using MediatR;
@@ -23,7 +23,7 @@ public class GetCommentsQueryHandler : IRequestHandler<GetCommentsQuery, Respons
     public async Task<Response> Handle(GetCommentsQuery request, CancellationToken cancellationToken)
     {
         var comments = await _commentsRespository.GetItemCommentsAsync(request.ItemId);
-        var commentModels = _mapper.Map<ICollection<CommentModel>>(comments);
+        var commentModels = _mapper.Map<ICollection<CommentViewModel>>(comments);
         
         return new CommonResponse
         {

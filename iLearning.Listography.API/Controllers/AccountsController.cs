@@ -20,7 +20,7 @@ public class AccountsController : ApiControllerBase
 
     [HttpGet("{username}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAccount([FromRoute] string username)
+    public async Task<IActionResult> GetAccountLists([FromRoute] string username)
         => Ok(await Mediator.Send(new GetAccountListsQuery()
         {
             Username = username

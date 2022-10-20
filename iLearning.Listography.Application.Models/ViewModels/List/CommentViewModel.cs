@@ -1,6 +1,6 @@
-﻿namespace iLearning.Listography.Application.Models.Common.List;
+﻿namespace iLearning.Listography.Application.Models.ViewModels.Common.List;
 
-public class CommentModel
+public class CommentViewModel
 {
     public int Id { get; set; }
     public string? Content { get; set; }

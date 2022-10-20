@@ -1,6 +1,6 @@
-﻿namespace iLearning.Listography.Application.Models.Common.Identity;
+﻿namespace iLearning.Listography.Application.Models.ViewModels.Common.Identity;
 
-public class AccountModel
+public class AccountViewModel
 {
     public string? Username { get; set; }
     public bool Blocked { get; set; }

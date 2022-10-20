@@ -68,17 +68,6 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         return await query.ToListAsync();
     }
 
-    public async override Task DeleteAsync(int id)
-    {
-        var entity = await GetByIdAsync(id, trackEntity: true);
-
-        if (entity is not null)
-        {
-            _table.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
-    }
-
     public async Task UpdateAsync(ListItem oldEntity, ListItem newEntity)
     {
         var updatedCustomFields = await _customFieldsRepository.UpdateCustomFieldsAsync(oldEntity.CustomFields, newEntity.CustomFields);

@@ -8,12 +8,12 @@ namespace iLearning.Listography.Application.Services.Implementatinos;
 
 public class UserPermissionsService : IUserPermissionsService
 {
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IListsRepository _listsRepository;
     private readonly IItemsRepository _itemsRepository;
 
     public UserPermissionsService(
-        UserManager<Account> userManager,
+        UserManager<ApplicationUser> userManager,
         IListsRepository listsRepository,
         IItemsRepository itemsRepository
         )

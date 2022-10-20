@@ -15,6 +15,6 @@ public class UserList : IEntity
     public ICollection<ListItem>? Items { get; set; }
 
     [JsonIgnore]
-    public Account? Account { get; set; }
-    public string? AccountId { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; }
+    public string? ApplicationUserId { get; set; }
 }

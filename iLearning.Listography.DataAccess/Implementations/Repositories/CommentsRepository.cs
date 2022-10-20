@@ -17,7 +17,7 @@ public class CommentsRepository : EFRepository<Comment>, ICommentsRespository
             : _table.AsNoTracking();
 
         return await query
-            .Include(i => i.Account)
+            .Include(i => i.ApplicationUser)
             .Where(i => i.ListItemId == itemId)
             .ToListAsync();
     }

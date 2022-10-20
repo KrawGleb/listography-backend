@@ -4,23 +4,23 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace iLearning.Listography.DataAccess.EntityConfigurations;
 
-public class AccountEntityConfiguration : IEntityTypeConfiguration<Account>
+public class UserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<Account> builder)
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder
             .HasMany(a => a.Lists)
-            .WithOne(l => l.Account)
+            .WithOne(l => l.ApplicationUser)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasMany(a => a.Comments)
-            .WithOne(c => c.Account)
+            .WithOne(c => c.ApplicationUser)
             .OnDelete(DeleteBehavior.SetNull);
 
         builder
             .HasMany(a => a.Likes)
-            .WithOne(l => l.Account)
+            .WithOne(l => l.ApplicationUser)
             .OnDelete(DeleteBehavior.SetNull);
     }
 }

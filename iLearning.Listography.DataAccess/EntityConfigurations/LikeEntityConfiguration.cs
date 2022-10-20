@@ -9,7 +9,7 @@ public class LikeEntityConfiguration : IEntityTypeConfiguration<Like>
     public void Configure(EntityTypeBuilder<Like> builder)
     {
         builder
-          .HasOne(l => l.Account)
+          .HasOne(l => l.ApplicationUser)
           .WithMany(a => a.Likes)
           .OnDelete(DeleteBehavior.NoAction);
     }

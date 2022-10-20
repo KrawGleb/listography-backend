@@ -22,6 +22,6 @@ public class ItemsMappingProfile : Profile
             .ForMember(d => d.ListName,
                 o => o.MapFrom(i => i.UserList.Title))
             .ForMember(d => d.Author,
-                o => o.MapFrom(i => i.UserList.Account.UserName));
+                o => o.MapFrom(i => i.UserList.ApplicationUser.UserName));
     }
 }

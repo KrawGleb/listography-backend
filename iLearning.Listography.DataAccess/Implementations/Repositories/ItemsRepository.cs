@@ -40,7 +40,7 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
                 .ThenInclude(c => c.SelectOptions)
             .Include(i => i.Tags)
             .Include(i => i.Comments)!
-                .ThenInclude(c => c.Account)
+                .ThenInclude(c => c.ApplicationUser)
             .Include(i => i.Likes)
             .SingleOrDefaultAsync(i => i.Id == id);
 
@@ -61,7 +61,7 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         var query = _table
             .AsNoTracking()
             .Include(i => i.UserList)
-                .ThenInclude(l => l!.Account)
+                .ThenInclude(l => l!.ApplicationUser)
             .OrderByDescending(i => i.CreatedAt)
             .Take(count);
 

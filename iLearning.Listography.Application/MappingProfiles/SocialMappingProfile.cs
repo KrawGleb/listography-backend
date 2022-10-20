@@ -10,6 +10,6 @@ public class SocialMappingProfile : Profile
 	{
         CreateMap<Comment, CommentViewModel>()
             .ForMember(c => c.Content, opt => opt.MapFrom(s => s.Text))
-            .ForMember(c => c.From, opt => opt.MapFrom(s => s.Account.UserName));
+            .ForMember(c => c.From, opt => opt.MapFrom(s => s.ApplicationUser.UserName));
     }
 }

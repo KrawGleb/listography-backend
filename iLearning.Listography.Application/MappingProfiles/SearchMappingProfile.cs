@@ -22,7 +22,7 @@ public class SearchMappingProfile : Profile
             .ForMember(item => item.List,
                 opt => opt.MapFrom(i => i.UserList.Title))
             .ForMember(item => item.Author,
-                opt => opt.MapFrom(i => i.UserList.Account.UserName))
+                opt => opt.MapFrom(i => i.UserList.ApplicationUser.UserName))
             .ForMember(item => item.CustomFieldValues,
                 opt => opt.MapFrom(i => i.CustomFields.Select(f => GetCustomFieldValue(f))));
     }

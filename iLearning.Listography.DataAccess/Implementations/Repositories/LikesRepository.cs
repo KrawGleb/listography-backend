@@ -15,7 +15,7 @@ public class LikesRepository : EFRepository<Like>, ILikesRepository
         var entity = _table
             .Where(e =>
                 e.ListItemId == itemId &&
-                e.AccountId == userId)
+                e.ApplicationUserId == userId)
             .SingleOrDefault();
 
         if (entity is not null)
@@ -25,12 +25,12 @@ public class LikesRepository : EFRepository<Like>, ILikesRepository
         }
     }
 
-    public async Task<bool> CheckIfExsistsAsync(string accountId, int itemId)
+    public async Task<bool> CheckIfExsistsAsync(string userId, int itemId)
     {
         var entity = await _table
             .Where(e =>
                 e.ListItemId == itemId &&
-                e.AccountId == accountId)
+                e.ApplicationUserId == userId)
             .SingleOrDefaultAsync();
 
         return entity is not null;

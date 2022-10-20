@@ -58,7 +58,7 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == listId);
 
-        return entity?.AccountId;
+        return entity?.ApplicationUserId;
     }
 
     public async Task<IEnumerable<UserList>> GetLargestAsync(int count)

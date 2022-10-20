@@ -10,9 +10,9 @@ namespace iLearning.Listography.Application.Handlers.Admin.CommandHandlers;
 
 public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Response>
 {
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public DeleteUserCommandHandler(UserManager<Account> userManager)
+    public DeleteUserCommandHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
@@ -25,7 +25,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
             .Include(u => u.Comments)
             .Include(u => u.Likes)
             .FirstOrDefaultAsync(a => a.UserName == request.Username, cancellationToken: cancellationToken)
-        ?? throw new NotFoundException("Account not found");
+        ?? throw new NotFoundException("User not found");
 
         await _userManager.DeleteAsync(query);
 

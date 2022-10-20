@@ -11,9 +11,9 @@ namespace iLearning.Listography.Application.Handlers.Admin.QueryHandlers;
 
 public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, Response>
 {
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public GetUserInfoQueryHandler(UserManager<Account> userManager)
+    public GetUserInfoQueryHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
@@ -23,10 +23,10 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, Respons
         var user = await _userManager.FindByNameAsync(request.Username) 
             ?? throw new NotFoundException($"There isn't any user with ${request.Username} username");
 
-        var info = new AccountViewModel
+        var info = new UserViewModel
         {
             Username = request.Username,
-            Blocked = user.State == AccountState.Blocked,
+            Blocked = user.State == UserState.Blocked,
             IsAdmin = await _userManager.IsInRoleAsync(user, RolesEnum.Admin)
         };
 

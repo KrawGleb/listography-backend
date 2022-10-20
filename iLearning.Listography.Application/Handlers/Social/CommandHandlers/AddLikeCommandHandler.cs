@@ -39,7 +39,7 @@ public class AddLikeCommandHandler : IRequestHandler<AddLikeCommand, Response>
             };
         }
 
-        var like = new Like { AccountId = userId };
+        var like = new Like { ApplicationUserId = userId };
 
         await _itemsRepository.AddLike(request.ItemId, like);
 

@@ -33,7 +33,7 @@ public class GetItemQueryHandler : IRequestHandler<GetItemQuery, Response>
         var itemModel = _mapper.Map<ItemViewModel>(item);
 
         itemModel.Comments = _mapper.Map<ICollection<CommentViewModel>>(item.Comments);
-        itemModel.Liked = item?.Likes?.Any(l => l.AccountId == userId);
+        itemModel.Liked = item?.Likes?.Any(l => l.ApplicationUserId == userId);
 
         return new CommonResponse()
         {

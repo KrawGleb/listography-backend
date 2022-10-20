@@ -4,10 +4,10 @@ using iLearning.Listography.DataAccess.Models.Identity;
 
 namespace iLearning.Listography.Application.MappingProfiles;
 
-public class AccountMappingProfile : Profile
+public class UserMappingProfile : Profile
 {
-	public AccountMappingProfile()
+	public UserMappingProfile()
 	{
-		CreateMap<Account, MeViewModel>();
+		CreateMap<ApplicationUser, MeViewModel>();
 	}
 }

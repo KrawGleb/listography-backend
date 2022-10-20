@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace iLearning.Listography.Application.Requests.Accounts.Queries.GetMe;
+namespace iLearning.Listography.Application.Requests.Users.Queries.GetMe;
 
 public class GetMeQueryValidator : AbstractValidator<GetMeQuery>
 {

@@ -24,7 +24,7 @@ public class CommentCommandHandler : IRequestHandler<CommentCommand, Response>
     public async Task<Response> Handle(CommentCommand request, CancellationToken cancellationToken)
     {
         var userId = _contextAccessor.HttpContext.GetUserId();
-        var comment = new Comment { AccountId = userId, Text = request.Content };
+        var comment = new Comment { ApplicationUserId = userId, Text = request.Content };
 
         await _itemsRepository.AddComment(request.ItemId, comment);
 

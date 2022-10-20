@@ -16,14 +16,14 @@ namespace iLearning.Listography.Application.Handlers.List.CommandHandlers;
 public class CreateListCommandHandler : IRequestHandler<CreateListCommand, Response>
 {
     private readonly IMapper _mapper;
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IListsRepository _repository;
     private readonly ITopicsRepository _topicsRepository;
     private readonly IHttpContextAccessor _contextAccessor;
 
     public CreateListCommandHandler(
         IMapper mapper,
-        UserManager<Account> userManager,
+        UserManager<ApplicationUser> userManager,
         IListsRepository repository,
         ITopicsRepository topicsRepository,
         IHttpContextAccessor contextAccessor)
@@ -56,7 +56,7 @@ public class CreateListCommandHandler : IRequestHandler<CreateListCommand, Respo
         await _userManager.UpdateAsync(listOwner);
     }
 
-    private async Task<Account> GetListOwnerAsync(string id)
+    private async Task<ApplicationUser> GetListOwnerAsync(string id)
     {
         var listOwner = await _userManager
             .Users

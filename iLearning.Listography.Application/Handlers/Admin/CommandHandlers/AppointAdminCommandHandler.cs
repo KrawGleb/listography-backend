@@ -9,9 +9,9 @@ namespace iLearning.Listography.Application.Handlers.Admin.CommandHandlers;
 
 public class AppointAdminCommandHandler : IRequestHandler<AppointAdminCommand, Response>
 {
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public AppointAdminCommandHandler(UserManager<Account> userManager)
+    public AppointAdminCommandHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }

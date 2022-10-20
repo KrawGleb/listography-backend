@@ -24,7 +24,7 @@ public static class DependencyInjection
                 configuration.GetConnectionString("Default"),
                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
-        services.AddIdentity<Account, IdentityRole>(options =>
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
             options.Password.RequireNonAlphanumeric = false;
             options.Password.RequireLowercase = false;

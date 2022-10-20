@@ -9,9 +9,9 @@ namespace iLearning.Listography.Application.Handlers.Admin.CommandHandlers;
 
 public class BlockUserCommandHandler : IRequestHandler<BlockUserCommand, Response>
 {
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public BlockUserCommandHandler(UserManager<Account> userManager)
+    public BlockUserCommandHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
@@ -20,7 +20,7 @@ public class BlockUserCommandHandler : IRequestHandler<BlockUserCommand, Respons
     {
         var user = await _userManager.FindByNameAsync(request.Username);
 
-        user.State = AccountState.Blocked;
+        user.State = UserState.Blocked;
 
         await _userManager.UpdateAsync(user);
 

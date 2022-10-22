@@ -3,7 +3,7 @@
 namespace iLearning.Listography.DataAccess.Interfaces.QueryBuilders;
 public interface IItemsQueryBuilder
 {
-    IItemsQueryBuilder AsNoTracking(bool asNoTracking = true);
+    IItemsQueryBuilder Track(bool track = false);
     IItemsQueryBuilder IncludeComments();
     IItemsQueryBuilder IncludeCustomFields();
     IItemsQueryBuilder IncludeLikes();

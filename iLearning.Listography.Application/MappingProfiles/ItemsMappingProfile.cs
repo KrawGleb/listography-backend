@@ -23,5 +23,12 @@ public class ItemsMappingProfile : Profile
                 o => o.MapFrom(i => i.UserList.Title))
             .ForMember(d => d.Author,
                 o => o.MapFrom(i => i.UserList.ApplicationUser.UserName));
+
+        CreateMap<CustomFieldViewModel, CustomField>()
+            .ReverseMap();
+        CreateMap<TagViewModel, ListTag>()
+            .ReverseMap();
+        CreateMap<SelectOptionViewModel, SelectOption>()
+            .ReverseMap();
     }
 }

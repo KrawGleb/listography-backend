@@ -31,26 +31,4 @@ public class CustomFieldsRepository : EFRepository<CustomField>, ICustomFieldsRe
 
         return oldValues;
     }
-
-    public async override Task AddRangeAsync(
-        IEnumerable<CustomField>? entities,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(entities);
-
-        entities = entities.Select(entity =>
-        {
-            entity.Id = 0;
-
-            entity.SelectOptions = entity.SelectOptions?.Select(option =>
-            {
-                option.Id = 0;
-                return option;
-            }).ToList();
-
-            return entity;
-        });
-
-        await base.AddRangeAsync(entities, cancellationToken);
-    }
 }

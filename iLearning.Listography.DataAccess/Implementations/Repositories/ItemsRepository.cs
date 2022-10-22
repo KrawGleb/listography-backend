@@ -23,23 +23,13 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         _tagsRepository = tagsRepository;
     }
 
-    public async override Task<ListItem> CreateAsync(ListItem entity, CancellationToken cancellationToken = default)
-    {
-        await _customFieldsRepository.AddRangeAsync(entity.CustomFields, cancellationToken);
-        await _tagsRepository.CreateTagsAsync(entity.Tags, cancellationToken);
-
-        entity.CreatedAt = DateTime.Now;
-
-        return entity;
-    }
-
     public async override Task<ListItem?> GetByIdAsync(
         int id,
         bool trackEntity = false,
         CancellationToken cancellationToken = default)
     {
         var query = _queryBuilder
-            .AsNoTracking(trackEntity)
+            .Track(trackEntity)
             .IncludeCustomFields()
             .IncludeTags()
             .IncludeComments()

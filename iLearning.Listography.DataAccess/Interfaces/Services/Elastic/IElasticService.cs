@@ -7,6 +7,8 @@ public interface IElasticService
 {
     Task<IEnumerable<SearchItem>?> SearchByValueAsync(string value, CancellationToken cancellationToken = default);
     Task<IndexResponse> IndexItemAsync(SearchItem item, CancellationToken cancellationToken = default);
-    Task DeleteItemAsync(int id, CancellationToken cancellationToken = default);
     Task UpdateItemAsync(SearchItem item, CancellationToken cancellationToken = default);
+    Task DeleteItemAsync(int id, CancellationToken cancellationToken = default);
+    Task DeleteListAsync(int listId, CancellationToken cancellationToken = default);
+    Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default);
 }

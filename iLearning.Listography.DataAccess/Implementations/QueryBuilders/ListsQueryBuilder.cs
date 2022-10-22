@@ -15,11 +15,11 @@ public class ListsQueryBuilder : IListsQueryBuilder
         _query = _table;
     }
 
-    public IListsQueryBuilder AsNoTracking(bool asNoTracking = true)
+    public IListsQueryBuilder Track(bool track = false)
     {
-        _query = asNoTracking
-            ? _query.AsNoTracking()
-            : _query;
+        _query = track
+             ? _query
+             : _query.AsNoTracking();
 
         return this;
     }

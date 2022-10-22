@@ -19,8 +19,12 @@ public class SearchMappingProfile : Profile
                 opt => opt.MapFrom(i => i.Id))
             .ForMember(item => item.Name,
                 opt => opt.MapFrom(i => i.Name))
+            .ForMember(item => item.ListId,
+                opt => opt.MapFrom(i => i.UserListId))
             .ForMember(item => item.List,
                 opt => opt.MapFrom(i => i.UserList.Title))
+            .ForMember(item => item.AuthorId,
+                opt => opt.MapFrom(i => i.UserList.ApplicationUserId))
             .ForMember(item => item.Author,
                 opt => opt.MapFrom(i => i.UserList.ApplicationUser.UserName))
             .ForMember(item => item.CustomFieldValues,

@@ -32,7 +32,7 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         CancellationToken cancellationToken = default)
     {
         var query = _queryBuilder
-            .AsNoTracking(trackEntity)
+            .Track(trackEntity)
             .IncludeItems(includeItems)
             .IncludeItemTemplate(includeItemTemplate)
             .IncludeTopic(includeTopic)
@@ -79,13 +79,16 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
     public async Task<ListItem> AddItemToListAsync(int id, ListItem item, CancellationToken cancellationToken = default)
     {
-        var list = await GetByIdAsync(id, trackEntity: true, cancellationToken)
+        var list = await GetByIdAsync(id, 
+                includeItems: true,
+                trackEntity: true, 
+                cancellationToken: cancellationToken)
             ?? throw new InvalidOperationException();
 
-        await _itemsRepository.CreateAsync(item);
-
+        item.CreatedAt = DateTime.UtcNow;
         list.Items!.Add(item);
-        await _context.SaveChangesAsync();
+
+        await _context.SaveChangesAsync(cancellationToken);
 
         return item;
     }

@@ -15,11 +15,11 @@ public class ItemsQueryBuilder : IItemsQueryBuilder
 		_query = _table;
 	}
 
-	public IItemsQueryBuilder AsNoTracking(bool asNoTracking = true)
+	public IItemsQueryBuilder Track(bool track = false)
 	{
-		_query = asNoTracking
-			? _query.AsNoTracking()
-			: _query;
+		_query = track
+			? _query
+			: _query.AsNoTracking();
 
 		return this;
 	}

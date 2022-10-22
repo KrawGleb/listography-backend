@@ -5,11 +5,10 @@ namespace iLearning.Listography.Application.Models.ViewModels.List;
 
 public class CustomFieldViewModel
 {
-    public int Id { get; set; }
     public string? Name { get; set; }
     public int Order { get; set; }
     public CustomFieldType Type { get; set; }
-    public ICollection<SelectOption>? SelectOptions { get; set; }
+    public ICollection<SelectOptionViewModel>? SelectOptions { get; set; }
 
     public string? StringValue { get; set; }
     public string? TextValue { get; set; }

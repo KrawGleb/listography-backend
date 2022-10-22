@@ -10,31 +10,6 @@ public class TagsRepository : EFRepository<ListTag>, ITagsRepository
         : base(context)
     { }
 
-    public async Task<IEnumerable<ListTag>?> CreateTagsAsync(IEnumerable<ListTag>? tags, CancellationToken cancellationToken = default)
-    {
-        if (tags is null)
-            return tags;
-
-        tags = tags.Select(tag =>
-        {
-            tag.Id = 0;
-            return tag;
-        });
-
-        await _table.AddRangeAsync(tags, cancellationToken);
-
-        return tags;
-    }
-
-    public async Task DeleteAllAsync(IEnumerable<ListTag>? tags, CancellationToken cancellationToken = default)
-    {
-        if (tags is not null)
-        {
-            _table.RemoveRange(tags);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-    }
-
     public async Task<IEnumerable<ListTag>?> UpdateTagsAsync(IEnumerable<ListTag>? oldTags, IEnumerable<ListTag>? newTags, CancellationToken cancellationToken = default)
     {
         if (oldTags is null || newTags is null)

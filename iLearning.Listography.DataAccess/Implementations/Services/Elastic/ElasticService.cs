@@ -31,4 +31,12 @@ public class ElasticService : IElasticService
 
     public async Task DeleteItemAsync(int id, CancellationToken cancellationToken = default)
         => await _client.DeleteAsync<SearchItem>(id.ToString(), ct: cancellationToken);
+
+    public async Task DeleteListAsync(int listId, CancellationToken cancellationToken = default)
+        => await _client.DeleteByQueryAsync<SearchItem>(q =>
+            q.Query(rq => rq.Match(m => m.Field(f => f.ListId).Query(listId.ToString()))), cancellationToken);
+
+    public async Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default)
+        => await _client.DeleteByQueryAsync<SearchItem>(q =>
+            q.Query(rq => rq.Match(m => m.Field(f => f.AuthorId).Query(userId))), cancellationToken);
 }

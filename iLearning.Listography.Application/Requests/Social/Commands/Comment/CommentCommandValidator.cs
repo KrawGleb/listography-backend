@@ -8,6 +8,6 @@ public class CommentCommandValidator : AbstractValidator<CommentCommand>
     public CommentCommandValidator()
     {
         RuleFor(x => x.Content)
-            .MaximumLength(CommentValidationRulesConstants.MaxContentLength);
+            .MaximumLength(CommentValidationRulesConstants.ContentMaxLength);
     }
 }

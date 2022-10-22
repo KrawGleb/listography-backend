@@ -69,6 +69,9 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         ?? throw new InvalidOperationException();
 
         await ApplyFieldsChangesAsync(existingList, entity);
+
+        _context.Entry(existingList).State = EntityState.Modified;
+
         await _context.SaveChangesAsync();
     }
 

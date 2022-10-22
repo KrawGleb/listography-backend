@@ -9,9 +9,9 @@ public class CustomFieldViewModelValidator : AbstractValidator<CustomFieldViewMo
 	public CustomFieldViewModelValidator()
 	{
 		RuleFor(vm => vm.StringValue)
-			.MaximumLength(CustomFieldValidationRules.StringValueMaxLength);
+			.MaximumLength(CustomFieldValidationRuleConstants.StringValueMaxLength);
 
 		RuleFor(vm => vm.TextValue)
-			.MaximumLength(CustomFieldValidationRules.TextValueMaxLength);
+			.MaximumLength(CustomFieldValidationRuleConstants.TextValueMaxLength);
 	}
 }

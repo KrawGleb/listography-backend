@@ -2,5 +2,5 @@
 
 public static class CommentValidationRulesConstants 
 {
-    public const int MaxContentLength = 300;
+    public const int ContentMaxLength = 300;
 }

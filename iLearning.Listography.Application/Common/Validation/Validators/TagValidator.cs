@@ -9,6 +9,6 @@ public class TagValidator : AbstractValidator<ListTag>
 	public TagValidator()
 	{
 		RuleFor(t => t.Name)
-			.MaximumLength(TagValidationRules.TagMaxLength);
+			.MaximumLength(TagValidationRuleConstants.TagMaxLength);
 	}
 }

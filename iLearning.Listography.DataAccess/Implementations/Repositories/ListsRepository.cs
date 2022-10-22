@@ -80,7 +80,6 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         await _itemsRepository.CreateAsync(item);
 
         list.Items!.Add(item);
-
         await _context.SaveChangesAsync();
 
         return item;

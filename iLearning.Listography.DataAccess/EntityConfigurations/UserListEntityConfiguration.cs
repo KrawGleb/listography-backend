@@ -44,7 +44,7 @@ public class UserListEntityConfiguration : IEntityTypeConfiguration<UserList>
 
         builder
             .Property(e => e.Description)
-            .HasMaxLength(300)
+            .HasMaxLength(1500)
             .IsRequired(false);
 
         builder

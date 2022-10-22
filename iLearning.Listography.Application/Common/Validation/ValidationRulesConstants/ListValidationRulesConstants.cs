@@ -3,5 +3,5 @@
 public static class ListValidationRulesConstants
 {
     public const int MaxTitleLength = 100;
-    public const int MaxDescriptionLength = 300;
+    public const int MaxDescriptionLength = 1500;
 }

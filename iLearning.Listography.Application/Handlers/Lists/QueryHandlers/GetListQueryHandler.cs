@@ -16,7 +16,7 @@ public class GetListQueryHandler : IRequestHandler<GetListQuery, Response>
 
     public async Task<Response> Handle(GetListQuery request, CancellationToken cancellationToken)
     {
-        var list = await _repository.GetByIdAsync(request.Id);
+        var list = await _repository.GetByIdAsync(request.Id, cancellationToken: cancellationToken);
 
         return new CommonResponse()
         {

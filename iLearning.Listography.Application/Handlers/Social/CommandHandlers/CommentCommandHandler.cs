@@ -26,7 +26,7 @@ public class CommentCommandHandler : IRequestHandler<CommentCommand, Response>
         var userId = _contextAccessor.HttpContext.GetUserId();
         var comment = new Comment { ApplicationUserId = userId, Text = request.Content };
 
-        await _itemsRepository.AddComment(request.ItemId, comment);
+        await _itemsRepository.AddCommentAsync(request.ItemId, comment, cancellationToken);
 
         return new Response { Succeeded = true };
     }

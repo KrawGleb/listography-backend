@@ -19,6 +19,8 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
 
     public async Task<Response> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
+        // TODO: Review it.
+        // Maybe we don't need to include related entities 'cause cascade delete was used
         var query = await _userManager
             .Users
             .Include(u => u.Lists)

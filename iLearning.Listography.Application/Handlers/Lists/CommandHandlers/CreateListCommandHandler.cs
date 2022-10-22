@@ -37,31 +37,31 @@ public class CreateListCommandHandler : IRequestHandler<CreateListCommand, Respo
 
     public async Task<Response> Handle(CreateListCommand request, CancellationToken cancellationToken)
     {
-        await CreateList(request);
+        await CreateList(request, cancellationToken);
 
         return new Response() { Succeeded = true };
     }
 
-    private async Task CreateList(CreateListCommand request)
+    private async Task CreateList(CreateListCommand request, CancellationToken cancellationToken = default)
     {
         var userId = _contextAccessor.HttpContext.GetUserId();
-        var listOwner = await GetListOwnerAsync(userId);
+        var listOwner = await GetListOwnerAsync(userId, cancellationToken);
 
         var list = _mapper.Map<UserList>(request);
-        list.Topic = await _topicsRepository.GetTopicByNameAsync(request.Topic?.Name!);
+        list.Topic = await _topicsRepository.GetTopicByNameAsync(request.Topic?.Name!, cancellationToken);
 
         listOwner.Lists!.Add(list);
 
-        await _repository.CreateAsync(list);
+        await _repository.CreateAsync(list, cancellationToken);
         await _userManager.UpdateAsync(listOwner);
     }
 
-    private async Task<ApplicationUser> GetListOwnerAsync(string id)
+    private async Task<ApplicationUser> GetListOwnerAsync(string id, CancellationToken cancellationToken)
     {
         var listOwner = await _userManager
             .Users
             .Include(u => u.Lists)
-            .FirstOrDefaultAsync(u => u.Id == id)
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken)
         ?? throw new NotFoundException("Invalid user id.");
 
         return listOwner;

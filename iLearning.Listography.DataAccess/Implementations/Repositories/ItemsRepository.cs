@@ -23,17 +23,20 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
         _tagsRepository = tagsRepository;
     }
 
-    public async override Task<ListItem> CreateAsync(ListItem entity)
+    public async override Task<ListItem> CreateAsync(ListItem entity, CancellationToken cancellationToken = default)
     {
-        await _customFieldsRepository.AddRangeAsync(entity.CustomFields);
-        await _tagsRepository.CreateTagsAsync(entity.Tags);
+        await _customFieldsRepository.AddRangeAsync(entity.CustomFields, cancellationToken);
+        await _tagsRepository.CreateTagsAsync(entity.Tags, cancellationToken);
 
         entity.CreatedAt = DateTime.Now;
 
         return entity;
     }
 
-    public async override Task<ListItem?> GetByIdAsync(int id, bool trackEntity = false)
+    public async override Task<ListItem?> GetByIdAsync(
+        int id,
+        bool trackEntity = false,
+        CancellationToken cancellationToken = default)
     {
         var query = _queryBuilder
             .AsNoTracking(trackEntity)
@@ -44,21 +47,21 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
             .Build();
 
         var entity = await query
-            .SingleOrDefaultAsync(i => i.Id == id);
+            .SingleOrDefaultAsync(i => i.Id == id, cancellationToken);
 
         return entity;
     }
 
-    public async Task<int?> GetListIdAsync(int id)
+    public async Task<int?> GetListIdAsync(int id, CancellationToken cancellationToken = default)
     {
         var item = await _table
             .AsNoTracking()
-            .SingleOrDefaultAsync(i => i.Id == id);
+            .SingleOrDefaultAsync(i => i.Id == id, cancellationToken);
 
         return item?.UserListId;
     }
 
-    public async Task<IEnumerable<ListItem>> GetLastCreated(int count)
+    public async Task<IEnumerable<ListItem>> GetLastCreatedAsync(int count, CancellationToken cancellationToken = default)
     {
         var query = _table
             .AsNoTracking()
@@ -67,22 +70,28 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
             .OrderByDescending(i => i.CreatedAt)
             .Take(count);
 
-        return await query.ToListAsync();
+        return await query.ToListAsync(cancellationToken);
     }
 
-    public async Task UpdateAsync(ListItem oldEntity, ListItem newEntity)
+    public async Task UpdateAsync(ListItem oldEntity, ListItem newEntity, CancellationToken cancellationToken = default)
     {
-        var updatedCustomFields = await _customFieldsRepository.UpdateCustomFieldsAsync(oldEntity.CustomFields, newEntity.CustomFields);
-        var updatedTags = await _tagsRepository.UpdateTagsAsync(oldEntity.Tags, newEntity.Tags);
+        var updatedCustomFields = await _customFieldsRepository.UpdateCustomFieldsAsync(
+            oldEntity.CustomFields,
+            newEntity.CustomFields,
+            cancellationToken);
+        var updatedTags = await _tagsRepository.UpdateTagsAsync(
+            oldEntity.Tags,
+            newEntity.Tags,
+            cancellationToken);
 
         oldEntity.Name = newEntity.Name;
         oldEntity.CustomFields = updatedCustomFields.ToList();
         oldEntity.Tags = updatedTags.ToList();
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task AddLike(int id, Like like)
+    public async Task AddLikeAsync(int id, Like like, CancellationToken cancellationToken = default)
     {
         var entity = _table
             .Include(i => i.Likes)
@@ -90,10 +99,10 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
 
         entity.Likes!.Add(like);
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task AddComment(int id, Comment comment)
+    public async Task AddCommentAsync(int id, Comment comment, CancellationToken cancellationToken = default)
     {
         var entity = _table
             .Include(i => i.Comments)
@@ -101,6 +110,6 @@ public class ItemsRepository : EFRepository<ListItem>, IItemsRepository
 
         entity.Comments!.Add(comment);
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

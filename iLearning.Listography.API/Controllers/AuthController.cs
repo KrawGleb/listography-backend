@@ -10,10 +10,10 @@ namespace iLearning.Listography.API.Controllers;
 public class AuthController : ApiControllerBase
 {
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Register([FromBody] RegisterCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginQuery query)
-        => Ok(await Mediator.Send(query));
+    public async Task<IActionResult> Login([FromBody] LoginQuery query, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(query, cancellationToken));
 }

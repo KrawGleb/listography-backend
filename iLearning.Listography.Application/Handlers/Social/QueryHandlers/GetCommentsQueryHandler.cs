@@ -22,7 +22,7 @@ public class GetCommentsQueryHandler : IRequestHandler<GetCommentsQuery, Respons
 
     public async Task<Response> Handle(GetCommentsQuery request, CancellationToken cancellationToken)
     {
-        var comments = await _commentsRespository.GetItemCommentsAsync(request.ItemId);
+        var comments = await _commentsRespository.GetItemCommentsAsync(request.ItemId, cancellationToken: cancellationToken);
         var commentModels = _mapper.Map<ICollection<CommentViewModel>>(comments);
         
         return new CommonResponse

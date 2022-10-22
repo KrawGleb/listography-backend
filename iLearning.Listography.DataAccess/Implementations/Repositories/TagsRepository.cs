@@ -10,7 +10,7 @@ public class TagsRepository : EFRepository<ListTag>, ITagsRepository
         : base(context)
     { }
 
-    public async Task<IEnumerable<ListTag>?> CreateTagsAsync(IEnumerable<ListTag>? tags)
+    public async Task<IEnumerable<ListTag>?> CreateTagsAsync(IEnumerable<ListTag>? tags, CancellationToken cancellationToken = default)
     {
         if (tags is null)
             return tags;
@@ -21,21 +21,21 @@ public class TagsRepository : EFRepository<ListTag>, ITagsRepository
             return tag;
         });
 
-        await _table.AddRangeAsync(tags);
+        await _table.AddRangeAsync(tags, cancellationToken);
 
         return tags;
     }
 
-    public async Task DeleteAll(IEnumerable<ListTag>? tags)
+    public async Task DeleteAllAsync(IEnumerable<ListTag>? tags, CancellationToken cancellationToken = default)
     {
         if (tags is not null)
         {
             _table.RemoveRange(tags);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 
-    public async Task<IEnumerable<ListTag>?> UpdateTagsAsync(IEnumerable<ListTag>? oldTags, IEnumerable<ListTag>? newTags)
+    public async Task<IEnumerable<ListTag>?> UpdateTagsAsync(IEnumerable<ListTag>? oldTags, IEnumerable<ListTag>? newTags, CancellationToken cancellationToken = default)
     {
         if (oldTags is null || newTags is null)
         {
@@ -45,13 +45,13 @@ public class TagsRepository : EFRepository<ListTag>, ITagsRepository
         var existingTags = oldTags.Where(tag => newTags.Any(t => t.Name == tag.Name));
         var notExistingTags = newTags.Where(tag => existingTags.All(t => t.Name != tag.Name));
 
-        await _table.AddRangeAsync(notExistingTags);
-        await _context.SaveChangesAsync();
+        await _table.AddRangeAsync(notExistingTags, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return existingTags.Concat(notExistingTags);
     }
 
-    public async Task<IEnumerable<ListTag>> GetRandomAsync(int count)
+    public async Task<IEnumerable<ListTag>> GetRandomAsync(int count = 1, CancellationToken cancellationToken = default)
     {
         return await _table
             .AsNoTracking()
@@ -60,6 +60,6 @@ public class TagsRepository : EFRepository<ListTag>, ITagsRepository
             .OrderBy(i => Guid.NewGuid())
             .Take(count)
             .Select(n => new ListTag { Name = n })
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

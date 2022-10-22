@@ -21,7 +21,7 @@ public class DeleteListCommandHandler : IRequestHandler<DeleteListCommand, Respo
 
     public async Task<Response> Handle(DeleteListCommand request, CancellationToken cancellationToken)
     {
-        await _repository.DeleteAsync(request.ListId);
+        await _repository.DeleteAsync(request.ListId, cancellationToken);
 
         // TODO: clear elastic search storage
         /*foreach (var deletedItem in deletedList?.Items!)

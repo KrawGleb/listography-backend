@@ -10,28 +10,28 @@ public class LikesRepository : EFRepository<Like>, ILikesRepository
         : base(context)
     { }
 
-    public async Task DeleteAsync(string userId, int itemId)
-    {
-        var entity = _table
-            .Where(e =>
-                e.ListItemId == itemId &&
-                e.ApplicationUserId == userId)
-            .SingleOrDefault();
-
-        if (entity is not null)
-        {
-            _table.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task<bool> CheckIfExsistsAsync(string userId, int itemId)
+    public async Task DeleteAsync(string userId, int itemId, CancellationToken cancellationToken = default)
     {
         var entity = await _table
             .Where(e =>
                 e.ListItemId == itemId &&
                 e.ApplicationUserId == userId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken);
+
+        if (entity is not null)
+        {
+            _table.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+    }
+
+    public async Task<bool> CheckIfExsistsAsync(string userId, int itemId, CancellationToken cancellationToken = default)
+    {
+        var entity = await _table
+            .Where(e =>
+                e.ListItemId == itemId &&
+                e.ApplicationUserId == userId)
+            .SingleOrDefaultAsync(cancellationToken);
 
         return entity is not null;
     }

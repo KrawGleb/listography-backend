@@ -12,17 +12,17 @@ namespace iLearning.Listography.API.Controllers;
 public class UsersController : ApiControllerBase
 {
     [HttpGet("me")]
-    public async Task<IActionResult> GetMe()
+    public async Task<IActionResult> GetMe(CancellationToken cancellationToken)
         => Ok(await Mediator.Send(new GetMeQuery()
         {
             Id = HttpContext.GetUserId(),
-        }));
+        }, cancellationToken));
 
     [HttpGet("{username}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetUserLists([FromRoute] string username)
+    public async Task<IActionResult> GetUserLists([FromRoute] string username, CancellationToken cancellationToken)
         => Ok(await Mediator.Send(new GetUserListsQuery()
         {
             Username = username
-        }));
+        }, cancellationToken));
 }

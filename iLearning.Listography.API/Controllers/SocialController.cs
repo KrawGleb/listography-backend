@@ -13,19 +13,19 @@ namespace iLearning.Listography.API.Controllers;
 public class SocialController : ApiControllerBase
 {
     [HttpPost("like")]
-    public async Task<IActionResult> Like([FromBody] AddLikeCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Like([FromBody] AddLikeCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpPost("dislike")]
-    public async Task<IActionResult> Dislike([FromBody] DeleteLikeCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Dislike([FromBody] DeleteLikeCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpPost("comment")]
-    public async Task<IActionResult> Comment([FromBody] CommentCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Comment([FromBody] CommentCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [AllowAnonymous]
     [HttpGet("comments/{itemId}")]
-    public async Task<IActionResult> GetComments([FromRoute] int itemId)
-        => Ok(await Mediator.Send(new GetCommentsQuery { ItemId = itemId }));
+    public async Task<IActionResult> GetComments([FromRoute] int itemId, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(new GetCommentsQuery { ItemId = itemId }, cancellationToken));
 }

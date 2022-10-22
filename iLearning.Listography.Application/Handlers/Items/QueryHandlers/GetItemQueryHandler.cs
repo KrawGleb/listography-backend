@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using iLearning.Listography.Application.Common.Exceptions;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Models.ViewModels.Common.List;
 using iLearning.Listography.Application.Models.ViewModels.List;
@@ -29,11 +30,10 @@ public class GetItemQueryHandler : IRequestHandler<GetItemQuery, Response>
     public async Task<Response> Handle(GetItemQuery request, CancellationToken cancellationToken)
     {
         var userId = _contextAccessor.HttpContext.GetUserId();
-        var item = await _repository.GetByIdAsync(request.Id);
+        var item = await _repository.GetByIdAsync(request.Id, cancellationToken: cancellationToken)
+            ?? throw new NotFoundException($"Item with id {request.Id} not found.");
+        
         var itemModel = _mapper.Map<ItemViewModel>(item);
-
-        // TODO: Handle if item not found.
-
         itemModel.Comments = _mapper.Map<ICollection<CommentViewModel>>(item.Comments);
         itemModel.Liked = item?.Likes?.Any(l => l.ApplicationUserId == userId);
 

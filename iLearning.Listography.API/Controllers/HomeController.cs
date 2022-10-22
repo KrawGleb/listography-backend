@@ -9,6 +9,6 @@ namespace iLearning.Listography.API.Controllers;
 public class HomeController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Get()
-        => Ok(await Mediator.Send(new GetHomeInfoQuery()));
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(new GetHomeInfoQuery(), cancellationToken));
 }

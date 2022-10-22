@@ -25,7 +25,7 @@ public class GetMeCommandHandler : IRequestHandler<GetMeQuery, Response>
 
     public async Task<Response> Handle(GetMeQuery request, CancellationToken cancellationToken)
     {
-        var user = await GetUserAsync(request.Id!);
+        var user = await GetUserAsync(request.Id!, cancellationToken);
         var me = _mapper.Map<MeViewModel>(user);
 
         return new CommonResponse()
@@ -36,13 +36,13 @@ public class GetMeCommandHandler : IRequestHandler<GetMeQuery, Response>
 
     }
 
-    private async Task<ApplicationUser> GetUserAsync(string id)
+    private async Task<ApplicationUser> GetUserAsync(string id, CancellationToken cancellationToken)
     {
         var user = await _userManager
             .Users
             .Include(u => u.Lists!)
                 .ThenInclude(l => l.Topic)
-            .FirstOrDefaultAsync(u => u.Id == id)
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken)
        ?? throw new NotFoundException("User not found");
 
         return user;

@@ -28,7 +28,7 @@ public class AddLikeCommandHandler : IRequestHandler<AddLikeCommand, Response>
     {
         var userId = _contextAccessor.HttpContext.GetUserId();
 
-        var isExists = await _likesRepository.CheckIfExsistsAsync(userId, request.ItemId);
+        var isExists = await _likesRepository.CheckIfExsistsAsync(userId, request.ItemId, cancellationToken);
 
         if (isExists)
         {
@@ -41,7 +41,7 @@ public class AddLikeCommandHandler : IRequestHandler<AddLikeCommand, Response>
 
         var like = new Like { ApplicationUserId = userId };
 
-        await _itemsRepository.AddLike(request.ItemId, like);
+        await _itemsRepository.AddLikeAsync(request.ItemId, like, cancellationToken);
 
         return new Response { Succeeded = true };
     }

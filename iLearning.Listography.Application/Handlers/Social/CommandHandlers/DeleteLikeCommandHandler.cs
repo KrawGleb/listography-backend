@@ -24,7 +24,7 @@ public class DeleteLikeCommandHandler : IRequestHandler<DeleteLikeCommand, Respo
     {
         var userId = _contextAccessor.HttpContext.GetUserId();
 
-        await _repository.DeleteAsync(userId, request.ItemId);
+        await _repository.DeleteAsync(userId, request.ItemId, cancellationToken);
 
         return new Response { Succeeded = true };
     }

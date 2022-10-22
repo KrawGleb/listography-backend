@@ -16,26 +16,26 @@ namespace iLearning.Listography.API.Controllers;
 public class AdminsController : ApiControllerBase
 {
     [HttpPatch("appoint")]
-    public async Task<IActionResult> AppointAdmin([FromBody] AppointAdminCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> AppointAdmin([FromBody] AppointAdminCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpPatch("remove")]
-    public async Task<IActionResult> RemoveAdmin([FromBody] RemoveAdminCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> RemoveAdmin([FromBody] RemoveAdminCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpPatch("block")]
-    public async Task<IActionResult> BlockUser([FromBody] BlockUserCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> BlockUser([FromBody] BlockUserCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpPatch("unblock")]
-    public async Task<IActionResult> UnblockUser([FromBody] UnblockUserCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> UnblockUser([FromBody] UnblockUserCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpDelete("delete")]
-    public async Task<IActionResult> DeleteUser([FromBody] DeleteUserCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> DeleteUser([FromBody] DeleteUserCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpGet("{username}")]
-    public async Task<IActionResult> GetUserInfo([FromRoute] string username)
-        => Ok(await Mediator.Send(new GetUserInfoQuery { Username = username }));
+    public async Task<IActionResult> GetUserInfo([FromRoute] string username, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(new GetUserInfoQuery { Username = username }, cancellationToken));
 }

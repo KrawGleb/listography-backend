@@ -11,7 +11,8 @@ public class BlockUserCommandHandler : IRequestHandler<BlockUserCommand, Respons
 {
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public BlockUserCommandHandler(UserManager<ApplicationUser> userManager)
+    public BlockUserCommandHandler(
+        UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }

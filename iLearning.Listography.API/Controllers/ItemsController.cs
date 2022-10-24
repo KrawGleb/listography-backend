@@ -14,21 +14,21 @@ public class ItemsController : ApiControllerBase
 {
     [HttpPost("create")]
     [ServiceFilter(typeof(ProtectedListActionFilter))]
-    public async Task<IActionResult> Create([FromBody] AddItemCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Create([FromBody] AddItemCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpPatch("update")]
     [ServiceFilter(typeof(ProtectedItemActionFilter))]
-    public async Task<IActionResult> Update([FromBody] UpdateItemCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Update([FromBody] UpdateItemCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpDelete("delete")]
     [ServiceFilter(typeof(ProtectedItemActionFilter))]
-    public async Task<IActionResult> Delete([FromBody] DeleteItemCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Delete([FromBody] DeleteItemCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<IActionResult> Get([FromRoute] int id)
-        => Ok(await Mediator.Send(new GetItemQuery { Id = id }));
+    public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(new GetItemQuery { Id = id }, cancellationToken));
 }

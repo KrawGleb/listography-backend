@@ -10,20 +10,20 @@ public class TopicsRepository : EFRepository<ListTopic>, ITopicsRepository
         : base(context)
     { }
 
-    public async Task<ListTopic> GetTopicByNameAsync(string? name)
+    public async Task<ListTopic> GetTopicByNameAsync(string? name, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(name))
-            return await GetDefaultTopic();
+            return await GetDefaultTopicAsync();
 
         var topic = await _table
-            .SingleOrDefaultAsync(t => t.Name!.ToLower() == name.ToLower());
+            .SingleOrDefaultAsync(t => t.Name!.ToLower() == name.ToLower(), cancellationToken);
 
-        return topic ?? await GetDefaultTopic();
+        return topic ?? await GetDefaultTopicAsync();
     }
 
-    private async Task<ListTopic> GetDefaultTopic()
+    private async Task<ListTopic> GetDefaultTopicAsync(CancellationToken cancellationToken = default)
     {
         return await _table
-            .SingleAsync(t => t.Name!.ToLower() == "other");
+            .SingleAsync(t => t.Name!.ToLower() == "other", cancellationToken);
     }
 }

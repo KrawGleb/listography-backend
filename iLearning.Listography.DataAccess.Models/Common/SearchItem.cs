@@ -7,8 +7,10 @@ public class SearchItem
 {
     public int Id { get; set; }
     public string? Name { get; set; }
+    public int ListId { get; set; }
     public string? List { get; set; }
+    public string? AuthorId { get; set; }
     public string? Author { get; set; }
     public IEnumerable<Tag>? Tags { get; set; }
-    public IEnumerable<object> CustomFieldValues { get; set; }
+    public IEnumerable<object>? CustomFieldValues { get; set; }
 }

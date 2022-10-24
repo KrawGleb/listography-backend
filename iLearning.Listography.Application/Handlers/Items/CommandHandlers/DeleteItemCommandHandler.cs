@@ -21,7 +21,7 @@ public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand, Respo
 
     public async Task<Response> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
     {
-        await _repository.DeleteAsync(request.Id);
+        await _repository.DeleteAsync(request.Id, cancellationToken);
         await _elasticService.DeleteItemAsync(request.Id);
 
         return new Response()

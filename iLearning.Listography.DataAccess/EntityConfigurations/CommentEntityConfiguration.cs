@@ -15,7 +15,7 @@ public class CommentEntityConfiguration : IEntityTypeConfiguration<Comment>
     private void ConfigureRelationships(EntityTypeBuilder<Comment> builder)
     {
         builder
-            .HasOne(c => c.Account)
+            .HasOne(c => c.ApplicationUser)
             .WithMany(a => a.Comments)
             .OnDelete(DeleteBehavior.NoAction);
     }

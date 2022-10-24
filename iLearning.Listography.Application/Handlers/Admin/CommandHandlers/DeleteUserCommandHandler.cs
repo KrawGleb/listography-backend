@@ -1,6 +1,7 @@
 ﻿using iLearning.Listography.Application.Common.Exceptions;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Admin.Commands.DeleteUser;
+using iLearning.Listography.DataAccess.Interfaces.Services.Elastic;
 using iLearning.Listography.DataAccess.Models.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -10,24 +11,31 @@ namespace iLearning.Listography.Application.Handlers.Admin.CommandHandlers;
 
 public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Response>
 {
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IElasticService _elasticService;
 
-    public DeleteUserCommandHandler(UserManager<Account> userManager)
+    public DeleteUserCommandHandler(
+        UserManager<ApplicationUser> userManager,
+        IElasticService elasticService)
     {
         _userManager = userManager;
+        _elasticService = elasticService;
     }
 
     public async Task<Response> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        var query = await _userManager
+        // TODO: Review it.
+        // Maybe we don't need to include related entities 'cause cascade delete was used
+        var user = await _userManager
             .Users
             .Include(u => u.Lists)
             .Include(u => u.Comments)
             .Include(u => u.Likes)
             .FirstOrDefaultAsync(a => a.UserName == request.Username, cancellationToken: cancellationToken)
-        ?? throw new NotFoundException("Account not found");
+        ?? throw new NotFoundException("User not found");
 
-        await _userManager.DeleteAsync(query);
+        await _userManager.DeleteAsync(user);
+        await _elasticService.DeleteUserAsync(user.Id);
 
         return new Response { Succeeded = true };
     }

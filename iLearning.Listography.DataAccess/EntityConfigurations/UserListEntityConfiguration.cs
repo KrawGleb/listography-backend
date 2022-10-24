@@ -28,6 +28,11 @@ public class UserListEntityConfiguration : IEntityTypeConfiguration<UserList>
             .HasOne(l => l.ItemTemplate)
             .WithOne(t => t.UserList)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder
+            .HasOne(l => l.ApplicationUser)
+            .WithMany(u => u.Lists)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 
     private void ConfigureConstraints(EntityTypeBuilder<UserList> builder)
@@ -39,7 +44,7 @@ public class UserListEntityConfiguration : IEntityTypeConfiguration<UserList>
 
         builder
             .Property(e => e.Description)
-            .HasMaxLength(300)
+            .HasMaxLength(1500)
             .IsRequired(false);
 
         builder

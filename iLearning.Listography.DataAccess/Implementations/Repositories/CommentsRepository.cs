@@ -10,15 +10,18 @@ public class CommentsRepository : EFRepository<Comment>, ICommentsRespository
         : base(context)
     { }
 
-    public async Task<IEnumerable<Comment>> GetItemCommentsAsync(int itemId, bool trackEntities = false)
+    public async Task<IEnumerable<Comment>> GetItemCommentsAsync(
+        int itemId,
+        bool trackEntities = false, 
+        CancellationToken cancellationToken = default)
     {
         var query = trackEntities
             ? _table
             : _table.AsNoTracking();
 
         return await query
-            .Include(i => i.Account)
+            .Include(i => i.ApplicationUser)
             .Where(i => i.ListItemId == itemId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

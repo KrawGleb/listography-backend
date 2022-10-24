@@ -1,4 +1,6 @@
-﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
+﻿using iLearning.Listography.DataAccess.Helpers.Options;
+using iLearning.Listography.DataAccess.Interfaces.QueryBuilders;
+using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,123 +8,103 @@ namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 
 public class ListsRepository : EFRepository<UserList>, IListsRepository
 {
-    private readonly IItemsRepository _itemsRepository;
-    private readonly ITagsRepository _tagsRepository;
-    private readonly ICustomFieldsRepository _customFieldsRepository;
+    private readonly IListsQueryBuilder _queryBuilder;
     private readonly ITopicsRepository _topicsRepository;
 
     public ListsRepository(
         ApplicationDbContext context,
-        IItemsRepository itemsRepository,
-        ITagsRepository tagsRepository,
-        ICustomFieldsRepository customFieldsRepository,
+        IListsQueryBuilder queryBuilder,
         ITopicsRepository topicsRepository)
         : base(context)
     {
-        _itemsRepository = itemsRepository;
-        _tagsRepository = tagsRepository;
-        _customFieldsRepository = customFieldsRepository;
+        _queryBuilder = queryBuilder;
         _topicsRepository = topicsRepository;
     }
 
     public async Task<UserList?> GetByIdAsync(
-        int id,
-        bool includeItems = true,
-        bool includeItemTemplate = true,
-        bool includeTopic = true,
-        bool trackEntity = false)
+        Action<ListQueryOptions>? setupQuery,
+        CancellationToken cancellationToken = default)
     {
-        var query = trackEntity
-            ? _table
-            : _table.AsNoTracking();
+        var queryOptions = new ListQueryOptions();
+        setupQuery?.Invoke(queryOptions);
 
-        query = includeItems
-            ? query
-                .Include(l => l.Items!)
-                    .ThenInclude(i => i.CustomFields)!
-                    .ThenInclude(f => f.SelectOptions)
-                .Include(l => l.Items!).ThenInclude(i => i.Tags)
-            : query;
+        var query = _queryBuilder
+            .Track(queryOptions.Track)
+            .IncludeItems(queryOptions.IncludeItems)
+            .IncludeItemTemplate(queryOptions.IncludeItemTemplate)
+            .IncludeTopic(queryOptions.IncludeTopic)
+            .Build();
 
-        query = includeItemTemplate
-            ? query
-                .Include(l => l.ItemTemplate!)
-                    .ThenInclude(i => i.CustomFields)!
-                    .ThenInclude(f => f.SelectOptions)
-            : query;
-
-        query = includeTopic
-            ? query.Include(l => l.Topic)
-            : query;
-
-        return await query.FirstOrDefaultAsync(l => l.Id == id);
+        return await query.SingleOrDefaultAsync(l => l.Id == queryOptions.Id, cancellationToken);
     }
 
-    public async Task<string?> GetOwnerIdAsync(int listId)
+    public async Task<string?> GetOwnerIdAsync(int listId, CancellationToken cancellationToken = default)
     {
         var entity = await _table
             .AsNoTracking()
-            .FirstOrDefaultAsync(l => l.Id == listId);
+            .FirstOrDefaultAsync(l => l.Id == listId, cancellationToken);
 
-        return entity?.AccountId;
+        return entity?.ApplicationUserId;
     }
 
-    public async Task<IEnumerable<UserList>> GetLargestAsync(int count)
+    public async Task<IEnumerable<UserList>> GetLargestAsync(int count, CancellationToken cancellationToken = default)
     {
         return await _table
             .AsNoTracking()
             .Include(l => l.Items)
-            .OrderByDescending(l => l.Items.Count)
+            .OrderByDescending(l => l.Items!.Count)
             .Take(count)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<UserList?> DeleteAsync(int id)
+    public async Task UpdateAsync(UserList entity, CancellationToken cancellationToken = default)
     {
-        var list = await GetByIdAsync(id, trackEntity: true);
-
-        if (list is not null)
+        var queryOptions = (ListQueryOptions options) =>
         {
-            _table.Remove(list);
-            await _context.SaveChangesAsync();
-        }
+            options.Id = entity.Id;
+            options.IncludeItems = false;
+            options.IncludeItemTemplate = false;
+            options.Track = true;
+        };
 
-        return list;
-    }
-
-    public async Task UpdateAsync(UserList entity)
-    {
-        var existingList = await GetByIdAsync(
-            entity.Id,
-            includeItems: false,
-            includeItemTemplate: false,
-            trackEntity: true)
+        var existingList = await GetByIdAsync(queryOptions, cancellationToken: cancellationToken)
         ?? throw new InvalidOperationException();
 
-        await ApplyFieldsChangesAsync(existingList, entity);
-        await _context.SaveChangesAsync();
+        await ApplyFieldsChangesAsync(existingList, entity, cancellationToken);
+
+        _context.Entry(existingList).State = EntityState.Modified;
+
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<ListItem> AddItemToListAsync(int id, ListItem item)
+    public async Task<ListItem> AddItemToListAsync(int id, ListItem item, CancellationToken cancellationToken = default)
     {
-        var list = await GetByIdAsync(id, trackEntity: true)
+        var queryOptions = (ListQueryOptions options) =>
+        {
+            options.Id = id;
+            options.Track = true;
+            options.IncludeItems = true;
+        };
+
+        var list = await GetByIdAsync(queryOptions, cancellationToken: cancellationToken)
             ?? throw new InvalidOperationException();
 
-        await _itemsRepository.CreateAsync(item);
-
-
+        item.CreatedAt = DateTime.UtcNow;
         list.Items!.Add(item);
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return item;
     }
 
-    private async Task ApplyFieldsChangesAsync(UserList oldEntity, UserList newEntity)
+    private async Task ApplyFieldsChangesAsync(
+        UserList oldEntity,
+        UserList newEntity,
+        CancellationToken cancellationToken = default)
     {
         oldEntity.Title = newEntity.Title;
         oldEntity.Description = newEntity.Description;
         oldEntity.ImageUrl = newEntity.ImageUrl;
-        oldEntity.Topic = await _topicsRepository.GetTopicByNameAsync(newEntity.Topic?.Name!);
+        oldEntity.Topic = await _topicsRepository.GetTopicByNameAsync(newEntity.Topic?.Name!, cancellationToken);
     }
 }

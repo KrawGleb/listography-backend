@@ -16,7 +16,7 @@ public class GetAllTagsQueryHandler : IRequestHandler<GetAllTagsQuery, Response>
 
     public async Task<Response> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
     {
-        var tags = await _repository.GetAllAsync();
+        var tags = await _repository.GetAllAsync(cancellationToken: cancellationToken);
 
         return new CommonResponse
         {

@@ -16,48 +16,51 @@ public class EFRepository<T> : IEFRepository<T>
         _table = context.Set<T>();
     }
 
-    public virtual async Task<IEnumerable<T>> GetAllAsync(bool trackEntities = false)
+    public virtual async Task<IEnumerable<T>> GetAllAsync(
+        bool trackEntities = false,
+        CancellationToken cancellationToken = default)
     {
         var query = trackEntities
             ? _table
             : _table.AsNoTracking();
 
-        return await query.ToListAsync();
+        return await query.ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<T?> GetByIdAsync(int id, bool trackEntity = false)
+    public virtual async Task<T?> GetByIdAsync(
+        int id,
+        bool trackEntity = false,
+        CancellationToken cancellationToken = default)
     {
         var query = trackEntity
             ? _table
             : _table.AsNoTracking();
 
-        return await query.FirstOrDefaultAsync(t => t.Id == id);
+        return await query.FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
 
-    public virtual async Task AddRangeAsync(IEnumerable<T> entities)
+    public virtual async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
-        await _table.AddRangeAsync(entities);
-
-        await _context.SaveChangesAsync();
+        await _table.AddRangeAsync(entities, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public virtual async Task<T> CreateAsync(T entity)
+    public virtual async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default)
     {
-        await _table.AddAsync(entity);
-
-        await _context.SaveChangesAsync();
+        await _table.AddAsync(entity, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return entity;
     }
 
-    public virtual async Task DeleteAsync(T entity)
+    public virtual async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
     {
         _table.Remove(entity);
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public virtual async Task DeleteAsync(int id)
+    public virtual async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
         var entity = _context
             .ChangeTracker
@@ -69,6 +72,6 @@ public class EFRepository<T> : IEFRepository<T>
 
         _table.Remove(entity);
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

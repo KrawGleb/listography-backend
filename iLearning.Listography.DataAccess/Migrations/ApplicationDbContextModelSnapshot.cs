@@ -22,7 +22,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.Identity.Account", b =>
+            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -104,7 +104,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AccountId")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("ListItemId")
@@ -117,7 +117,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ListItemId");
 
@@ -186,7 +186,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AccountId")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("ListItemId")
@@ -194,7 +194,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ListItemId");
 
@@ -367,12 +367,12 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AccountId")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(1500)
+                        .HasColumnType("nvarchar(1500)");
 
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(300)
@@ -388,7 +388,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("TopicId");
 
@@ -424,15 +424,15 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a12009e5-03da-4f5e-af58-8d5e163e13ef",
-                            ConcurrencyStamp = "35f1a615-c157-4833-9bf2-49dd88a8b27b",
+                            Id = "f5a7175e-c8cd-4e99-8918-6f977fc40e3b",
+                            ConcurrencyStamp = "c8123a67-5a2c-4e85-a42c-b67f417e466c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "1a3aa162-2851-4869-b84b-7cf90010f134",
-                            ConcurrencyStamp = "bb99f8b3-e2bf-4af4-8568-b282a93be6d9",
+                            Id = "b67ba75c-d9ca-4d5c-9248-f10e5e6c80b1",
+                            ConcurrencyStamp = "c8b5072d-319e-4c26-aaea-287add654d67",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -546,17 +546,17 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.Comment", b =>
                 {
-                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.Account", "Account")
+                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", "ApplicationUser")
                         .WithMany("Comments")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.ListItem", "ListItem")
                         .WithMany("Comments")
                         .HasForeignKey("ListItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("Account");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("ListItem");
                 });
@@ -580,17 +580,17 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.Like", b =>
                 {
-                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.Account", "Account")
+                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", "ApplicationUser")
                         .WithMany("Likes")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.ListItem", "ListItem")
                         .WithMany("Likes")
                         .HasForeignKey("ListItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("Account");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("ListItem");
                 });
@@ -637,17 +637,17 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.UserList", b =>
                 {
-                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.Account", "Account")
+                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", "ApplicationUser")
                         .WithMany("Lists")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.ListTopic", "Topic")
                         .WithMany("UserLists")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("Account");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Topic");
                 });
@@ -663,7 +663,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.Account", null)
+                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -672,7 +672,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.Account", null)
+                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -687,7 +687,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.Account", null)
+                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -696,14 +696,14 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.Account", null)
+                    b.HasOne("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.Identity.Account", b =>
+            modelBuilder.Entity("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", b =>
                 {
                     b.Navigation("Comments");
 

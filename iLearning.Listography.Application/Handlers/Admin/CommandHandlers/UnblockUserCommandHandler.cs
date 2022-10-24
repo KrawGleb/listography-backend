@@ -9,9 +9,9 @@ namespace iLearning.Listography.Application.Handlers.Admin.CommandHandlers;
 
 public class UnblockUserCommandHandler : IRequestHandler<UnblockUserCommand, Response>
 {
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public UnblockUserCommandHandler(UserManager<Account> userManager)
+    public UnblockUserCommandHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
@@ -20,7 +20,7 @@ public class UnblockUserCommandHandler : IRequestHandler<UnblockUserCommand, Res
     {
         var user = await _userManager.FindByNameAsync(request.Username);
 
-        user.State = AccountState.Avaliable;
+        user.State = UserState.Avaliable;
 
         await _userManager.UpdateAsync(user);
 

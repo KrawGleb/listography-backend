@@ -18,13 +18,13 @@ namespace iLearning.Listography.Application.Handlers.Identity.QueryHandlers;
 
 public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
 {
-    private readonly UserManager<Account> _userManager;
-    private readonly SignInManager<Account> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly JWTConfiguration _jwtConfiguration;
 
     public LoginQueryHandler(
-        UserManager<Account> userManager,
-        SignInManager<Account> signInManager,
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
         IOptions<JWTConfiguration> jwtConfiguration)
     {
         _userManager = userManager;
@@ -45,6 +45,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
 
             return new LoginResponse()
             {
+                Username = user!.UserName,
                 Succeeded = true,
                 Token = token,
                 IsAdmin = isAdmin
@@ -54,7 +55,7 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
         return new ErrorResponse() { Succeeded = false, Errors = new string[] { "Invalid password or email" } };
     }
 
-    private async Task<Account> GetUserByEmailAsync(string email)
+    private async Task<ApplicationUser> GetUserByEmailAsync(string email)
     {
         var user = await _userManager.FindByEmailAsync(email)
             ?? throw new NotFoundException("User not found.");
@@ -65,21 +66,21 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Response>
         return user;
     }
 
-    private async Task<string> GenerateTokenAsync(Account account)
+    private async Task<string> GenerateTokenAsync(ApplicationUser user)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Key);
-        var role = (await _userManager.GetRolesAsync(account)).FirstOrDefault();
+        var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
 
         var tokenDescription = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(JwtRegisteredClaimNames.NameId, account.Id),
-                new Claim(JwtRegisteredClaimNames.Email, account.Email),
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Role, role ?? ""),
-                new Claim("id", account.Id)
+                new Claim("id", user.Id)
             }),
             Expires = DateTime.UtcNow.AddHours(12),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

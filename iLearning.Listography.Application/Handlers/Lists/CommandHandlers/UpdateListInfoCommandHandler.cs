@@ -23,7 +23,7 @@ public class UpdateListInfoCommandHandler : IRequestHandler<UpdateListInfoComman
     public async Task<Response> Handle(UpdateListInfoCommand request, CancellationToken cancellationToken)
     {
         var listInfo = _mapper.Map<UserList>(request);
-        await _repository.UpdateAsync(listInfo);
+        await _repository.UpdateAsync(listInfo, cancellationToken);
 
         return new Response { Succeeded = true };
     }

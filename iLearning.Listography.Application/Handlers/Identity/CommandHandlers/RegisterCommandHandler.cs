@@ -8,32 +8,32 @@ namespace iLearning.Listography.Application.Handlers.Identity.CommandHandlers;
 
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Response>
 {
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public RegisterCommandHandler(
-        UserManager<Account> userManager)
+        UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
 
     public async Task<Response> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var result = await RegisterAccountAsync(request);
+        var result = await RegisterUserAsync(request);
 
         return result.Succeeded
             ? new Response() { Succeeded = true }
             : new ErrorResponse() { Succeeded = false, Errors = result.Errors.Select(e => e.Description) };
     }
 
-    private async Task<IdentityResult> RegisterAccountAsync(RegisterCommand request)
+    private async Task<IdentityResult> RegisterUserAsync(RegisterCommand request)
     {
-        var account = new Account()
+        var user = new ApplicationUser()
         {
             UserName = request.Username,
             Email = request.Email,
         };
 
-        var result = await _userManager.CreateAsync(account, request.Password);
+        var result = await _userManager.CreateAsync(user, request.Password);
 
         return result;
     }

@@ -10,7 +10,10 @@ public class CustomFieldsRepository : EFRepository<CustomField>, ICustomFieldsRe
         : base(context)
     { }
 
-    public async Task<IEnumerable<CustomField>> UpdateCustomFieldsAsync(IEnumerable<CustomField> oldValues, IEnumerable<CustomField>? newValues)
+    public async Task<IEnumerable<CustomField>> UpdateCustomFieldsAsync(
+        IEnumerable<CustomField> oldValues,
+        IEnumerable<CustomField>? newValues, 
+        CancellationToken cancellationToken = default)
     {
         if (oldValues is null || newValues is null)
             return Enumerable.Empty<CustomField>();
@@ -24,28 +27,8 @@ public class CustomFieldsRepository : EFRepository<CustomField>, ICustomFieldsRe
             oldValues.ElementAt(i).SetValue(newValue);
         }
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return oldValues;
-    }
-
-    public async override Task AddRangeAsync(IEnumerable<CustomField>? entities)
-    {
-        _ = entities ?? throw new ArgumentNullException(nameof(entities));
-
-        entities = entities.Select(entity =>
-        {
-            entity.Id = 0;
-
-            entity.SelectOptions = entity.SelectOptions?.Select(option =>
-            {
-                option.Id = 0;
-                return option;
-            }).ToList();
-
-            return entity;
-        });
-
-        await base.AddRangeAsync(entities);
     }
 }

@@ -16,7 +16,7 @@ public class SearchQueryHandler : IRequestHandler<SearchQuery, Response>
 
     public async Task<Response> Handle(SearchQuery request, CancellationToken cancellationToken)
     {
-        var items = await _elasticService.SearchByValueAsync(request.SearchValue);
+        var items = await _elasticService.SearchByValueAsync(request.SearchValue, cancellationToken);
 
         return new CommonResponse
         {

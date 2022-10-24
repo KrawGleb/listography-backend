@@ -1,5 +1,6 @@
 using iLearning.Listography.API.Common;
 using iLearning.Listography.API.Common.FilterAttributes;
+using iLearning.Listography.API.Hubs;
 using iLearning.Listography.Application;
 using iLearning.Listography.DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,7 +14,7 @@ var configuration = builder.Configuration;
 // Add services to the container.
 services.AddDataAccess(configuration);
 services.AddApplication(configuration);
-
+services.AddSignalR();
 services.AddFilters();
 
 services.AddCors(options =>
@@ -69,5 +70,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<AppHub>("/hub");
 
 app.Run();

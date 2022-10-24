@@ -12,9 +12,9 @@ public class CreateListCommandValidator : AbstractValidator<CreateListCommand>
             .NotNull();
 
         RuleFor(x => x.Title)
-            .MaximumLength(ListValidationRulesConstants.MaxTitleLength);
+            .MaximumLength(ListValidationRulesConstants.TitleMaxLength);
 
         RuleFor(x => x.Description)
-            .MaximumLength(ListValidationRulesConstants.MaxDescriptionLength);
+            .MaximumLength(ListValidationRulesConstants.DescriptionMaxLength);
     }
 }

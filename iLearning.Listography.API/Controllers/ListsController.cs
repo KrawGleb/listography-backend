@@ -14,21 +14,21 @@ namespace iLearning.Listography.API.Controllers;
 public class ListsController : ApiControllerBase
 {
     [HttpPost("create")]
-    public async Task<IActionResult> CreateList([FromBody] CreateListCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> CreateList([FromBody] CreateListCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpPatch("update")]
     [ServiceFilter(typeof(ProtectedListActionFilter))]
-    public async Task<IActionResult> UpdateListInfo([FromBody] UpdateListInfoCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> UpdateListInfo([FromBody] UpdateListInfoCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpDelete("delete")]
     [ServiceFilter(typeof(ProtectedListActionFilter))]
-    public async Task<IActionResult> DeleteList([FromBody] DeleteListCommand command)
-        => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> DeleteList([FromBody] DeleteListCommand command, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(command, cancellationToken));
 
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetList([FromRoute] int id)
-        => Ok(await Mediator.Send(new GetListQuery { Id = id }));
+    public async Task<IActionResult> GetList([FromRoute] int id, CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(new GetListQuery { Id = id }, cancellationToken));
 }

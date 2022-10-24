@@ -9,9 +9,9 @@ namespace iLearning.Listography.Application.Handlers.Admin.CommandHandlers;
 
 public class RemoveAdminCommandHandler : IRequestHandler<RemoveAdminCommand, Response>
 {
-    private readonly UserManager<Account> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public RemoveAdminCommandHandler(UserManager<Account> userManager)
+    public RemoveAdminCommandHandler(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }

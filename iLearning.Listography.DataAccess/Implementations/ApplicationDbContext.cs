@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace iLearning.Listography.DataAccess.Implementations;
 
-public class ApplicationDbContext : IdentityDbContext<Account, IdentityRole, string>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
 {
     private DbSet<UserList> Lists { get; set; }
     private DbSet<ListTag> Tags { get; set; }

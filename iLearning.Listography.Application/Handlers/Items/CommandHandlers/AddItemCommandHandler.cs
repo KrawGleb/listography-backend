@@ -27,7 +27,7 @@ public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Response>
 
     public async Task<Response> Handle(AddItemCommand request, CancellationToken cancellationToken)
     {
-        var item = await AddItemToList(request);
+        var item = await AddItemToList(request, cancellationToken);
 
         await IndexItemForSearch(item);
 
@@ -38,10 +38,10 @@ public class AddItemCommandHandler : IRequestHandler<AddItemCommand, Response>
         };
     }
 
-    private async Task<ListItem> AddItemToList(AddItemCommand request)
+    private async Task<ListItem> AddItemToList(AddItemCommand request, CancellationToken cancellationToken = default)
     {
         var item = _mapper.Map<ListItem>(request);
-        await _listsRepository.AddItemToListAsync(request.ListId, item);
+        await _listsRepository.AddItemToListAsync(request.ListId, item, cancellationToken);
 
         return item;
     }

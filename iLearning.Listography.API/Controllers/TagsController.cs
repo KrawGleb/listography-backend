@@ -10,6 +10,6 @@ namespace iLearning.Listography.API.Controllers;
 public class TagsController : ApiControllerBase
 {
     [HttpGet("all")]
-    public async Task<IActionResult> GetAll()
-        => Ok(await Mediator.Send(new GetAllTagsQuery()));
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        => Ok(await Mediator.Send(new GetAllTagsQuery(), cancellationToken));
 }

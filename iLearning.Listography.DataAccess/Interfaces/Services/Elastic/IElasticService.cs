@@ -5,8 +5,10 @@ namespace iLearning.Listography.DataAccess.Interfaces.Services.Elastic;
 
 public interface IElasticService
 {
-    Task<IEnumerable<SearchItem>?> SearchByValueAsync(string value);
-    Task<IndexResponse> IndexItemAsync(SearchItem item);
-    Task DeleteItemAsync(int id);
-    Task UpdateItemAsync(SearchItem item);
+    Task<IEnumerable<SearchItem>?> SearchByValueAsync(string value, CancellationToken cancellationToken = default);
+    Task<IndexResponse> IndexItemAsync(SearchItem item, CancellationToken cancellationToken = default);
+    Task UpdateItemAsync(SearchItem item, CancellationToken cancellationToken = default);
+    Task DeleteItemAsync(int id, CancellationToken cancellationToken = default);
+    Task DeleteListAsync(int listId, CancellationToken cancellationToken = default);
+    Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default);
 }

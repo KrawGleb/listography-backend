@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Interfaces.QueryBuilders;
+﻿using iLearning.Listography.DataAccess.Helpers.Options;
+using iLearning.Listography.DataAccess.Interfaces.QueryBuilders;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
@@ -8,37 +9,33 @@ namespace iLearning.Listography.DataAccess.Implementations.Repositories;
 public class ListsRepository : EFRepository<UserList>, IListsRepository
 {
     private readonly IListsQueryBuilder _queryBuilder;
-    private readonly IItemsRepository _itemsRepository;
     private readonly ITopicsRepository _topicsRepository;
 
     public ListsRepository(
         ApplicationDbContext context,
         IListsQueryBuilder queryBuilder,
-        IItemsRepository itemsRepository,
         ITopicsRepository topicsRepository)
         : base(context)
     {
         _queryBuilder = queryBuilder;
-        _itemsRepository = itemsRepository;
         _topicsRepository = topicsRepository;
     }
 
     public async Task<UserList?> GetByIdAsync(
-        int id,
-        bool includeItems = true,
-        bool includeItemTemplate = true,
-        bool includeTopic = true,
-        bool trackEntity = false,
+        Action<ListQueryOptions>? setupQuery,
         CancellationToken cancellationToken = default)
     {
+        var queryOptions = new ListQueryOptions();
+        setupQuery?.Invoke(queryOptions);
+
         var query = _queryBuilder
-            .Track(trackEntity)
-            .IncludeItems(includeItems)
-            .IncludeItemTemplate(includeItemTemplate)
-            .IncludeTopic(includeTopic)
+            .Track(queryOptions.Track)
+            .IncludeItems(queryOptions.IncludeItems)
+            .IncludeItemTemplate(queryOptions.IncludeItemTemplate)
+            .IncludeTopic(queryOptions.IncludeTopic)
             .Build();
 
-        return await query.SingleOrDefaultAsync(l => l.Id == id, cancellationToken);
+        return await query.SingleOrDefaultAsync(l => l.Id == queryOptions.Id, cancellationToken);
     }
 
     public async Task<string?> GetOwnerIdAsync(int listId, CancellationToken cancellationToken = default)
@@ -62,12 +59,15 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
     public async Task UpdateAsync(UserList entity, CancellationToken cancellationToken = default)
     {
-        var existingList = await GetByIdAsync(
-            entity.Id,
-            includeItems: false,
-            includeItemTemplate: false,
-            trackEntity: true,
-            cancellationToken: cancellationToken)
+        var queryOptions = (ListQueryOptions options) =>
+        {
+            options.Id = entity.Id;
+            options.IncludeItems = false;
+            options.IncludeItemTemplate = false;
+            options.Track = true;
+        };
+
+        var existingList = await GetByIdAsync(queryOptions, cancellationToken: cancellationToken)
         ?? throw new InvalidOperationException();
 
         await ApplyFieldsChangesAsync(existingList, entity, cancellationToken);
@@ -79,10 +79,14 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
 
     public async Task<ListItem> AddItemToListAsync(int id, ListItem item, CancellationToken cancellationToken = default)
     {
-        var list = await GetByIdAsync(id, 
-                includeItems: true,
-                trackEntity: true, 
-                cancellationToken: cancellationToken)
+        var queryOptions = (ListQueryOptions options) =>
+        {
+            options.Id = id;
+            options.Track = true;
+            options.IncludeItems = true;
+        };
+
+        var list = await GetByIdAsync(queryOptions, cancellationToken: cancellationToken)
             ?? throw new InvalidOperationException();
 
         item.CreatedAt = DateTime.UtcNow;

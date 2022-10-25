@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221025094033_FirstAdminPopulation")]
+    partial class FirstAdminPopulation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,15 +102,15 @@ namespace iLearning.Listography.DataAccess.Migrations
                         {
                             Id = "A3BF16BB-378C-4350-8BFF-FF1ED9CB2915",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "314e92e8-da23-49d7-ac47-908a933d57fc",
+                            ConcurrencyStamp = "af7396d4-9b65-49a1-bc5e-7c8119dcadd2",
                             Email = "krawcevitsch@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "KRAWCEVITSCH@GMAIL.COM",
                             NormalizedUserName = "CREATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAENmR3VyO1iFAng5WjdT6ziiANQvfQFn4Qy7WHWJisPNljF6EUGibbRB9mTjpWJ2Y6A",
+                            PasswordHash = "AQAAAAEAACcQAAAAENmR3VyO1iFAng5WjdT6ziiANQvfQFn4Qy7WHWJisPNljF6EUGibbRB9mTjpWJ2Y6A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1832ac7c-f9e1-42f7-9e1f-eebd0d979f3b",
+                            SecurityStamp = "6d0ec72f-b95a-4e4e-a6ad-153aed83d2db",
                             State = 0,
                             TwoFactorEnabled = false,
                             UserName = "Creator"
@@ -444,14 +446,14 @@ namespace iLearning.Listography.DataAccess.Migrations
                         new
                         {
                             Id = "677FFB03-B872-4D82-96AF-08A2747699D6",
-                            ConcurrencyStamp = "de82f252-85d2-41ba-becd-2df69de95872",
+                            ConcurrencyStamp = "d6a58c5c-ee2b-42ef-9441-afc9695843d9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "A98F783C-2C85-46AB-BC7D-73F766D04DB3",
-                            ConcurrencyStamp = "dee96d48-3d13-4602-8b66-2e4fdf059195",
+                            ConcurrencyStamp = "342a5bf6-48e1-4677-8f26-3deca039ed6f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -542,13 +544,6 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "A3BF16BB-378C-4350-8BFF-FF1ED9CB2915",
-                            RoleId = "677FFB03-B872-4D82-96AF-08A2747699D6"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

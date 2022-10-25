@@ -16,6 +16,7 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7266;http://localhost:5266",
       "environmentVariables": {
+        "CREATOR_PASSWORD": "ChangeMe123!",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -24,6 +25,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
+        "CREATOR_PASSWORD": "ChangeMe123!",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }

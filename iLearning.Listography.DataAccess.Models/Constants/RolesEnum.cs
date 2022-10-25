@@ -7,17 +7,23 @@ public static class RolesEnum
     public const string Admin = "Admin";
     public const string User = "User";
 
-    public static readonly IEnumerable<IdentityRole> Roles = new List<IdentityRole>
+    public static readonly IdentityRole AdminRole = new()
     {
-        new IdentityRole
-        {
-            Name = Admin,
-            NormalizedName = Admin.ToUpper()
-        },
-        new IdentityRole()
-        {
-            Name = User,
-            NormalizedName = User.ToUpper(),
-        }
+        Id = "677FFB03-B872-4D82-96AF-08A2747699D6",
+        Name = Admin,
+        NormalizedName = Admin.ToUpper()
+    };
+
+    public static readonly IdentityRole UserRole = new()
+    {
+        Id = "A98F783C-2C85-46AB-BC7D-73F766D04DB3",
+        Name = User,
+        NormalizedName = User.ToUpper(),
+    };
+
+    public static readonly IEnumerable<IdentityRole> Roles = new List<IdentityRole> 
+    { 
+        AdminRole, 
+        UserRole
     };
 }

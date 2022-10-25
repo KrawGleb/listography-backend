@@ -27,6 +27,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.SeedWithRoles();
+        builder.SeedWithAdmins();
+        builder.SeedWithUserRoles();
+
         builder.SeedWithTopics();
 
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

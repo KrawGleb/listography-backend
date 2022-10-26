@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.Configure<JWTConfiguration>(configuration.GetSection("JWT"));
 
         services.AddScoped<IUserPermissionsService, UserPermissionsService>();
+        services.AddScoped<IAuthService, AuthService>();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 

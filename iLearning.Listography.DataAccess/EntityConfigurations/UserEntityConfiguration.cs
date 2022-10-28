@@ -16,11 +16,11 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
         builder
             .HasMany(a => a.Comments)
             .WithOne(c => c.ApplicationUser)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .HasMany(a => a.Likes)
             .WithOne(l => l.ApplicationUser)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

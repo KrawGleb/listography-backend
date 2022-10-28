@@ -15,14 +15,9 @@ public class ListItemTemplateEntityConfiguration : IEntityTypeConfiguration<List
     private void ConfigureRelationships(EntityTypeBuilder<ListItemTemplate> builder)
     {
         builder
-            .HasOne(t => t.UserList)
-            .WithOne(l => l.ItemTemplate)
-            .OnDelete(DeleteBehavior.SetNull);
-
-        builder
             .HasMany(t => t.CustomFields)
             .WithOne(f => f.ListItemTemplate)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private void ConfigureConstraints(EntityTypeBuilder<ListItemTemplate> builder)

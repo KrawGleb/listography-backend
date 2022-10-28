@@ -10,7 +10,6 @@ public class CustomField : IEntity
     public string? Name { get; set; }
     public int Order { get; set; }
     public CustomFieldType Type { get; set; }
-    public ICollection<SelectOption>? SelectOptions { get; set; }
 
     public string? StringValue { get; set; }
     public string? TextValue { get; set; }
@@ -22,8 +21,4 @@ public class CustomField : IEntity
     [JsonIgnore]
     public ListItem? ListItem { get; set; }
     public int? ListItemId { get; set; }
-
-    [JsonIgnore]
-    public ListItemTemplate? ListItemTemplate { get; set; }
-    public int? ListItemTemplateId { get; set; }
 }

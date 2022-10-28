@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221028220813_AddNewTemplateEntity")]
+    partial class AddNewTemplateEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,7 +102,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                         {
                             Id = "A3BF16BB-378C-4350-8BFF-FF1ED9CB2915",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e6d79c4f-b56b-44a3-b2e2-e0874facab64",
+                            ConcurrencyStamp = "8fa3533b-a555-410b-bce8-b5f46927baa4",
                             Email = "krawcevitsch@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
@@ -108,7 +110,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                             NormalizedUserName = "CREATOR",
                             PasswordHash = "AQAAAAEAACcQAAAAENmR3VyO1iFAng5WjdT6ziiANQvfQFn4Qy7WHWJisPNljF6EUGibbRB9mTjpWJ2Y6A",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a5295cea-8aa5-4712-b814-d3f359276e25",
+                            SecurityStamp = "313d958d-2e58-4c00-a9eb-2bceadd8cd73",
                             State = 0,
                             TwoFactorEnabled = false,
                             UserName = "Creator"
@@ -383,7 +385,7 @@ namespace iLearning.Listography.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CustomFieldTemplateId")
+                    b.Property<int?>("CustomFieldTemplateId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -466,14 +468,14 @@ namespace iLearning.Listography.DataAccess.Migrations
                         new
                         {
                             Id = "677FFB03-B872-4D82-96AF-08A2747699D6",
-                            ConcurrencyStamp = "788511dd-dd95-4497-8047-c542c22cd732",
+                            ConcurrencyStamp = "0b397ebb-9130-456e-9876-978c12ea7f07",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "A98F783C-2C85-46AB-BC7D-73F766D04DB3",
-                            ConcurrencyStamp = "1c35a8f8-3230-4ace-b67a-5c3133efd762",
+                            ConcurrencyStamp = "e201a1b9-4fa1-4e95-a6c1-de79e53e639c",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -678,13 +680,9 @@ namespace iLearning.Listography.DataAccess.Migrations
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.SelectOption", b =>
                 {
-                    b.HasOne("iLearning.Listography.DataAccess.Models.List.CustomFieldTemplate", "CustomFieldTemplate")
+                    b.HasOne("iLearning.Listography.DataAccess.Models.List.CustomFieldTemplate", null)
                         .WithMany("SelectOptions")
-                        .HasForeignKey("CustomFieldTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CustomFieldTemplate");
+                        .HasForeignKey("CustomFieldTemplateId");
                 });
 
             modelBuilder.Entity("iLearning.Listography.DataAccess.Models.List.UserList", b =>

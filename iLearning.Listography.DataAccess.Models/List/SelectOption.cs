@@ -10,6 +10,6 @@ public class SelectOption : IEntity
     public string? Text { get; set; }
 
     [JsonIgnore]
-    public CustomField? CustomField { get; set; }
-    public int CustomFieldId { get; set; }
+    public CustomFieldTemplate? CustomFieldTemplate { get; set; }
+    public int CustomFieldTemplateId { get; set; }
 }

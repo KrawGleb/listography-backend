@@ -62,16 +62,14 @@ public class EFRepository<T> : IEFRepository<T>
 
     public virtual async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        var entity = _context
-            .ChangeTracker
-            .Entries<T>()
-            .FirstOrDefault(entry => entry.Entity.Id == id)?
-            .Entity;
+        var entity = await _table
+            .FirstOrDefaultAsync(entry => entry.Id == id, cancellationToken);
 
-        entity ??= new T { Id = id };
+        if (entity is not null)
+        {
+            _table.Remove(entity);
 
-        _table.Remove(entity);
-
-        await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }

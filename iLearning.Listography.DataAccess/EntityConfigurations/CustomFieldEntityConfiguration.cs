@@ -8,29 +8,7 @@ public class CustomFieldEntityConfiguration : IEntityTypeConfiguration<CustomFie
 {
     public void Configure(EntityTypeBuilder<CustomField> builder)
     {
-        ConfigureRelationships(builder);
         ConfigureConstraints(builder);
-    }
-
-    private void ConfigureRelationships(EntityTypeBuilder<CustomField> builder)
-    {
-        builder
-            .HasOne(f => f.ListItem)
-            .WithMany(l => l.CustomFields)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
-
-        builder
-            .HasOne(f => f.ListItemTemplate)
-            .WithMany(l => l.CustomFields)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
-
-        builder
-            .HasMany(f => f.SelectOptions)
-            .WithOne(o => o.CustomField)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private void ConfigureConstraints(EntityTypeBuilder<CustomField> builder)

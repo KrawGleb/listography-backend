@@ -12,4 +12,7 @@ public class SelectOption : IEntity
     [JsonIgnore]
     public CustomFieldTemplate? CustomFieldTemplate { get; set; }
     public int CustomFieldTemplateId { get; set; }
+
+    [JsonIgnore]
+    public ICollection<CustomField>? CustomFields { get; set; }
 }

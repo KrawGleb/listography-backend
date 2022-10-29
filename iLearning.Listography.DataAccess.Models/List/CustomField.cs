@@ -10,6 +10,7 @@ public class CustomField : IEntity
     public string? Name { get; set; }
     public int Order { get; set; }
     public CustomFieldType Type { get; set; }
+    public ICollection<SelectOption>? SelectOptions { get; set; }
 
     public string? StringValue { get; set; }
     public string? TextValue { get; set; }

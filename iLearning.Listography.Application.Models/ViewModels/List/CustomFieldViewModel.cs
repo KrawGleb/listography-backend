@@ -1,5 +1,4 @@
 ﻿using iLearning.Listography.DataAccess.Models.Helpers;
-using iLearning.Listography.DataAccess.Models.List;
 
 namespace iLearning.Listography.Application.Models.ViewModels.List;
 

@@ -28,11 +28,6 @@ public class UserListEntityConfiguration : IEntityTypeConfiguration<UserList>
             .HasOne(l => l.Topic)
             .WithMany(t => t.UserLists)
             .OnDelete(DeleteBehavior.NoAction);
-
-        builder
-            .HasOne(l => l.ApplicationUser)
-            .WithMany(u => u.Lists)
-            .OnDelete(DeleteBehavior.NoAction);
     }
 
     private void ConfigureConstraints(EntityTypeBuilder<UserList> builder)

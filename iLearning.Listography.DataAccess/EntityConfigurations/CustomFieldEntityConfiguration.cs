@@ -15,22 +15,12 @@ public class CustomFieldEntityConfiguration : IEntityTypeConfiguration<CustomFie
     private void ConfigureRelationships(EntityTypeBuilder<CustomField> builder)
     {
         builder
-            .HasOne(f => f.ListItem)
-            .WithMany(l => l.CustomFields)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
-
-        builder
-            .HasOne(f => f.ListItemTemplate)
-            .WithMany(l => l.CustomFields)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
-
-        builder
             .HasMany(f => f.SelectOptions)
-            .WithOne(o => o.CustomField)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.Cascade);
+            .WithMany(s => s.CustomFields)
+            .UsingEntity<Dictionary<string, object>>(
+                "CustomFieldSelectOption",
+                j => j.HasOne<SelectOption>().WithMany().OnDelete(DeleteBehavior.NoAction),
+                j => j.HasOne<CustomField>().WithMany().OnDelete(DeleteBehavior.Cascade));
     }
 
     private void ConfigureConstraints(EntityTypeBuilder<CustomField> builder)

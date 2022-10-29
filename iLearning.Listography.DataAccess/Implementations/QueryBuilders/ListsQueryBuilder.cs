@@ -29,8 +29,8 @@ public class ListsQueryBuilder : IListsQueryBuilder
         _query = includeItems
             ? _query
                 .Include(l => l.Items!)
-                    .ThenInclude(i => i.CustomFields)!
-                    .ThenInclude(f => f.SelectOptions)
+                    .ThenInclude(i => i.CustomFields)
+                    .ThenInclude(c => c.SelectOptions)
                 .Include(l => l.Items!).ThenInclude(i => i.Tags)
             : _query;
 

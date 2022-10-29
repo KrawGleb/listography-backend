@@ -1,10 +1,13 @@
 ﻿using iLearning.Listography.API.Filters;
+using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.List.Queries.Get;
 using iLearning.Listography.Application.Requests.Lists.Commands.Create;
 using iLearning.Listography.Application.Requests.Lists.Commands.Delete;
 using iLearning.Listography.Application.Requests.Lists.Commands.Update;
+using iLearning.Listography.Application.Requests.Lists.Queries.Export;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace iLearning.Listography.API.Controllers;
 
@@ -31,4 +34,13 @@ public class ListsController : ApiControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetList([FromRoute] int id, CancellationToken cancellationToken)
         => Ok(await Mediator.Send(new GetListQuery { Id = id }, cancellationToken));
+
+    [HttpPost("export")]
+    [AllowAnonymous]
+    public async Task<FileResult> ExportToCsv([FromBody] ExportToCsvQuery command, CancellationToken cancellationToken)
+        => File(
+            Encoding.UTF8.GetBytes(
+                (await Mediator.Send(command, cancellationToken)).Body!.ToString()!),
+            "text/csv",
+            $"list{command.ListId}.csv");
 }

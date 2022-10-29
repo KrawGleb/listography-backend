@@ -26,6 +26,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IUserPermissionsService, UserPermissionsService>();
+        services.AddScoped<IAuthService, AuthService>();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 

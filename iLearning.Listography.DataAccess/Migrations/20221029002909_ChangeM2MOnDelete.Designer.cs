@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221029002909_ChangeM2MOnDelete")]
+    partial class ChangeM2MOnDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,7 +117,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                         {
                             Id = "A3BF16BB-378C-4350-8BFF-FF1ED9CB2915",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "05ababb9-e792-4ca6-b45f-cbf268626ccd",
+                            ConcurrencyStamp = "22cbc27e-97d7-4b95-a664-f9eb93212834",
                             Email = "krawcevitsch@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
@@ -123,7 +125,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                             NormalizedUserName = "CREATOR",
                             PasswordHash = "AQAAAAEAACcQAAAAENmR3VyO1iFAng5WjdT6ziiANQvfQFn4Qy7WHWJisPNljF6EUGibbRB9mTjpWJ2Y6A",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ec0162c9-b9f6-4984-b4b9-ee0c75c91448",
+                            SecurityStamp = "a61820be-788f-4ed1-b6f1-8f8db20910c4",
                             State = 0,
                             TwoFactorEnabled = false,
                             UserName = "Creator"
@@ -481,14 +483,14 @@ namespace iLearning.Listography.DataAccess.Migrations
                         new
                         {
                             Id = "677FFB03-B872-4D82-96AF-08A2747699D6",
-                            ConcurrencyStamp = "5e548f4f-207d-4d20-a557-433066e7fe92",
+                            ConcurrencyStamp = "5074a165-7165-4045-a136-915939c5138b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "A98F783C-2C85-46AB-BC7D-73F766D04DB3",
-                            ConcurrencyStamp = "581d91b8-7252-4df4-a460-c0fa85e9ea8a",
+                            ConcurrencyStamp = "70900a10-ed55-4e25-9459-eb835d8960ec",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -722,7 +724,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasOne("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", "ApplicationUser")
                         .WithMany("Lists")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.ListTopic", "Topic")
                         .WithMany("UserLists")

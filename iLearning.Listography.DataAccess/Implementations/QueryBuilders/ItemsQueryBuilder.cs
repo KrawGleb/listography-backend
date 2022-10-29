@@ -27,8 +27,8 @@ public class ItemsQueryBuilder : IItemsQueryBuilder
 	public IItemsQueryBuilder IncludeCustomFields()
 	{
 		_query = _query
-			.Include(i => i.CustomFields)!
-			.ThenInclude(f => f.SelectOptions);
+			.Include(i => i.CustomFields)
+				.ThenInclude(f => f.SelectOptions);
 
 		return this;
 	}

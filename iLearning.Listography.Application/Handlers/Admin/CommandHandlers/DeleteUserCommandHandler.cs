@@ -24,15 +24,8 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
 
     public async Task<Response> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        // TODO: Review it.
-        // Maybe we don't need to include related entities 'cause cascade delete was used
-        var user = await _userManager
-            .Users
-            .Include(u => u.Lists)
-            .Include(u => u.Comments)
-            .Include(u => u.Likes)
-            .FirstOrDefaultAsync(a => a.UserName == request.Username, cancellationToken: cancellationToken)
-        ?? throw new NotFoundException("User not found");
+        var user = await _userManager.FindByNameAsync(request.Username)
+            ?? throw new NotFoundException("User not found");
 
         await _userManager.DeleteAsync(user);
         await _elasticService.DeleteUserAsync(user.Id);

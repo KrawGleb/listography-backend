@@ -14,6 +14,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     private DbSet<ListTag> Tags { get; set; }
     private DbSet<ListTopic> Topics { get; set; }
     private DbSet<CustomField> CustomFields { get; set; }
+    private DbSet<CustomFieldTemplate> CustomFieldTemplates { get; set; }
     private DbSet<ListItem> Items { get; set; }
     private DbSet<ListItemTemplate> ItemTemplates { get; set; }
     private DbSet<Like> Likes { get; set; }

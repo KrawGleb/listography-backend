@@ -20,19 +20,14 @@ public class UserListEntityConfiguration : IEntityTypeConfiguration<UserList>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
+            .HasOne(l => l.ItemTemplate)
+            .WithOne(t => t.UserList)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
             .HasOne(l => l.Topic)
             .WithMany(t => t.UserLists)
             .OnDelete(DeleteBehavior.NoAction);
-
-        builder
-            .HasOne(l => l.ItemTemplate)
-            .WithOne(t => t.UserList)
-            .OnDelete(DeleteBehavior.SetNull);
-
-        builder
-            .HasOne(l => l.ApplicationUser)
-            .WithMany(u => u.Lists)
-            .OnDelete(DeleteBehavior.SetNull);
     }
 
     private void ConfigureConstraints(EntityTypeBuilder<UserList> builder)

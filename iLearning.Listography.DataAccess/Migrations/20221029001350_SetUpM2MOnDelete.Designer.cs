@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iLearning.Listography.DataAccess.Implementations;
 
@@ -11,9 +12,10 @@ using iLearning.Listography.DataAccess.Implementations;
 namespace iLearning.Listography.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221029001350_SetUpM2MOnDelete")]
+    partial class SetUpM2MOnDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,7 +117,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                         {
                             Id = "A3BF16BB-378C-4350-8BFF-FF1ED9CB2915",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "05ababb9-e792-4ca6-b45f-cbf268626ccd",
+                            ConcurrencyStamp = "49760180-d092-4487-87a4-0ca64696e9f3",
                             Email = "krawcevitsch@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
@@ -123,7 +125,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                             NormalizedUserName = "CREATOR",
                             PasswordHash = "AQAAAAEAACcQAAAAENmR3VyO1iFAng5WjdT6ziiANQvfQFn4Qy7WHWJisPNljF6EUGibbRB9mTjpWJ2Y6A",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ec0162c9-b9f6-4984-b4b9-ee0c75c91448",
+                            SecurityStamp = "38830ae9-eec2-45a8-a29f-6213b8b344f8",
                             State = 0,
                             TwoFactorEnabled = false,
                             UserName = "Creator"
@@ -481,14 +483,14 @@ namespace iLearning.Listography.DataAccess.Migrations
                         new
                         {
                             Id = "677FFB03-B872-4D82-96AF-08A2747699D6",
-                            ConcurrencyStamp = "5e548f4f-207d-4d20-a557-433066e7fe92",
+                            ConcurrencyStamp = "003bd031-89ed-40de-ae56-4f333e75f4ba",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "A98F783C-2C85-46AB-BC7D-73F766D04DB3",
-                            ConcurrencyStamp = "581d91b8-7252-4df4-a460-c0fa85e9ea8a",
+                            ConcurrencyStamp = "97747859-4b14-4ca9-8122-578ab72c65a5",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -612,13 +614,13 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.CustomField", null)
                         .WithMany()
                         .HasForeignKey("CustomFieldsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.SelectOption", null)
                         .WithMany()
                         .HasForeignKey("SelectOptionsId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -722,7 +724,7 @@ namespace iLearning.Listography.DataAccess.Migrations
                     b.HasOne("iLearning.Listography.DataAccess.Models.Identity.ApplicationUser", "ApplicationUser")
                         .WithMany("Lists")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("iLearning.Listography.DataAccess.Models.List.ListTopic", "Topic")
                         .WithMany("UserLists")

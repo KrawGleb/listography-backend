@@ -6,7 +6,7 @@ public class ListItemTemplate
 {
     public int Id { get; set; }
     public string? Name { get; set; }
-    public ICollection<CustomField>? CustomFields { get; set; }
+    public ICollection<CustomFieldTemplate>? CustomFields { get; set; }
 
     [JsonIgnore]
     public UserList? UserList { get; set; }

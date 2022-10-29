@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace iLearning.Listography.DataAccess.Models.List;
 
-public class CustomField : IEntity
+public class CustomFieldTemplate : IEntity
 {
     public int Id { get; set; }
     public string? Name { get; set; }
@@ -12,14 +12,7 @@ public class CustomField : IEntity
     public CustomFieldType Type { get; set; }
     public ICollection<SelectOption>? SelectOptions { get; set; }
 
-    public string? StringValue { get; set; }
-    public string? TextValue { get; set; }
-    public decimal? NumberValue { get; set; }
-    public DateTime? DateTimeValue { get; set; }
-    public bool? BoolValue { get; set; }
-    public int? SelectValue { get; set; }
-
     [JsonIgnore]
-    public ListItem? ListItem { get; set; }
-    public int? ListItemId { get; set; }
+    public ListItemTemplate? ListItemTemplate { get; set; }
+    public int? ListItemTemplateId { get; set; }
 }

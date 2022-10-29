@@ -44,4 +44,19 @@ public static class CustomFieldExtensions
             _ => throw new InvalidOperationException("Unknown field type."),
         };
     }
+
+    public static object? GetDisplayedValue(this CustomField field)
+    {
+        return field.Type switch
+        {
+            CustomFieldType.SelectType => GetSelecedOption(field),
+            _ => field.GetValue()
+        };
+    }
+
+    private static string? GetSelecedOption(CustomField field)
+        => field
+            .SelectOptions?
+            .SingleOrDefault(o => o.Value == field.SelectValue)?
+            .Text;
 }

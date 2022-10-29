@@ -83,6 +83,7 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
         {
             options.Id = id;
             options.Track = true;
+            options.IncludeItemTemplate = true;
             options.IncludeItems = true;
         };
 
@@ -90,6 +91,14 @@ public class ListsRepository : EFRepository<UserList>, IListsRepository
             ?? throw new InvalidOperationException();
 
         item.CreatedAt = DateTime.UtcNow;
+        item.CustomFields = item.CustomFields.Zip(
+            list.ItemTemplate!.CustomFields,
+            (field, template) =>
+            {
+                field.SelectOptions = template.SelectOptions;
+                return field;
+            }).ToList();
+
         list.Items!.Add(item);
 
         await _context.SaveChangesAsync(cancellationToken);

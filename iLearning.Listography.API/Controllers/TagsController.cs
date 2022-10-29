@@ -6,7 +6,6 @@ namespace iLearning.Listography.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class TagsController : ApiControllerBase
 {
     [HttpGet("all")]

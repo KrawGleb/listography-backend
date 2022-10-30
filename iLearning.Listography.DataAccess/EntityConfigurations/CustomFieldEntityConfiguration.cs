@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Models.List;
+﻿using iLearning.Listography.DataAccess.Models.Constraints;
+using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -27,21 +28,22 @@ public class CustomFieldEntityConfiguration : IEntityTypeConfiguration<CustomFie
     {
         builder
             .Property(e => e.Name)
-            .HasMaxLength(100)
+            .HasMaxLength(CustomFieldConstraints.NameMaxLength)
             .IsRequired();
 
         builder
             .Property(e => e.StringValue)
-            .HasMaxLength(200)
+            .HasMaxLength(CustomFieldConstraints.StringMaxLength)
             .IsRequired(false);
 
         builder
             .Property(e => e.TextValue)
-            .HasMaxLength(3000)
+            .HasMaxLength(CustomFieldConstraints.TextMaxLength)
             .IsRequired(false);
 
         builder
             .Property(e => e.NumberValue)
+            .HasColumnType("decimal(18,2)")
             .IsRequired(false);
     }
 }

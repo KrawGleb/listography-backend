@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Models.List;
+﻿using iLearning.Listography.DataAccess.Models.Constraints;
+using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -24,7 +25,7 @@ public class CommentEntityConfiguration : IEntityTypeConfiguration<Comment>
     {
         builder
             .Property(e => e.Text)
-            .HasMaxLength(300)
+            .HasMaxLength(CommentConstraints.TextMaxLength)
             .IsRequired();
     }
 }

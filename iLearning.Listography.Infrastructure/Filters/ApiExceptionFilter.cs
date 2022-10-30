@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace iLearning.Listography.Infrastructure.FilterAttributes;
+namespace iLearning.Listography.Infrastructure.Filters;
 
-public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
+public class ApiExceptionFilter : IActionFilter, IOrderedFilter
 {
-    private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;
+    private readonly IDictionary<Type, Action<ActionExecutedContext>> _exceptionHandlers;
 
-    public ApiExceptionFilterAttribute()
+    public ApiExceptionFilter()
     {
-        _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
+        _exceptionHandlers = new Dictionary<Type, Action<ActionExecutedContext>>
         {
             { typeof(NotFoundException), HandleNotFoundException },
             { typeof(ValidationException), HandleValidationException },
@@ -21,26 +21,31 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         };
     }
 
-    public override void OnException(ExceptionContext context)
-    {
-        HandleException(context);
+    public int Order => int.MaxValue - 10;
 
-        base.OnException(context);
+    public void OnActionExecuting(ActionExecutingContext context) { }
+
+    public void OnActionExecuted(ActionExecutedContext context)
+    {
+        if (context.Exception is not null)
+            HandleException(context);
     }
 
-    private void HandleException(ExceptionContext context)
+    private void HandleException(ActionExecutedContext context)
     {
         var type = context.Exception.GetType();
         if (_exceptionHandlers.ContainsKey(type))
         {
             _exceptionHandlers[type].Invoke(context);
+            context.ExceptionHandled = true;
             return;
         }
 
         HandleUnknownException(context);
+        context.ExceptionHandled = true;
     }
 
-    private void HandleValidationException(ExceptionContext context)
+    private void HandleValidationException(ActionExecutedContext context)
     {
         var exception = (ValidationException)context.Exception;
         var errors = exception.Errors.Select(e => e.ErrorMessage);
@@ -57,7 +62,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         };
     }
 
-    private void HandleNotFoundException(ExceptionContext context)
+    private void HandleNotFoundException(ActionExecutedContext context)
     {
         var response = new ErrorResponse()
         {
@@ -71,7 +76,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         };
     }
 
-    private void HandlerUserIsBlockedException(ExceptionContext context)
+    private void HandlerUserIsBlockedException(ActionExecutedContext context)
     {
         var response = new ErrorResponse()
         {
@@ -85,7 +90,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         };
     }
 
-    private void HandleUnknownException(ExceptionContext context)
+    private void HandleUnknownException(ActionExecutedContext context)
     {
         var response = new ErrorResponse()
         {
@@ -101,4 +106,5 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             StatusCode = StatusCodes.Status500InternalServerError
         };
     }
+
 }

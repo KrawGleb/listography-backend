@@ -2,7 +2,7 @@ using iLearning.Listography.API.Hubs;
 using iLearning.Listography.Application;
 using iLearning.Listography.DataAccess;
 using iLearning.Listography.Infrastructure;
-using iLearning.Listography.Infrastructure.FilterAttributes;
+using iLearning.Listography.Infrastructure.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -48,7 +48,7 @@ services.AddAuthentication(options =>
 });
 
 services.AddControllers(options =>
-    options.Filters.Add<ApiExceptionFilterAttribute>());
+    options.Filters.Add<ApiExceptionFilter>());
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();

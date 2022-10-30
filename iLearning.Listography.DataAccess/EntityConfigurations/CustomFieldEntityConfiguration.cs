@@ -32,12 +32,12 @@ public class CustomFieldEntityConfiguration : IEntityTypeConfiguration<CustomFie
 
         builder
             .Property(e => e.StringValue)
-            .HasMaxLength(100)
+            .HasMaxLength(200)
             .IsRequired(false);
 
         builder
             .Property(e => e.TextValue)
-            .HasMaxLength(600)
+            .HasMaxLength(3000)
             .IsRequired(false);
 
         builder

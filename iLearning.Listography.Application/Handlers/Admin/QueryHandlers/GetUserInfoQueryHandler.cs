@@ -21,7 +21,7 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, Respons
     public async Task<Response> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByNameAsync(request.Username) 
-            ?? throw new NotFoundException($"There isn't any user with ${request.Username} username");
+            ?? throw new NotFoundException($"There isn't any user with {request.Username} username");
 
         var info = new UserViewModel
         {

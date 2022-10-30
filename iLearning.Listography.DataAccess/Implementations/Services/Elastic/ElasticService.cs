@@ -17,7 +17,7 @@ public class ElasticService : IElasticService
     public async Task<IEnumerable<SearchItem>?> SearchByValueAsync(string value, CancellationToken cancellationToken = default)
         => (await _client.SearchAsync<SearchItem>(s =>
                 s.Index(ElasticConstants.ItemIndexName)
-                .Query(q => q.QueryString(q => q.Query(value))), cancellationToken)).Documents;
+                .Query(q => q.QueryString(q => q.Query($"*{value}*"))), cancellationToken)).Documents;
 
     public async Task<IndexResponse> IndexItemAsync(SearchItem item, CancellationToken cancellationToken = default)
         => await _client

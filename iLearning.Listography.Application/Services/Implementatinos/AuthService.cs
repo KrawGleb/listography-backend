@@ -42,6 +42,8 @@ public class AuthService : IAuthService
 
         var tokenDescription = new SecurityTokenDescriptor()
         {
+            Issuer = "ListographyBackend",
+            Audience = "ListographyFrontent",
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id),

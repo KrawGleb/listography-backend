@@ -40,8 +40,10 @@ services.AddAuthentication(options =>
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = "ListographyBackend",
+        ValidAudience = "ListographyFrontent",
         RequireExpirationTime = true,
     };
 });
@@ -49,7 +51,6 @@ services.AddAuthentication(options =>
 services.AddControllers(options =>
     options.Filters.Add<ApiExceptionFilterAttribute>());
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 

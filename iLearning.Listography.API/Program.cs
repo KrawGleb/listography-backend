@@ -19,7 +19,6 @@ services.AddFilters();
 
 services.AddCors(options =>
 {
-    // TODO: Hide origins.
     options.AddPolicy("CorsPolicy", b => b
         .WithOrigins("http://localhost:4200")
         .AllowAnyMethod()

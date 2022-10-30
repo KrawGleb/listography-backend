@@ -1,7 +1,7 @@
-﻿using iLearning.Listography.Application.Models.Responses;
+﻿using iLearning.Listography.Application.Common.Extensions;
+using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Social.Commands.DeleteLike;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
-using iLearning.Listography.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 

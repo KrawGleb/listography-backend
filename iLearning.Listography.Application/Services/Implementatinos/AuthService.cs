@@ -14,11 +14,11 @@ namespace iLearning.Listography.Application.Services.Implementatinos;
 public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly JWTConfiguration _jwtConfiguration;
+    private readonly JwtConfiguration _jwtConfiguration;
 
     public AuthService(
         UserManager<ApplicationUser> userManager,
-        IOptions<JWTConfiguration> jwtConfiguration)
+        IOptions<JwtConfiguration> jwtConfiguration)
     {
         _userManager = userManager;
         _jwtConfiguration = jwtConfiguration.Value;

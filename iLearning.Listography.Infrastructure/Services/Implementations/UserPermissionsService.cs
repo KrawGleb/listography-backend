@@ -1,10 +1,10 @@
-﻿using iLearning.Listography.Application.Services.Interfaces;
-using iLearning.Listography.DataAccess.Interfaces.Repositories;
+﻿using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.Constants;
 using iLearning.Listography.DataAccess.Models.Identity;
+using iLearning.Listography.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
-namespace iLearning.Listography.Application.Services.Implementatinos;
+namespace iLearning.Listography.Infrastructure.Services.Implementations;
 
 public class UserPermissionsService : IUserPermissionsService
 {

@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using iLearning.Listography.Application.Common.Exceptions;
 using iLearning.Listography.Application.Models.Responses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace iLearning.Listography.API.Common.FilterAttributes;
+namespace iLearning.Listography.Infrastructure.FilterAttributes;
 
 public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 {

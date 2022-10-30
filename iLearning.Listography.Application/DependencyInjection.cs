@@ -20,9 +20,8 @@ public static class DependencyInjection
         services.AddMediatR(assembly);
         services.AddAutoMapper(assembly);
 
-        services.Configure<JWTConfiguration>(configuration.GetSection("JWT"));
+        services.Configure<JwtConfiguration>(configuration.GetSection("JWT"));
 
-        services.AddScoped<IUserPermissionsService, UserPermissionsService>();
         services.AddScoped<IAuthService, AuthService>();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

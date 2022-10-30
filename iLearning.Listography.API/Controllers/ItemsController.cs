@@ -1,8 +1,8 @@
-﻿using iLearning.Listography.API.Filters;
-using iLearning.Listography.Application.Requests.Items.Commands.Add;
+﻿using iLearning.Listography.Application.Requests.Items.Commands.Add;
 using iLearning.Listography.Application.Requests.Items.Commands.Delete;
 using iLearning.Listography.Application.Requests.Items.Commands.Update;
 using iLearning.Listography.Application.Requests.Items.Queries.Get;
+using iLearning.Listography.Infrastructure.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

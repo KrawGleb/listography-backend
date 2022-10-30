@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using iLearning.Listography.Application.Common.Exceptions;
+using iLearning.Listography.Application.Common.Extensions;
 using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.Lists.Commands.Create;
 using iLearning.Listography.DataAccess.Interfaces.Repositories;
 using iLearning.Listography.DataAccess.Models.Identity;
 using iLearning.Listography.DataAccess.Models.List;
-using iLearning.Listography.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

@@ -1,10 +1,10 @@
-﻿using iLearning.Listography.Application.Requests.Common.Interfaces;
-using iLearning.Listography.Application.Services.Interfaces;
-using iLearning.Listography.Infrastructure.Extensions;
+﻿using iLearning.Listography.Application.Common.Extensions;
+using iLearning.Listography.Application.Requests.Common.Interfaces;
+using iLearning.Listography.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace iLearning.Listography.API.Filters;
+namespace iLearning.Listography.Infrastructure.Filters;
 
 public class ProtectedItemActionFilter : IAsyncActionFilter
 {

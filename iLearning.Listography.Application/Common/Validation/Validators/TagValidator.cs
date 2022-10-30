@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using iLearning.Listography.Application.Common.Validation.ValidationRulesConstants;
+using iLearning.Listography.DataAccess.Models.Constraints;
 using iLearning.Listography.DataAccess.Models.List;
 
 namespace iLearning.Listography.Application.Common.Validation.Validators;
@@ -9,6 +9,6 @@ public class TagValidator : AbstractValidator<ListTag>
 	public TagValidator()
 	{
 		RuleFor(t => t.Name)
-			.MaximumLength(TagValidationRuleConstants.TagMaxLength);
+			.MaximumLength(ListTagConstraints.NameMaxLength);
 	}
 }

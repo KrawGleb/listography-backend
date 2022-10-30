@@ -1,4 +1,4 @@
-﻿namespace iLearning.Listography.Application.Services.Interfaces;
+﻿namespace iLearning.Listography.Infrastructure.Services.Interfaces;
 
 public interface IUserPermissionsService
 {

@@ -1,6 +1,6 @@
-﻿using iLearning.Listography.Application.Requests.Users.Queries.GetLists;
+﻿using iLearning.Listography.Application.Common.Extensions;
+using iLearning.Listography.Application.Requests.Users.Queries.GetLists;
 using iLearning.Listography.Application.Requests.Users.Queries.GetMe;
-using iLearning.Listography.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

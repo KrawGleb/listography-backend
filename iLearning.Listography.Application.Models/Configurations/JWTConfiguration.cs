@@ -1,6 +1,6 @@
 ﻿namespace iLearning.Listography.Application.Models.Configurations;
 
-public class JWTConfiguration
+public class JwtConfiguration
 {
-    public string Key { get; set; }
+    public string? Key { get; set; }
 }

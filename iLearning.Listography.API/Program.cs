@@ -1,8 +1,8 @@
-using iLearning.Listography.API.Common;
-using iLearning.Listography.API.Common.FilterAttributes;
 using iLearning.Listography.API.Hubs;
 using iLearning.Listography.Application;
 using iLearning.Listography.DataAccess;
+using iLearning.Listography.Infrastructure;
+using iLearning.Listography.Infrastructure.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -14,12 +14,11 @@ var configuration = builder.Configuration;
 // Add services to the container.
 services.AddDataAccess(configuration);
 services.AddApplication(configuration);
+services.AddInfrastructure();
 services.AddSignalR();
-services.AddFilters();
 
 services.AddCors(options =>
 {
-    // TODO: Hide origins.
     options.AddPolicy("CorsPolicy", b => b
         .WithOrigins("https://ilearning-listography.herokuapp.com")
         .AllowAnyMethod()
@@ -40,16 +39,17 @@ services.AddAuthentication(options =>
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = "ListographyBackend",
+        ValidAudience = "ListographyFrontent",
         RequireExpirationTime = true,
     };
 });
 
 services.AddControllers(options =>
-    options.Filters.Add<ApiExceptionFilterAttribute>());
+    options.Filters.Add<ApiExceptionFilter>());
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 

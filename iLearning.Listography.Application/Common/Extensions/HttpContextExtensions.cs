@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace iLearning.Listography.Infrastructure.Extensions;
+namespace iLearning.Listography.Application.Common.Extensions;
 
 public static class HttpContextExtensions
 {

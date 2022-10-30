@@ -1,10 +1,10 @@
-﻿using iLearning.Listography.API.Filters;
-using iLearning.Listography.Application.Models.Responses;
+﻿using iLearning.Listography.Application.Models.Responses;
 using iLearning.Listography.Application.Requests.List.Queries.Get;
 using iLearning.Listography.Application.Requests.Lists.Commands.Create;
 using iLearning.Listography.Application.Requests.Lists.Commands.Delete;
 using iLearning.Listography.Application.Requests.Lists.Commands.Update;
 using iLearning.Listography.Application.Requests.Lists.Queries.Export;
+using iLearning.Listography.Infrastructure.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;

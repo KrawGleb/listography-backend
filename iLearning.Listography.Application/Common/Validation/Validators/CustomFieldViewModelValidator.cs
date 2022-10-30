@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using iLearning.Listography.Application.Common.Validation.ValidationRulesConstants;
 using iLearning.Listography.Application.Models.ViewModels.List;
+using iLearning.Listography.DataAccess.Models.Constraints;
 
 namespace iLearning.Listography.Application.Common.Validation.Validators;
 
@@ -9,9 +9,9 @@ public class CustomFieldViewModelValidator : AbstractValidator<CustomFieldViewMo
 	public CustomFieldViewModelValidator()
 	{
 		RuleFor(vm => vm.StringValue)
-			.MaximumLength(CustomFieldValidationRuleConstants.StringValueMaxLength);
+			.MaximumLength(CustomFieldConstraints.StringMaxLength);
 
 		RuleFor(vm => vm.TextValue)
-			.MaximumLength(CustomFieldValidationRuleConstants.TextValueMaxLength);
+			.MaximumLength(CustomFieldConstraints.TextMaxLength);
 	}
 }

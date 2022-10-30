@@ -20,7 +20,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
     {
-        // TODO: Secure connection string.
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
                 configuration.GetConnectionString("Default"),

@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Models.List;
+﻿using iLearning.Listography.DataAccess.Models.Constraints;
+using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -39,7 +40,7 @@ internal class ListItemEntityConfiguration : IEntityTypeConfiguration<ListItem>
     {
         builder
             .Property(e => e.Name)
-            .HasMaxLength(100)
+            .HasMaxLength(ListItemConstraints.NameMaxLength)
             .IsRequired();
     }
 }

@@ -20,12 +20,11 @@ public static class DependencyInjection
         services.AddMediatR(assembly);
         services.AddAutoMapper(assembly);
         
-        services.Configure<JWTConfiguration>((instance) =>
+        services.Configure<JwtConfiguration>((instance) =>
         {
             instance.Key = Environment.GetEnvironmentVariable("JWT.Key")!;
         });
 
-        services.AddScoped<IUserPermissionsService, UserPermissionsService>();
         services.AddScoped<IAuthService, AuthService>();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

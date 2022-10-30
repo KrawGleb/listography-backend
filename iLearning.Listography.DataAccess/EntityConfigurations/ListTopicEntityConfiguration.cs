@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Models.List;
+﻿using iLearning.Listography.DataAccess.Models.Constraints;
+using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,7 +16,7 @@ public class ListTopicEntityConfiguration : IEntityTypeConfiguration<ListTopic>
     {
         builder
             .Property(e => e.Name)
-            .HasMaxLength(100)
+            .HasMaxLength(ListTopicConstraints.NameMaxLength)
             .IsRequired(true);
     }
 }

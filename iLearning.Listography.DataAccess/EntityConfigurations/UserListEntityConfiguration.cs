@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Models.List;
+﻿using iLearning.Listography.DataAccess.Models.Constraints;
+using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -34,17 +35,17 @@ public class UserListEntityConfiguration : IEntityTypeConfiguration<UserList>
     {
         builder
             .Property(e => e.Title)
-            .HasMaxLength(100)
+            .HasMaxLength(UserListConstraints.TitleMaxLength)
             .IsRequired();
 
         builder
             .Property(e => e.Description)
-            .HasMaxLength(1500)
+            .HasMaxLength(UserListConstraints.DescriptionMaxLength)
             .IsRequired(false);
 
         builder
             .Property(e => e.ImageUrl)
-            .HasMaxLength(300)
+            .HasMaxLength(UserListConstraints.ImageUrlMaxLength)
             .IsRequired(false);
     }
 }

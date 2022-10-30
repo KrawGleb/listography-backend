@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using iLearning.Listography.Application.Common.Validation.ValidationRulesConstants;
+using iLearning.Listography.DataAccess.Models.Constraints;
 
 namespace iLearning.Listography.Application.Requests.Lists.Commands.Update;
 
@@ -12,9 +12,9 @@ public class UpdateListInfoCommandValidator : AbstractValidator<UpdateListInfoCo
             .NotNull();
 
         RuleFor(x => x.Title)
-            .MaximumLength(ListValidationRulesConstants.TitleMaxLength);
+            .MaximumLength(UserListConstraints.TitleMaxLength);
 
         RuleFor(x => x.Description)
-            .MaximumLength(ListValidationRulesConstants.DescriptionMaxLength);
+            .MaximumLength(UserListConstraints.DescriptionMaxLength);
     }
 }

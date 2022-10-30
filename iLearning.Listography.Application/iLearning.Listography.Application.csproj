@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\iLearning.Listography.Application.Models\iLearning.Listography.Application.Models.csproj" />
     <ProjectReference Include="..\iLearning.Listography.DataAccess\iLearning.Listography.DataAccess.csproj" />
-    <ProjectReference Include="..\iLearning.Listography.Infrastructure\iLearning.Listography.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

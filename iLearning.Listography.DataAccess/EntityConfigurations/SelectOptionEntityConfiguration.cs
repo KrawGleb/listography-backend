@@ -1,4 +1,5 @@
-﻿using iLearning.Listography.DataAccess.Models.List;
+﻿using iLearning.Listography.DataAccess.Models.Constraints;
+using iLearning.Listography.DataAccess.Models.List;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,6 +16,6 @@ public class SelectOptionEntityConfiguration : IEntityTypeConfiguration<SelectOp
     {
         builder
             .Property(s => s.Text)
-            .HasMaxLength(200);
+            .HasMaxLength(SelectOptionConstraints.TextMaxLength);
     }
 }
